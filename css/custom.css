@@ -1,0 +1,8 @@
+/* your-hexo/source/css/custom.css */
+
+:root {
+    --box-border-radius: 20px;
+    --post-author-avatar: none;
+    --post-author-name: none;
+    --post-img-align: 0 auto;
+}
