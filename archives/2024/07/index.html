@@ -9,7 +9,7 @@
     
     <title>
         
-            linux使用 |
+            Archive: 2024/7 |
         
         introspection
     </title>
@@ -97,7 +97,7 @@
                         </li>
                     
                         
-                        <li class="menu-item flex-start border-box">
+                        <li class="menu-item flex-start border-box active">
                             <a class="menu-text-color border-box" href="/archives">
                                 
                                 ARCHIVES
@@ -160,7 +160,7 @@
                 </li>
             
                 
-                <li class="drawer-menu-item border-box not-sub-menu">
+                <li class="drawer-menu-item border-box not-sub-menu active">
                     <label class="drawer-menu-label border-box">
                         <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
                             
@@ -210,191 +210,37 @@
             <div class="main-content border-box">
                 
 
-                    
-<div class="fade-in-down-animation">
-    <div class="post-page-container border-box">
-        <div class="post-content-container border-box">
+                    <div class="fade-in-down-animation">
+    <div class="archives-container">
+        <div class="archives-timeline border-box">
             
-
-            <div class="post-content-bottom border-box">
+<div class="archive-list-container border-box">
+    
+        <section class="archive-item border-box">
+            <div class="archive-item-header border-box">
+                <span class="archive-year">2024</span>
+            </div>
+            <ul class="archive-item-body border-box">
                 
-                    <div class="post-title">
-                        linux使用
-                    </div>
+                    <li class="post-item border-box">
+                        <span class="starting-point border-box flex-center"></span>
+                        <span class="post-date border-box">07-28</span>
+                        <a class="post-title border-box text-ellipsis"
+                           href="/2024/07/28/%E6%8A%80%E6%9C%AF/Linux%E5%91%BD%E4%BB%A4/"
+                        >linux命令</a>
+                    </li>
                 
-
-                
-                    <div class="post-header border-box">
-                        
-                            <div class="avatar-box border-box">
-                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png">
-                            </div>
-                        
-                        <div class="info-box">
-                            <div class="author border-box">
-                                <span class="name">eric</span>
-                                
-                            </div>
-                            <div class="meta-info border-box">
-                                
-
-<div class="post-meta-info-container border-box post">
-    <div class="post-meta-info border-box">
-        
-
-        
-            <span class="meta-info-item post-create-date">
-                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2022-12-12</span>
-            </span>
-
-            <span class="meta-info-item post-update-date">
-                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                <span class="datetime" data-updated="Mon Jun 24 2024 00:50:18 GMT+0800">2024-06-24</span>
-            </span>
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/linux/">linux</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
-
+            </ul>
+        </section>
     
 </div>
 
-                            </div>
-                        </div>
-                    </div>
-                
-
-                <div class="post-content keep-markdown-body ">
-                    
-
-                    
-                         <p>linux的基本使用。</p>
-<p>本地用wsl就可以，在线colab网站也挺好。</p>
-<h4 id="好用命令"><a href="#好用命令" class="headerlink" title="好用命令"></a>好用命令</h4><p>查找文件。<strong>/</strong> : 从根目录开始查找。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name &quot;local&quot;</span><br></pre></td></tr></table></figure>
-<p>查找进程。grep是搜索，用kill杀死进程。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep bash</span><br></pre></td></tr></table></figure>
-<p>后台运行。nohup , &amp;  , 2&gt;&amp;1 将错误输出重定向到标准输出</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./clash-linux-amd64-v1.10.0 -f xiaoyin_linux.yml -d . &gt; clash.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-<p> 修改权限。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 test.txt </span><br></pre></td></tr></table></figure>
-<p>whereis</p>
-<h4 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h4><p>更换pip清华源，快的飞起。  有时候换科大源快，可能离得近吧。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-<h4 id="WSL2"><a href="#WSL2" class="headerlink" title="WSL2"></a>WSL2</h4><p>windows开启Linux子系统设置</p>
-<p>微软商店下个20.04ubuntu</p>
-<p>再在vscode中打开，linus编程比windows好很多。</p>
-
-                    
-                </div>
-
-                
-
-                <div class="post-bottom-tags-and-share border-box">
-                    <div>
-                        
-                            <ul class="post-tags-box border-box">
-                                
-                                    <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
-                                    </li>
-                                
-                                    <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/linux/">linux</a>
-                                    </li>
-                                
-                            </ul>
-                        
-                    </div>
-                    <div>
-                        
-                    </div>
-                </div>
-
-                
-
-                
-                    <div class="post-nav border-box">
-                        
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/2023/10/19/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/Megatron-LM%E5%AE%9E%E9%AA%8C/"
-                                   title="Megatron-LM实验"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">Megatron-LM实验</span>
-                                        <span class="post-nav-item">Prev posts</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
-                        
-                            <div class="next-post">
-                                <a class="next"
-                                   rel="next"
-                                   href="/2022/09/02/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8/"
-                                   title="博客使用"
-                                >
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">博客使用</span>
-                                        <span class="post-nav-item">Next posts</span>
-                                    </span>
-                                    <span class="right arrow-icon flex-center">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                        
-                    </div>
-                
-
-                
-                    
-
-
-
-
-
-
-                
-            </div>
         </div>
-
-        
-            <div class="pc-post-toc right-toc">
-                <div class="post-toc-wrap border-box">
-    <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%BD%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">好用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="nav-text">常用配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WSL2"><span class="nav-text">WSL2</span></a></li></ol>
     </div>
-</div>
+    
 
-            </div>
-        
-    </div>
+
+
 </div>
 
 
@@ -428,31 +274,6 @@
 
     <!-- post tools -->
     
-        <div class="post-tools right-toc">
-            <div class="post-tools-container border-box">
-    <ul class="post-tools-list border-box">
-        <!-- PC encrypt again -->
-        
-
-        <!-- PC TOC show toggle -->
-        
-            <li class="tools-item flex-center toggle-show-toc">
-                <i class="fas fa-list"></i>
-            </li>
-        
-
-        <!-- PC go comment -->
-        
-
-        <!-- PC full screen -->
-        <li class="tools-item flex-center full-screen">
-            <i class="fa-solid fa-expand"></i>
-        </li>
-    </ul>
-</div>
-
-        </div>
-    
 
     <!-- side tools -->
     <div class="side-tools">
@@ -483,10 +304,6 @@
     </ul>
 
     <ul class="exposed-tools-list border-box">
-        
-            <li class="tools-item toggle-show-toc-tablet flex-center">
-                <i class="fas fa-list"></i>
-            </li>
         
 
         
@@ -544,18 +361,8 @@
 
     <!-- tablet toc -->
     
-        <div class="tablet-post-toc-mask">
-            <div class="tablet-post-toc">
-                <div class="post-toc-wrap border-box">
-    <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%BD%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">好用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="nav-text">常用配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WSL2"><span class="nav-text">WSL2</span></a></li></ol>
-    </div>
-</div>
-
-            </div>
-        </div>
-    
 </main>
+
 
 
 
@@ -593,24 +400,6 @@
     
 
     <!-- post page -->
-    
-        <!-- post-helper -->
-        
-<script src="/js/post/post-helper.js"></script>
-
-
-        <!-- toc -->
-        
-            
-<script src="/js/post/toc.js"></script>
-
-        
-
-        <!-- copyright-info -->
-        
-
-        <!-- share -->
-        
     
 
     <!-- categories page -->
