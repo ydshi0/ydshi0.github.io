@@ -459,9 +459,12 @@ self-attention能提取序列的关系，取代了之...
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            运行英伟达的并行框架，跑实验经常用。
-A402024/7/29 用最新的megatron代码，最新的docker镜像，运行很流畅。需要换一下数据集。
-1docker run -it --name ydshi_7_29 --gpus all --shm...
+                            运行英伟达的并行框架，很常用。
+gpt需要vocab，merges 2个文件，预处理数据，补充sh脚本里的参数，如GPUS_PER_NODE、tp、pp。
+运行命令：
+1bash examples/pretrain_gpt.sh 
+
+checkpoi...
                         
                     </div>
 

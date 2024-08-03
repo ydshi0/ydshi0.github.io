@@ -250,7 +250,7 @@
 
             <span class="meta-info-item post-update-date">
                 <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                <span class="datetime" data-updated="Mon Jul 29 2024 20:01:50 GMT+0800">2024-07-29</span>
+                <span class="datetime" data-updated="Sat Aug 03 2024 14:47:59 GMT+0800">2024-08-03</span>
             </span>
         
 
@@ -288,16 +288,19 @@
                     
 
                     
-                         <h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>英伟达的并行框架，跑实验经常用。</p>
-<h4 id="A40"><a href="#A40" class="headerlink" title="A40"></a>A40</h4><p>2024/7/29 用最新的megatron代码，最新的docker镜像，运行很流畅。需要换一下数据集。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_7_29 --gpus all --shm-size=1G -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:24.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
-<p>资料</p>
-<p><a class="link"   href="https://nolebase.ayaka.io/笔记/🤖 AI 人工智能/用 Megatron-LM 训练一个 GPT-2.html" >用 Megatron-LM 训练一个 GPT-2 | Nólëbase (ayaka.io) <i class="fas fa-external-link-alt"></i></a>  数据集</p>
+                         <h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>英伟达的并行框架，很常用。</p>
+<p>gpt需要vocab，merges 2个文件，预处理数据，补充sh脚本里的参数，如GPUS_PER_NODE、tp、pp。</p>
+<p>运行命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash examples/pretrain_gpt.sh </span><br></pre></td></tr></table></figure>
+<ul>
+<li>checkpoint可以不保存，直接注释掉，—load、—save</li>
+<li>—mock-data 可以生成假数据，需要注释掉 —data-path </li>
+</ul>
+<h4 id="A40"><a href="#A40" class="headerlink" title="A40"></a>A40</h4><p>2024/7/30 用最新的megatron代码，最新的docker镜像，运行很顺利。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_8_2 --gpus all --shm-size=64G -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:24.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
+<p><a class="link"   href="https://nolebase.ayaka.io/笔记/🤖 AI 人工智能/用 Megatron-LM 训练一个 GPT-2.html" >用 Megatron-LM 训练一个 GPT-2 | Nólëbase (ayaka.io) <i class="fas fa-external-link-alt"></i></a>  数据集来源</p>
 <h4 id="1080Ti"><a href="#1080Ti" class="headerlink" title="1080Ti"></a>1080Ti</h4><p>由于架构比较老，需要注释掉trans engine模块，加上参数   —transformer-impl local </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_3_1 --gpus all --shm-size=1G -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:22.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
-<p>gpt需要vocab，merges 2个文件，可以在hugging face下载到。预处理数据。补充sh脚本里的参数，如GPUS_PER_NODE、tp、pp。</p>
-<p>运行命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash examples/pretrain_gpt_distributed_with_mp.sh </span><br></pre></td></tr></table></figure>
 <h4 id="显存不够"><a href="#显存不够" class="headerlink" title="显存不够"></a>显存不够</h4><p>CUDA out of memory，可以减小一些参数。</p>
 <p>​    —num-layers 12 \<br>​    —hidden-size 256  </p>
 <h3 id="统计nccl通信占比"><a href="#统计nccl通信占比" class="headerlink" title="统计nccl通信占比"></a>统计nccl通信占比</h3><p>在interation 代码前后插入 <a class="link"   href="https://pytorch.org/docs/stable/generated/torch.cuda.nvtx.range_push.html#torch-cuda-nvtx-range-push" >torch.cuda.nvtx.range_push <i class="fas fa-external-link-alt"></i></a>  、 …pop tag。运行时前面加上<strong>nsys profile</strong>，在windows 使用NsightSystems 进行可视化查看。（一般第一个iteration是warm up，可以设置成5、10）</p>
