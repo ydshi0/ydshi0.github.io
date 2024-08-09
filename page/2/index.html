@@ -219,16 +219,20 @@
                 <div class="home-post-item-bottom border-box">
                     
                     <h3 class="home-post-title border-box">
-                        <a href="/2023/12/26/%E6%8A%80%E6%9C%AF/%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/">
-                            方法
+                        <a href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/">
+                            并行训练
                         </a>
                     </h3>
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            新模型 模型榜单 最新的模型
-打印模型结构
-123model = timm.create_model(&#x27;coatnet_0_224&#x27;)for name, param in model.named_parameters():    ...
+                            数据并行pytorch中DDP比DP效果好，
+可以用torchrun启动，也能用多线程普通启动
+待了解
+
+[ ] hugging face 的accelerate
+
+
                         
                     </div>
 
@@ -249,7 +253,7 @@
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%96%B9%E6%B3%95/">方法</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/">并行训练</a></li>
                         
                     
                 </ul>
@@ -263,7 +267,7 @@
     </div>
 
     
-        <a class="home-read-more" href="/2023/12/26/%E6%8A%80%E6%9C%AF/%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+        <a class="home-read-more" href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
@@ -520,12 +524,12 @@ checkpoi...
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            linux的基本使用。
-本地用wsl就可以，在线colab网站也挺好。
-WSL2windows开启Linux子系统设置
-微软商店下个20.04ubuntu
-再在vscode中打开，linus编程比windows好很多。
-常用配置更换pip清华源，快的...
+                            linux配置
+WSL2—推荐windows开启Linux子系统设置
+安装wsl2，再配合vscode打开
+1wsl --install
+常用更换pip科大源
+1pip config set global.index-url https://mirr...
                         
                     </div>
 
