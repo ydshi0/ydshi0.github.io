@@ -250,7 +250,7 @@
 
             <span class="meta-info-item post-update-date">
                 <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                <span class="datetime" data-updated="Sat Jul 27 2024 15:56:58 GMT+0800">2024-07-27</span>
+                <span class="datetime" data-updated="Wed Oct 23 2024 01:09:13 GMT+0800">2024-10-23</span>
             </span>
         
 
@@ -291,7 +291,6 @@
                          <h3 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h3><p>参数维度大小是（v,h），v是词表总量，h是hidden_size。 每个词有个整数索引，embedding后就是对应索引的那行，python代码中张量直接套一个索引就得出了。</p>
 <h3 id="self-attention"><a href="#self-attention" class="headerlink" title="self-attention"></a>self-attention</h3><p>能提取序列的关系，取代了之前的RNN，方便并行。</p>
 <p>由input a1分别算出q，k，v。attention就是每个词之间的关系，q1乘其他词的k得到，最后拿attention乘对应的v 再加起来，就是output b1。要训练的就是Wq,Wk,Wv。</p>
-<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090259568.png"  alt=""></p>
 <p>muti-head就是多个self-attention，可以提取不同角度的信息。</p>
 <p>资料</p>
 <p><a class="link"   href="https://www.youtube.com/watch?v=ugWDIIOHtPA&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&amp;index=61" >Transformer - YouTube<i class="fas fa-external-link-alt"></i></a>   讲的很清楚</p>
