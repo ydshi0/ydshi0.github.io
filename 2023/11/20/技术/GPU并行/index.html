@@ -250,7 +250,7 @@
 
             <span class="meta-info-item post-update-date">
                 <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                <span class="datetime" data-updated="Sat Jul 27 2024 15:56:45 GMT+0800">2024-07-27</span>
+                <span class="datetime" data-updated="Wed Oct 30 2024 15:09:39 GMT+0800">2024-10-30</span>
             </span>
         
 
@@ -288,28 +288,30 @@
                     
 
                     
-                         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>主要针对transformer大模型架构，megatron-LM框架。</p>
-<p>资料</p>
+                         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>主要针对transformer模型架构，megatron-LM框架。</p>
+<p>输入input X维度 （batch_size, sequence, hidden_size) （b, s, h)</p>
+<p><strong>资料</strong></p>
 <p><a class="link"   href="https://github.com/NVIDIA/Megatron-LM" >NVIDIA/Megatron-LM <i class="fas fa-external-link-alt"></i></a>  官网里面给出了经典的3篇文章</p>
 <p><a class="link"   href="https://docs.oneflow.org/master/parallelism/01_introduction.html" >常见的分布式并行策略 - OneFlow<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   href="https://colossalai.org/zh-Hans/docs/concepts/paradigms_of_parallelism/" >并行技术 | Colossal-AI (colossalai.org)<i class="fas fa-external-link-alt"></i></a></p>
-<h3 id="数据并行"><a href="#数据并行" class="headerlink" title="数据并行"></a>数据并行</h3><p>DP，要 all-reduce 互相传梯度。</p>
+<h3 id="数据并行"><a href="#数据并行" class="headerlink" title="数据并行"></a>数据并行</h3><p>DP从 b维度进行切分。要 all-reduce 互相传梯度。</p>
 <h4 id="zero1"><a href="#zero1" class="headerlink" title="zero1"></a>zero1</h4><p> 对于 optimizer states 的切分。每个gpu只维护一部分优化器状态，也只更新一部分参数。这样显存和计算都减少了。</p>
-<p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090301958.png"   alt="image-20240409030145849" style="zoom: 33%;" ></p>
+<p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090301958.png"   alt="image-20240409030145849" style="zoom: 25%;" ></p>
 <p>通信量并没有增加。Ring AllReduce就是分为两个步骤：reduce-scatter和 all-gather。</p>
 <p>通信量：$2\times (N-1)  \times  \frac{K}{N} $    k是数据大小，N个GPU</p>
 <p>资料</p>
 <p><a class="link"   href="https://mp.weixin.qq.com/s/K8l7H2zCUr9sGzYehizFMA" >Ring AllReduce简介 <i class="fas fa-external-link-alt"></i></a></p>
-<h3 id="张量并行"><a href="#张量并行" class="headerlink" title="张量并行"></a>张量并行</h3><p>将attention、MLP拆开。只要在g处做all-reduce加在一起就行。</p>
-<p>相当于先做一个列并行，再做一个行并行。</p>
+<h3 id="张量并行"><a href="#张量并行" class="headerlink" title="张量并行"></a>张量并行</h3><p>TP从h维度切分。attention层一个GPU放几个head。只要在g处做all-reduce加在一起就行。</p>
+<p>先做一个列并行，再做一个行并行。</p>
 <p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090304716.png"   alt="image-20231212014706267" style="zoom: 50%;" ></p>
 <p>列并行:把权重A按照列来分割。</p>
 <p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202407271554204.png"   alt="8b6de7e8bac53785e73ab3926c018084" style="zoom:50%;" ></p>
 <p>行并行:把权重A按照行分割成两部分。</p>
 <p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202407271554850.png"   alt="44d156d16fb9b042f7524e9a1db24d87" style="zoom:50%;" ></p>
-<h4 id="sequence-parallel"><a href="#sequence-parallel" class="headerlink" title="sequence parallel"></a>sequence parallel</h4><p>启用sp后all-reduce就变成all-gather和reduce-scatter了。</p>
-<p>将 layernorm 和 dropout 按sequence维度也拆分。通信g是前向的all-gather，反向reduce-scatter，$\hat{g}$相反。同样通信量也没有增加。</p>
+<h4 id="sequence-parallel"><a href="#sequence-parallel" class="headerlink" title="sequence parallel"></a>sequence parallel</h4><p>sp从s维度切分。all-reduce变成all-gather和reduce-scatter。通信g是前向的all-gather，反向reduce-scatter，$\hat{g}$相反。同样通信量也没有增加。</p>
+<p>具体是 layernorm 和 dropout 按sequence维度拆分。这2个层可以序列并行，因为layernorm是一个token一个token算的。</p>
 <p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090302167.png"  alt="image-20240409030212742"></p>
+<p>sp也可以用到attention层，但会引入通信，适用场景是长序列输入。</p>
 <h3 id="流水线并行"><a href="#流水线并行" class="headerlink" title="流水线并行"></a>流水线并行</h3><p>Gpipe。算完前向再算反向。</p>
 <p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090303061.png"  alt="image-20240409030253495"></p>
 <p>1F1B、交错流水线 。上面是1F1B，保持进行中的微批次数量里只有4个（与管道深度一样），这样相比Gpipe显存会更小。</p>
