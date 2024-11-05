@@ -514,9 +514,8 @@ kill 杀死进程，ctrl + C 中断进程， ctrl + Z 暂停进程
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            dockerpython ，pytorch，cuda都要相互兼容。可以用官方提供的docker，如nvidia。
-cuda版本查看 ，其他的如nvidia-smi都不是。
-1python -c &quot;import torch; print(to...
+                            dockerdocker run的时候要-v挂载数据， —shm-size扩大空间。docker工作目录命名为workspace，还得重新命名。
+1docker run -it --name ydshi_3_1 --gpus all --shm-si...
                         
                     </div>
 
@@ -632,11 +631,8 @@ How a Transfor...
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            MFU表示模型在实际运行中利用其最大理论 FLOPS 的比例。
-MFU = (实际浮点运算次数) / (理论最大 FLOPS)
-NIC 网卡
-随机访问存储器RAM（Random Access Memory） /DDR/ HBM 都是内存
-PCIe s...
+                            CPU取数据CPU依次从 cache、主存、磁盘中读取数据。cache中没有，如果主存中有，读取后会写入到cache中。但主存中也没有，则会用DMA从磁盘读取到主存中，而不是CPU直接读取磁盘。
+frame是物理内存一个块的大小，page是虚拟内存，...
                         
                     </div>
 
