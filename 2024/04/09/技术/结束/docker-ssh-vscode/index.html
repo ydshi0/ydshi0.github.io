@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Mon Dec 09 2024 14:33:21 GMT+0800">2024-12-09</span>
+                    <span class="datetime" data-updated="Sun Feb 16 2025 21:43:41 GMT+0800">2025-02-16</span>
                 </span>
             
         
@@ -291,13 +291,11 @@
 
                     
                          <h4 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h4><p>docker run的时候要-v挂载数据， —shm-size扩大空间。docker工作目录命名为workspace，还得重新命名。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_3_1 --gpus all --shm-size=1G -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:22.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_2_16 --gpus all --shm-size=2G -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:24.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
 <p>创建完容器之后重新打开</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start ydshi_3_1</span><br><span class="line">docker exec -it ydshi_3_1 /bin/bash </span><br></pre></td></tr></table></figure>
-<p>将容器保存为镜像</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit abc123 my_image:latest</span><br></pre></td></tr></table></figure>
-<p>传输docker 镜像</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker save -o my_image.tar my_image:latest</span><br><span class="line">scp my_image.tar root@123.123.123.123:/path</span><br><span class="line">docker load -i my_image.tar </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start ydshi</span><br><span class="line">docker exec -it ydshi /bin/bash </span><br></pre></td></tr></table></figure>
+<p>将容器保存为镜像，传输docker 镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker commit abc123 my_image:latest</span><br><span class="line">docker save -o my_image.tar my_image:latest</span><br><span class="line">scp my_image.tar root@123.123.123.123:/path</span><br><span class="line">docker load -i my_image.tar </span><br></pre></td></tr></table></figure>
 <p>查看镜像        docker images   </p>
 <p>查看容器        docker ps </p>
 <p>删除镜像        docker rmi</p>

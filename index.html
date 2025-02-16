@@ -346,7 +346,7 @@
                     <div class="home-post-content keep-markdown-body">
                         
                             dockerdocker run的时候要-v挂载数据， —shm-size扩大空间。docker工作目录命名为workspace，还得重新命名。
-1docker run -it --name ydshi_3_1 --gpus all --shm-si...
+1docker run -it --name ydshi_2_16 --gpus all --shm-s...
                         
                     </div>
 
@@ -512,8 +512,8 @@ frame是物理内存一个块的大小，page是虚拟内存，...
                 <div class="home-post-item-bottom border-box">
                     
                     <h3 class="home-post-title border-box">
-                        <a href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/">
-                            并行训练
+                        <a href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E6%9C%BA%E8%AE%AD%E7%BB%83/">
+                            多机训练
                         </a>
                     </h3>
 
@@ -521,9 +521,10 @@ frame是物理内存一个块的大小，page是虚拟内存，...
                         
                             数据并行pytorch中DDP比DP效果好
 可以用torchrun启动，也能用多线程普通启动
-跨机训练另一个节点NODE_RANK=1
+跨机训练节点间要先ssh互连
+另一个节点NODE_RANK=1
 ip地址，网卡用 ifconfig 看
-1234567891011121314151617181920212223...
+12345678910111213141516171...
                         
                     </div>
 
@@ -544,7 +545,7 @@ ip地址，网卡用 ifconfig 看
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/">并行训练</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%9A%E6%9C%BA%E8%AE%AD%E7%BB%83/">多机训练</a></li>
                         
                     
                 </ul>
@@ -558,7 +559,7 @@ ip地址，网卡用 ifconfig 看
     </div>
 
     
-        <a class="home-read-more" href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E8%AE%AD%E7%BB%83/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+        <a class="home-read-more" href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E6%9C%BA%E8%AE%AD%E7%BB%83/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
@@ -630,8 +631,8 @@ ip地址，网卡用 ifconfig 看
                 <div class="home-post-item-bottom border-box">
                     
                     <h3 class="home-post-title border-box">
-                        <a href="/2023/11/20/%E6%8A%80%E6%9C%AF/GPU%E5%B9%B6%E8%A1%8C/">
-                            GPU并行
+                        <a href="/2023/11/20/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">
+                            并行策略
                         </a>
                     </h3>
 
@@ -661,7 +662,7 @@ NVIDIA/Megatron-LM   官网里面给出...
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/GPU%E5%B9%B6%E8%A1%8C/">GPU并行</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">并行策略</a></li>
                         
                     
                 </ul>
@@ -675,7 +676,7 @@ NVIDIA/Megatron-LM   官网里面给出...
     </div>
 
     
-        <a class="home-read-more" href="/2023/11/20/%E6%8A%80%E6%9C%AF/GPU%E5%B9%B6%E8%A1%8C/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+        <a class="home-read-more" href="/2023/11/20/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
