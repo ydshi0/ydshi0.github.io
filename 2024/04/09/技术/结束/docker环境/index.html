@@ -9,7 +9,7 @@
     
     <title>
         
-            docker相关 |
+            docker环境 |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        docker相关
+                        docker环境
                     </div>
                 
 
@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Feb 16 2025 21:43:41 GMT+0800">2025-02-16</span>
+                    <span class="datetime" data-updated="Tue Feb 18 2025 18:46:40 GMT+0800">2025-02-18</span>
                 </span>
             
         
@@ -303,8 +303,10 @@
 <h4 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h4><p>连接需要用户名、ip地址、密码。默认端口22。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@host</span><br></pre></td></tr></table></figure>
 <p>可以在vscode里面下载ssh插件，打开服务器的文件夹</p>
-<h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>python ，pytorch，cuda都要相互兼容。</p>
-<p>cuda版本查看 ，其他的如nvidia-smi都不是。</p>
+<h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>pytorch，cuda要兼容。 </p>
+<p>cuda版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --version</span><br></pre></td></tr></table></figure>
+<p>pytorch依赖的cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import torch; print(torch.version.cuda)&quot;</span><br></pre></td></tr></table></figure>
 <h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>docker也需要用  <strong>conda </strong> 来管理环境的，不过默认在用base。</p>
 <p>vscode可直接连接到docker，再选择docker里面的conda python解释器，就可以跳转、查看参数了。</p>
