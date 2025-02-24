@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Feb 18 2025 18:46:40 GMT+0800">2025-02-18</span>
+                    <span class="datetime" data-updated="Mon Feb 24 2025 01:08:46 GMT+0800">2025-02-24</span>
                 </span>
             
         
@@ -300,19 +300,17 @@
 <p>查看容器        docker ps </p>
 <p>删除镜像        docker rmi</p>
 <p>删除容器        docker rm</p>
-<h4 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h4><p>连接需要用户名、ip地址、密码。默认端口22。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@host</span><br></pre></td></tr></table></figure>
-<p>可以在vscode里面下载ssh插件，打开服务器的文件夹</p>
+<p>有时候容器用不了GPU，nvidia-smi 也看不到。尝试：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart container           </span><br></pre></td></tr></table></figure>
 <h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>pytorch，cuda要兼容。 </p>
 <p>cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --version</span><br></pre></td></tr></table></figure>
 <p>pytorch依赖的cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import torch; print(torch.version.cuda)&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>docker也需要用  <strong>conda </strong> 来管理环境的，不过默认在用base。</p>
+<h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>vscode下载ssh插件，打开服务器的文件夹</p>
 <p>vscode可直接连接到docker，再选择docker里面的conda python解释器，就可以跳转、查看参数了。</p>
+<p>docker也可以用  <strong>conda </strong> 来管理环境的，不过默认在用base。</p>
 <p>pylance类型检查报错，可以在vscode setting里面关闭。</p>
-<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090258514.png"  alt="image-20240409025843123"></p>
-<p>最后能在服务器里面愉快的编程了。</p>
 
                     
                 </div>
@@ -397,7 +395,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh"><span class="nav-text">ssh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
     </div>
 </div>
 
@@ -557,7 +555,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh"><span class="nav-text">ssh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
     </div>
 </div>
 

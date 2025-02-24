@@ -460,12 +460,10 @@ frame是物理内存一个块的大小，page是虚拟内存，...
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            数据并行pytorch中DDP比DP效果好
-可以用torchrun启动，也能用多线程普通启动
-跨机训练节点间要先ssh互连
-另一个节点NODE_RANK=1
-ip地址，网卡用 ifconfig 看
-12345678910111213141516171...
+                            多机训练节点间要先ssh互连
+一个节点NODE_RANK=0，另一个节点NODE_RANK=1
+ifconfig  查看ip地址，网卡  
+1234567891011121314151617181920212223242526272829303132...
                         
                     </div>
 
