@@ -9,7 +9,7 @@
     
     <title>
         
-            个人成长 |
+            cuda知识 |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        个人成长
+                        cuda知识
                     </div>
                 
 
@@ -245,13 +245,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2023-01-01</span>
+                <span class="datetime">2025-02-25</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Jan 21 2025 22:04:50 GMT+0800">2025-01-21</span>
+                    <span class="datetime" data-updated="Wed Feb 26 2025 17:03:14 GMT+0800">2025-02-26</span>
                 </span>
             
         
@@ -262,10 +262,10 @@
             <span class="post-tag meta-info-item border-box">
                 <ul class="post-tag-ul">
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%94%9F%E6%B4%BB/">生活</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/private/">private</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/cuda/">cuda</a></li>
                         
                     
                 </ul>
@@ -290,18 +290,21 @@
                     
 
                     
-                         <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，您输入的密码错误。" data-whm="抱歉, 当前文章不能被校验。">
-  <script id="hbeData" type="hbeData" data-hmacdigest="0fc1066b58fafd2d2dea3cceaab6c2b7288da4407db6a652610053408de770bb">463f9e316d1170d91999ca3c1874fb1b39f3f3a61959c37d81791c80c21b4104ff1926bf37b77c438f2aff8f6ac9d3465a956025a686f5d39f2d5d6274697238dc2f03c32de5026911f90c928794e879a790bd72359a6e536403716ab180503418b65e37c76a888bd4a29a8d36323af1f8d339107b9f3bb4866682237be3484d88e54bcf4bb1ecd9f92962f8eaf5615c4cd10fc31dd649251175e2f26b338b041367b4c3dab1ab5fd951ce9c8e8f96447eff10e92c7a057fb9177ece93c9ff0db63917fa487c46f205d8f6169513d4f7972267f359f9ed6e00fef9c57cde74c582798197b1c0569ee8bc38257bb2086ac682228e09a513e9fb4c5eaf52fc6964e84a03fe88deea261d219564bc548df658b2eca26a0de744d4abaa0edd5c9f96391da6dd9813c1808b17ea81a348a6da9b7f92b971b107b54d5c9406dd7752b457090333c9e9e65a5280a8846ac2dc24be60656dcf2412da12a897e6ba93d090a8ad81e171f873aa27c152aaacc75addc1f2313c5f1f7684b973c50ed4f686fd4be993218bd94d92bf7e367b145ed0e81b1c44f16d2cd6b4112b2fbf0472b8dd08f7dfa2090b93a15f046706aca2d5f6f2b04d4df9a02b61339ae196e3380e8b4bbadf2b91f2bd9d2f6ba81f0cd379bf6346a67ef97707cbcecb88fe15c1e1c89d20addeae64a0cc814bbfaab076b180c787e4bfd2c3f4638137bd840f3cdfb26ad68adee2de55b19e42579085b4380f0cb3a39c97ed268d252b8a49dbcb3cec5fd900b9f0f23221ffdebb6941ad770864458c77b7e7e17c915b9267afe6b869d167be4643b6d056700b57a677f199cbf50ea62838629d48b4a3fb3897bd943379c95cbd221a3cc01e86ccee93ed4cc78e77bec4b28988e4601b5edde4762a33</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码后查看</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+                         <p><strong>sp:</strong> </p>
+<p><strong>sp:</strong> 最基本的处理单元，streaming processor </p>
+<p><strong>sm:</strong>多个sp加上其他的一些资源组成一个sm,  streaming multiprocessor. 其他资源也就是存储资源，共享内存，寄储器等。</p>
+<p><strong>warp:</strong>GPU执行程序时的调度单位，目前cuda的warp的大小为32，</p>
+<p><strong>grid、block、thread：</strong>在利用cuda进行编程时，一个grid分为多个block，而一个block分为多个thread.</p>
+<p><strong>由于warp的大小一般为32，所以block所含的thread的大小一般要设置为32的倍数。</strong></p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/123170285" >理解CUDA中的thread,block,grid和warp - 知乎<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/34587739" >CUDA编程入门极简教程 - 知乎<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/398427344" >CUDA编程 （2.1）—— 核函数、线程层级 - 知乎<i class="fas fa-external-link-alt"></i></a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 核函数</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatAdd</span><span class="params">(<span class="type">float</span> A[N][N], <span class="type">float</span> B[N][N],</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="type">float</span> C[N][N])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> i = threadIdx.x;</span><br><span class="line">    <span class="type">int</span> j = threadIdx.y;</span><br><span class="line">    C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation with one block of N * N * 1 threads</span></span><br><span class="line">    <span class="type">int</span> numBlocks = <span class="number">1</span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(N, N)</span></span>;</span><br><span class="line">    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CUDA把block，thread的ID设计成了一个3维的向量，可以根据需要使用1维、2维或者3维索引来识别每个thread</p>
+<p>每个block里面的所有thread会共用一个处理器核心（Streaming Multiprocessors），它们共享shared memory</p>
+<p>CUDA限制了每个block最多只能有1024个thread</p>
+<p>在CUDA核函数中，第一个参数通常是 <code>output</code></p>
+
                     
                 </div>
 
@@ -313,11 +316,11 @@
                             <ul class="post-tags-box border-box">
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%94%9F%E6%B4%BB/">生活</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/private/">private</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/cuda/">cuda</a>
                                     </li>
                                 
                             </ul>
@@ -333,31 +336,15 @@
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/2023/01/02/%E7%94%9F%E6%B4%BB/%E5%93%B2%E5%AD%A6%E6%80%9D%E6%83%B3/"
-                                   title="哲学思想"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">哲学思想</span>
-                                        <span class="post-nav-item">Prev posts</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/2022/09/02/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8/"
-                                   title="博客使用"
+                                   href="/2024/07/28/%E6%8A%80%E6%9C%AF/Linux%E7%9F%A5%E8%AF%86/"
+                                   title="linux知识"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">博客使用</span>
+                                        <span class="post-nav-title-item text-ellipsis">linux知识</span>
                                         <span class="post-nav-item">Next posts</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
