@@ -226,10 +226,11 @@
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            sp: 
-sp: 最基本的处理单元，streaming processor 
-sm:多个sp加上其他的一些资源组成一个sm,  streaming multiprocessor. 其他资源也就是存储资源，共享内存，寄储器等。
-warp:GPU执行程序...
+                            GPU参数SM（Streaming Multiprocessor）GPU的核心计算单元，一个GPU含有多个SM
+每个SM包含：
+
+CUDA核心（SP, Streaming Processor）：最基本的计算单元，执行浮点和整数运算
+共享内存（Shar...
                         
                     </div>
 
@@ -1022,6 +1023,22 @@ checkpoi...
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>

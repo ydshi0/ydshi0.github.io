@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed Feb 26 2025 17:03:14 GMT+0800">2025-02-26</span>
+                    <span class="datetime" data-updated="Wed Mar 05 2025 02:18:36 GMT+0800">2025-03-05</span>
                 </span>
             
         
@@ -290,20 +290,30 @@
                     
 
                     
-                         <p><strong>sp:</strong> </p>
-<p><strong>sp:</strong> 最基本的处理单元，streaming processor </p>
-<p><strong>sm:</strong>多个sp加上其他的一些资源组成一个sm,  streaming multiprocessor. 其他资源也就是存储资源，共享内存，寄储器等。</p>
-<p><strong>warp:</strong>GPU执行程序时的调度单位，目前cuda的warp的大小为32，</p>
-<p><strong>grid、block、thread：</strong>在利用cuda进行编程时，一个grid分为多个block，而一个block分为多个thread.</p>
-<p><strong>由于warp的大小一般为32，所以block所含的thread的大小一般要设置为32的倍数。</strong></p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/123170285" >理解CUDA中的thread,block,grid和warp - 知乎<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/34587739" >CUDA编程入门极简教程 - 知乎<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/398427344" >CUDA编程 （2.1）—— 核函数、线程层级 - 知乎<i class="fas fa-external-link-alt"></i></a></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 核函数</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatAdd</span><span class="params">(<span class="type">float</span> A[N][N], <span class="type">float</span> B[N][N],</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="type">float</span> C[N][N])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> i = threadIdx.x;</span><br><span class="line">    <span class="type">int</span> j = threadIdx.y;</span><br><span class="line">    C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation with one block of N * N * 1 threads</span></span><br><span class="line">    <span class="type">int</span> numBlocks = <span class="number">1</span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(N, N)</span></span>;</span><br><span class="line">    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>CUDA把block，thread的ID设计成了一个3维的向量，可以根据需要使用1维、2维或者3维索引来识别每个thread</p>
-<p>每个block里面的所有thread会共用一个处理器核心（Streaming Multiprocessors），它们共享shared memory</p>
-<p>CUDA限制了每个block最多只能有1024个thread</p>
+                         <h3 id="GPU参数"><a href="#GPU参数" class="headerlink" title="GPU参数"></a>GPU参数</h3><h4 id="SM（Streaming-Multiprocessor）"><a href="#SM（Streaming-Multiprocessor）" class="headerlink" title="SM（Streaming Multiprocessor）"></a><strong>SM（Streaming Multiprocessor）</strong></h4><p>GPU的核心计算单元，一个GPU含有多个SM</p>
+<p>每个SM包含：</p>
+<ul>
+<li><strong>CUDA核心（SP, Streaming Processor）</strong>：最基本的计算单元，执行浮点和整数运算</li>
+<li><strong>共享内存（Shared Memory）</strong>：SM内线程块可共享的高速内存</li>
+<li><strong>寄存器（Registers）</strong>：为每个线程分配私有存储</li>
+<li><strong>调度器（Warp Scheduler）</strong>：管理线程束（Warp）的执行</li>
+</ul>
+<h4 id="Thread、Block、Grid"><a href="#Thread、Block、Grid" class="headerlink" title="Thread、Block、Grid"></a>Thread、Block、Grid</h4><p><strong>Block</strong>：包含多个Thread，同一Block内的线程共享SM资源（如Shared Memory）</p>
+<p><strong>Grid</strong>：包含多个block</p>
+<p><strong>Warp（线程束）</strong>：GPU的最小调度单位，固定包含32个线程</p>
+<p>每个Block最多包含1024个Thread（受硬件限制）</p>
+<p>Block大小建议设为32的倍数（与Warp对齐，避免资源浪费）</p>
+<p>每个 Block 会被分配到一个 SM 上执行，一个 SM 可以同时执行多个 Block</p>
+<h3 id="CUDA核函数"><a href="#CUDA核函数" class="headerlink" title="CUDA核函数"></a><strong>CUDA核函数</strong></h3><p>使用<code>__global__</code>修饰，通过<code>&lt;&lt;&lt;grid_dim, block_dim&gt;&gt;&gt;</code>指定执行配置</p>
+<p>grid，block 支持1D/2D/3D索引（dim3），用索引来识别对应的计算任务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">__global__ void vectorAdd(const float *A, const float *B, float *C, int N) &#123;</span><br><span class="line">    int i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    if (i &lt; N) &#123;</span><br><span class="line">        C[i] = A[i] + B[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vectorAdd&lt;&lt;&lt;blocksPerGrid, threadsPerBlock&gt;&gt;&gt;(d_A, d_B, d_C, N);</span><br></pre></td></tr></table></figure>
 <p>在CUDA核函数中，第一个参数通常是 <code>output</code></p>
+<h3 id="GPU结构"><a href="#GPU结构" class="headerlink" title="GPU结构"></a>GPU结构</h3><p><strong>INT32</strong> ：32位整型运算的器件</p>
+<p><strong>FP32</strong> : 32位浮点型计算 </p>
+<p><strong>Tensor Core</strong>: 矩阵运算</p>
+<p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202503050153050.jpeg"   alt="img" style="zoom: 33%;" ></p>
+<p><strong>资料</strong></p>
+<p><a class="link"   href="https://www.twisted-meadows.com/nvidia-gpu-architecture/" >Nvidia 显卡架构详解 – Twisted Meadows<i class="fas fa-external-link-alt"></i></a> （比较GPU的方法）</p>
 
                     
                 </div>
@@ -372,7 +382,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU%E5%8F%82%E6%95%B0"><span class="nav-text">GPU参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SM%EF%BC%88Streaming-Multiprocessor%EF%BC%89"><span class="nav-text">SM（Streaming Multiprocessor）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread%E3%80%81Block%E3%80%81Grid"><span class="nav-text">Thread、Block、Grid</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="nav-text">CUDA核函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU%E7%BB%93%E6%9E%84"><span class="nav-text">GPU结构</span></a></li></ol>
     </div>
 </div>
 
@@ -532,7 +542,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU%E5%8F%82%E6%95%B0"><span class="nav-text">GPU参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SM%EF%BC%88Streaming-Multiprocessor%EF%BC%89"><span class="nav-text">SM（Streaming Multiprocessor）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread%E3%80%81Block%E3%80%81Grid"><span class="nav-text">Thread、Block、Grid</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="nav-text">CUDA核函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU%E7%BB%93%E6%9E%84"><span class="nav-text">GPU结构</span></a></li></ol>
     </div>
 </div>
 
@@ -618,6 +628,22 @@
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
