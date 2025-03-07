@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Thu Feb 27 2025 16:28:28 GMT+0800">2025-02-27</span>
+                    <span class="datetime" data-updated="Fri Mar 07 2025 17:42:54 GMT+0800">2025-03-07</span>
                 </span>
             
         
@@ -290,8 +290,9 @@
                     
 
                     
-                         <h4 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h4><p>docker run的时候要-v挂载数据， —shm-size扩大空间。docker工作目录命名为workspace，还得重新命名。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_2_16 --gpus all --shm-size=32G -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:24.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
+                         <h4 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h4><p>-v挂载数据，工作目录命名为workspace。</p>
+<p>直接用宿主机的空间和网络。（方便跨机）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_2_16 --gpus all --ipc=host --net=host -v /home/ydshi/data:/workspace nvcr.io/nvidia/pytorch:24.04-py3 /bin/bash</span><br></pre></td></tr></table></figure>
 <p>创建完容器之后重新打开</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start ydshi</span><br><span class="line">docker exec -it ydshi /bin/bash </span><br></pre></td></tr></table></figure>
 <p>将容器保存为镜像，传输docker 镜像</p>
