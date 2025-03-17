@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed Feb 26 2025 15:58:26 GMT+0800">2025-02-26</span>
+                    <span class="datetime" data-updated="Tue Mar 18 2025 00:21:03 GMT+0800">2025-03-18</span>
                 </span>
             
         
@@ -291,19 +291,16 @@
 
                     
                          <h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><p>git clone下来的仓库就可以查看修改记录，不要在docker里面git clone</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git status </span><br><span class="line">git add .</span><br><span class="line">git commit</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git status </span><br><span class="line">git add .</span><br><span class="line">git commit</span><br><span class="line">git checkout</span><br></pre></td></tr></table></figure>
 <h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>设置权限，解决无法修改，运行的问题</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 filename   // -R 文件夹</span><br></pre></td></tr></table></figure>
 <p>删除当前目录下的内容</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf *            //  千万不要写成rm -rf /*</span><br></pre></td></tr></table></figure>
-<p>查看历史命令</p>
+<p>历史命令</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history</span><br></pre></td></tr></table></figure>
-<h3 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -czf file.tar.gz file    //压缩</span><br><span class="line">tar -xzf file.tar.gz		 //解压缩</span><br></pre></td></tr></table></figure>
-<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>ps查找进程，grep搜索</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep bash</span><br></pre></td></tr></table></figure>
-<p>jobs 查看后台进程，fg 调到前台</p>
-<p>将进程放在后台运行  &amp; </p>
-<p>kill 杀进程，ctrl + C 中断进程， ctrl + Z 暂停进程</p>
+<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>查找进程，grep搜索。进程可以放在后台。</p>
+<p>kill 杀进程 （常用pkill，根据名称杀死进程），ctrl + C 中断， ctrl + Z 暂停。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep bash</span><br><span class="line">pkill -x python3</span><br><span class="line">pkill -x bash   </span><br></pre></td></tr></table></figure>
 <h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><ul>
 <li><strong>i</strong>        切换到输入模式</li>
 <li>/                搜索模式</li>
@@ -399,7 +396,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9"><span class="nav-text">压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-text">vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-text">vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol>
     </div>
 </div>
 
@@ -559,7 +556,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9"><span class="nav-text">压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-text">vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-text">vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol>
     </div>
 </div>
 
