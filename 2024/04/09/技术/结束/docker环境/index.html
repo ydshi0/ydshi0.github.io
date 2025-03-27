@@ -9,7 +9,7 @@
     
     <title>
         
-            docker环境 |
+            docker |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        docker环境
+                        docker
                     </div>
                 
 
@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Mon Mar 10 2025 00:36:26 GMT+0800">2025-03-10</span>
+                    <span class="datetime" data-updated="Fri Mar 28 2025 01:42:28 GMT+0800">2025-03-28</span>
                 </span>
             
         
@@ -266,6 +266,9 @@
                         
                     
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/docker/">docker</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/linux/">linux</a></li>
                         
                     
                 </ul>
@@ -296,7 +299,7 @@
 <p>创建完容器之后重新打开</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start ydshi</span><br><span class="line">docker exec -it ydshi /bin/bash </span><br></pre></td></tr></table></figure>
 <p>将容器保存为镜像，传输docker 镜像</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker commit abc123 my_image:latest</span><br><span class="line">docker save -o my_image.tar my_image:latest</span><br><span class="line">scp my_image.tar root@123.123.123.123:/path</span><br><span class="line">docker load -i my_image.tar </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker commit abc123 my_image:latest</span><br><span class="line">docker save -o my_image.tar my_image:latest</span><br><span class="line">scp my_image.tar root@192.168.0.1:/path</span><br><span class="line">docker load -i my_image.tar </span><br></pre></td></tr></table></figure>
 <p>查看镜像        docker images   </p>
 <p>查看容器        docker ps </p>
 <p>删除镜像        docker rmi</p>
@@ -309,9 +312,9 @@
 <p>pytorch依赖的cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import torch; print(torch.version.cuda)&quot;</span><br></pre></td></tr></table></figure>
 <h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>vscode下载ssh插件，打开服务器的文件夹</p>
-<p>vscode可直接连接到docker，再选择docker里面的conda python解释器，就可以跳转、查看参数了。</p>
+<p>VScode插件：Dev Containers 连接到容器内部，可以查看库函数</p>
+<p>Attach to Running Container…</p>
 <p>docker也可以用  <strong>conda </strong> 来管理环境的，不过默认在用base。</p>
-<p>pylance类型检查报错，可以在vscode setting里面关闭。</p>
 
                     
                 </div>
@@ -329,6 +332,10 @@
                                 
                                     <li class="tag-item border-box">
                                         <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/docker/">docker</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/linux/">linux</a>
                                     </li>
                                 
                             </ul>
