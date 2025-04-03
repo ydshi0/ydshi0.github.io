@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Nov 12 2024 20:16:03 GMT+0800">2024-11-12</span>
+                    <span class="datetime" data-updated="Tue Apr 01 2025 19:30:00 GMT+0800">2025-04-01</span>
                 </span>
             
         
@@ -290,7 +290,13 @@
                     
 
                     
-                         <p>prefiil - decode 2个阶段，PD分离 mooncake</p>
+                         <p>111</p>
+<h4 id="vLLM"><a href="#vLLM" class="headerlink" title="vLLM"></a>vLLM</h4><p>关键参数</p>
+<p>server端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--max-num-batched-tokens 2048 \</span><br><span class="line">--max-num-seqs 256 \       共同限制一个batch的大小</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>client端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--ignore-eos \</span><br><span class="line">--burstiness 100 \     请求分布</span><br></pre></td></tr></table></figure>
+<p>其他</p>
 <p>KV-cache 缓存，token -&gt; token 生成下一个token需要当前的Q，和之前所有的KV。</p>
 <p>资料</p>
 <p><a class="link"   href="https://mp.weixin.qq.com/s/WxbMFoSrKl0xqsUkzPLJHw" >LLM推理入门指南②：深入解析KV缓存 (qq.com)<i class="fas fa-external-link-alt"></i></a></p>
@@ -379,7 +385,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#vLLM"><span class="nav-text">vLLM</span></a></li></ol>
     </div>
 </div>
 
@@ -539,7 +545,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#vLLM"><span class="nav-text">vLLM</span></a></li></ol>
     </div>
 </div>
 
@@ -625,22 +631,6 @@
 
 
     
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>

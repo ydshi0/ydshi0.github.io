@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Fri Mar 28 2025 01:42:28 GMT+0800">2025-03-28</span>
+                    <span class="datetime" data-updated="Thu Apr 03 2025 15:18:28 GMT+0800">2025-04-03</span>
                 </span>
             
         
@@ -306,11 +306,12 @@
 <p>删除容器        docker rm</p>
 <p>有时候容器用不了GPU，nvidia-smi 也看不到。尝试：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart container           </span><br></pre></td></tr></table></figure>
-<h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>pytorch，cuda要兼容。 </p>
-<p>cuda版本</p>
+<h4 id="cuda环境"><a href="#cuda环境" class="headerlink" title="cuda环境"></a>cuda环境</h4><p>pytorch，cuda要兼容。 </p>
+<p>cuda版本。nvidia-smi看到的cuda version比较奇怪</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --version</span><br></pre></td></tr></table></figure>
 <p>pytorch依赖的cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import torch; print(torch.version.cuda)&quot;</span><br></pre></td></tr></table></figure>
+<p>cuda工具包一般在 /usr/local/  cuda</p>
 <h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>vscode下载ssh插件，打开服务器的文件夹</p>
 <p>VScode插件：Dev Containers 连接到容器内部，可以查看库函数</p>
 <p>Attach to Running Container…</p>
@@ -403,7 +404,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda%E7%8E%AF%E5%A2%83"><span class="nav-text">cuda环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
     </div>
 </div>
 
@@ -563,7 +564,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda%E7%8E%AF%E5%A2%83"><span class="nav-text">cuda环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
     </div>
 </div>
 
@@ -649,22 +650,6 @@
 
 
     
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
