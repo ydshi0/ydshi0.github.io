@@ -476,7 +476,9 @@ CUDA核心（SP, Streaming Processor）：最基本的计算单元，执行浮�
                     <div class="home-post-content keep-markdown-body">
                         
                             gitgit clone下来的仓库就可以查看修改记录，不要在docker里面git clone
-12345678git switch -c v1_pd_yhc_debug origin/v1_pd_yhc_debug创建本地分支，追踪 origin/...
+对于私有仓库，优先使用PAT(Personal Access Token)方式
+.gitignore里忽略log, png..
+1234567891011...
                         
                     </div>
 
@@ -512,65 +514,6 @@ CUDA核心（SP, Streaming Processor）：最基本的计算单元，执行浮�
 
     
         <a class="home-read-more" href="/2024/07/28/%E6%8A%80%E6%9C%AF/Linux%E7%9F%A5%E8%AF%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
-    
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-post-item">
-
-                
-
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2024/07/28/%E6%8A%80%E6%9C%AF/%E5%A4%A7%E6%A8%A1%E5%9E%8Bsys%E5%B8%B8%E8%AF%86/">
-                            大模型
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            111
-模型githugging face模型下载
-命令行就能下载
-
-                        
-                    </div>
-
-                    
-
-<div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/linux/">linux</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
-
-    
-        <a class="home-read-more" href="/2024/07/28/%E6%8A%80%E6%9C%AF/%E5%A4%A7%E6%A8%A1%E5%9E%8Bsys%E5%B8%B8%E8%AF%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
@@ -655,9 +598,7 @@ CUDA核心（SP, Streaming Processor）：最基本的计算单元，执行浮�
                             111
 vLLM关键参数
 server端
-123--max-num-batched-tokens 2048 \--max-num-seqs 256 \       共同限制一个batch的大小
-client端
-12--ignore-eos \--bu...
+123--max-num-batched-tokens 2048 \     \\一个batch最多token数--max-num-seqs 256 \                \\一个batch最多请...
                         
                     </div>
 
@@ -809,6 +750,64 @@ frame是物理内存一个块的大小，page是虚拟内存，...
 
     
         <a class="home-read-more" href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E6%9C%BA%E8%AE%AD%E7%BB%83/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+    
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-post-item">
+
+                
+
+                <div class="home-post-item-bottom border-box">
+                    
+                    <h3 class="home-post-title border-box">
+                        <a href="/2023/12/01/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/">
+                            深度学习基础
+                        </a>
+                    </h3>
+
+                    <div class="home-post-content keep-markdown-body">
+                        
+                            常用方法Cross Entropy Loss交叉熵主要用于度量两个概率分布间的差异性。标签值 y（分类时用one-hot编码，真实类别是1，其他为0）， 预测值 a，分类数n
+
+\text { loss }=-\sum_{j=1}^n y_j \ln...
+                        
+                    </div>
+
+                    
+
+<div class="post-meta-info-container border-box home">
+    <div class="post-meta-info border-box">
+        
+
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+        <a class="home-read-more" href="/2023/12/01/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
