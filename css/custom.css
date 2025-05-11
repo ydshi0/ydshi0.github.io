@@ -1,0 +1,17 @@
+/* your-hexo/source/css/custom.css */
+
+:root {
+    --box-border-radius: 20px;
+    --post-author-avatar: none;
+    --post-author-name: none;
+    --post-img-align: 0 auto;
+}
+
+.headerlink{
+    display: none;
+ }
+
+
+ h2, h3, h4, h5{
+    border: none!important;
+  }

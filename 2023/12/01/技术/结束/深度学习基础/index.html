@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="eric">
+    
+    <title>
+        
+            深度学习基础 |
+        
+        introspection
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+        
+            
+                
+<link rel="stylesheet" href="/css/custom.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"icp":{"enable":false,"record_code":null,"url":null},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               introspection
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                TAGS
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                            TAGS
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        深度学习基础
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202312121642203.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">eric</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-12-01</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Wed Oct 30 2024 10:57:01 GMT+0800">2024-10-30</span>
+                </span>
+            
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><h4 id="Cross-Entropy-Loss"><a href="#Cross-Entropy-Loss" class="headerlink" title="Cross Entropy Loss"></a>Cross Entropy Loss</h4><p>交叉熵主要用于度量两个概率分布间的差异性。标签值 y（分类时用one-hot编码，真实类别是1，其他为0）， 预测值 a，分类数n</p>
+<script type="math/tex; mode=display">
+\text { loss }=-\sum_{j=1}^n y_j \ln a_j</script><h4 id="softmax"><a href="#softmax" class="headerlink" title="softmax"></a>softmax</h4><p>多类别分类的激活函数，将一组实数转化为表示概率分布的值。每个元素都在 0 到 1 之间，且所有元素的和为 1。</p>
+<p>给定输入向量 $z=\left(z_1, z_2, \ldots, z_k\right)$ ，计算公式为:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sigma(z)_i=\frac{e^{z_i}}{\sum_{j=1}^k e^{z_j}}，i=1,2, \ldots, k
+\end{aligned}</script><p>其中， $e$ 是自然对数的底， $k$ 是类别的数量。</p>
+<h4 id="larynorm"><a href="#larynorm" class="headerlink" title="larynorm"></a>larynorm</h4><p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202407271219087.png"  alt="202404090305342"></p>
+<p>用于加速训练的。对单个样本的不同特征做归一化操作，公式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_i & =\frac{1}{n} \sum_{j=1}^n x_{i j} \\
+\sigma_i^2 & =\frac{1}{m} \sum_{j=1}^m\left(x_{i j}-\mu_i\right)^2 \\
+\hat{x}_{i j} & =\frac{x_{i j}-\mu_i}{\sqrt{\sigma_i^2+\epsilon}}
+\end{aligned}</script><script type="math/tex; mode=display">
+\begin{aligned}
+
+
+ \end{aligned}</script><h4 id="dropout"><a href="#dropout" class="headerlink" title="dropout"></a>dropout</h4><p>用于防止神经网络过拟合。在训练过程中，随机地将一部分神经元的输出设置为零。</p>
+<p>资料</p>
+<p><a class="link"   href="https://microsoft.github.io/ai-edu/基础教程/A2-神经网络基本原理/第1步 - 基本知识/03.2-交叉熵损失函数/" >03.2 交叉熵损失函数 - AI-EDU (microsoft.github.io)<i class="fas fa-external-link-alt"></i></a></p>
+<h3 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h3><p>深度学习的优化目标是最小化目标（损失）函数，就是反向传播算梯度从而更新参数。不同优化器区别在于q函数。</p>
+<p>待优化参数: $\theta$ ，目标函数： $f(\theta)$ ，学习率: $\alpha$</p>
+<p> $\mathrm{t}$ 时刻参数的梯度: $g_t=\nabla f\left(\theta_t\right)$</p>
+<p>优化通式：  $\theta_t=\theta_{t-1}-q\left(g_t\right)$</p>
+<h4 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h4><p>SGD的梯度下降过程，类似于一个小球从山坡上滚下，它的前进方向只与当前山坡的最大倾斜方向一致(梯度反方向)，每一个时刻的初速度都为０。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+
+\theta_t=\theta_{t-1}-\alpha * g_t
+
+ \end{aligned}</script><p>SGD容易收敛到局部最优，在某些情况下可能被困在鞍点。</p>
+<p>引入 Momentum </p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+
+m_t & =\text { momentum } * m_{t-1}+\alpha * g_t \\
+\theta_t & =\theta_{t-1}-m_t
+
+\end{aligned}</script><p>假设momentum =0.9,$ \alpha=0.01$, 有:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+& m_5=0.9 m_4+0.01 g_5 \\
+& m_4=0.9 m_3+0.01 g_4 \\
+& m_3=0.9 m_2+0.01 g_3 \\
+& m_2=0.9 m_1+0.01 g_2
+\end{aligned}</script><p>则: $m_5=0.01 *\left(g_5+0.9 g_5+0.9^2 g_3+0.9^3 g_2+0.9^4 g_1\right)$<br>可以看到第5次更新的梯度包含了前4次的梯度，且是一个指数衰减的过程。</p>
+<p>SGD Momentum的梯度下降过程，前进方向由当前山坡的最大倾斜方向与之前的下降方向共同决定，小球具有初速度(动量)。</p>
+<h4 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h4><script type="math/tex; mode=display">
+\begin{aligned}
+m_t & =\beta_1 m_{t-1}+\left(1-\beta_1\right) g_t \\
+\hat{m}_t & =\frac{m_t}{1-\beta_1^t} \\
+V_t & =\beta_2 V_{t-1}+\left(1-\beta_2\right) g_t^2 \\
+\hat{V}_t & =\frac{V_t}{1-\beta_2^t} \\
+\alpha_t & =\frac{\alpha}{\sqrt{\hat{V}_t}+\epsilon} \\
+\theta_t & =\theta_{t-1}-\alpha_t * \hat{m}_t    \\
+
+\end{aligned}</script><p>二阶动量$V_t $ 是历史梯度平方和，度量历史更新频率。参数更新越频繁，二阶动量越大，学习率就越小。$\hat{m}_t 、\hat{V}_t$是偏差修正。</p>
+<p>资料</p>
+<p><a class="link"   href="https://haiping.vip/2020/02/21/优化器/" >optimizer优化器总结 - weber’s Blog (haiping.vip)<i class="fas fa-external-link-alt"></i></a></p>
+<h4 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h4><p>就是求损失函数C对参数的梯度，利用梯度更新参数。</p>
+<p>反向计算梯度时，根据前向不同的计算公式，从而有相应的系数。</p>
+<p>资料 </p>
+<p><a class="link"   href="https://hannlp.github.io/2020-11-06-Back-Propagation-and-Gradient-Calculation-in-Deep-Learning/" >Back Propagation and Gradient Calculation in Deep Learning (hannlp.github.io)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.bilibili.com/video/BV16x411V7Qg?p=2&amp;vd_source=beee036ef7b5cbbed88ff79ffb991c1c" >下篇 反向传播的微积分原理_哔哩哔哩_bilibili<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.cnblogs.com/pinard/p/6494810.html" >卷积神经网络(CNN)反向传播算法 - 刘建平Pinard - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<h4 id="conv2d结构"><a href="#conv2d结构" class="headerlink" title="conv2d结构"></a>conv2d结构</h4><p>Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)) </p>
+<p>这个卷积层参数：$64\times3\times9+64 = 1792$  </p>
+<p>一个通道的结果： 输入的3个通道各自经过一个卷积核再相加得到的，卷积核个数=输出通道*输入通道，每个通道还有有一个偏置。 </p>
+<p>资料</p>
+<p><a class="link"   href="https://hezl1592.github.io/2020/04/22/深度学习_Pytorch_参数量&amp;计算量/" >卷积操作参数量和计算量 <i class="fas fa-external-link-alt"></i></a>      卷积核图示</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2024/01/03/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E6%9C%BA%E8%AE%AD%E7%BB%83/"
+                                   title="多机训练"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">多机训练</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/11/20/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/"
+                                   title="并行策略"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">并行策略</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cross-Entropy-Loss"><span class="nav-text">Cross Entropy Loss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#softmax"><span class="nav-text">softmax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#larynorm"><span class="nav-text">larynorm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dropout"><span class="nav-text">dropout</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SGD"><span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conv2d%E7%BB%93%E6%9E%84"><span class="nav-text">conv2d结构</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cross-Entropy-Loss"><span class="nav-text">Cross Entropy Loss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#softmax"><span class="nav-text">softmax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#larynorm"><span class="nav-text">larynorm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dropout"><span class="nav-text">dropout</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SGD"><span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conv2d%E7%BB%93%E6%9E%84"><span class="nav-text">conv2d结构</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+    
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>
