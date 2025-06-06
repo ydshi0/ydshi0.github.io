@@ -9,7 +9,7 @@
     
     <title>
         
-            linux知识 |
+            linux |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        linux知识
+                        linux
                     </div>
                 
 
@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Jun 03 2025 22:17:33 GMT+0800">2025-06-03</span>
+                    <span class="datetime" data-updated="Fri Jun 06 2025 00:58:55 GMT+0800">2025-06-06</span>
                 </span>
             
         
@@ -295,8 +295,11 @@
 <p>.gitignore里忽略log, png..</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">git config --local user.email</span><br><span class="line">git config --local user.email &quot;lingshi321@gmail.com&quot;</span><br><span class="line">//设置自己的邮箱</span><br><span class="line"></span><br><span class="line">添加github网址代理</span><br><span class="line">git remote set-url origin https://ghfast.top/XXX</span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">git switch -c v1_pd_yhc_debug origin/v1_pd_yhc_debug</span><br><span class="line">// 创建本地分支。同时追踪远程分支，直接git pull更新，git push上传</span><br><span class="line"></span><br><span class="line">git status </span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;&quot;</span><br><span class="line"></span><br><span class="line">git fetch origin </span><br><span class="line">git branch -r</span><br><span class="line">git branch -vv</span><br><span class="line">git branch --set-upstream-to=origin/ydshi_debug</span><br><span class="line"></span><br><span class="line">git stash</span><br><span class="line">git pull</span><br><span class="line">git stash pop</span><br><span class="line"></span><br><span class="line">git config core.fileMode false      //忽略权限改变</span><br></pre></td></tr></table></figure>
 <p>VScode插件：Git History 查看提交历史</p>
-<h3 id="大模型下载"><a href="#大模型下载" class="headerlink" title="大模型下载"></a>大模型下载</h3><p>Hugging Face很卡，使用镜像<a class="link"   href="https://hf-mirror.com/" >HF-Mirror<i class="fas fa-external-link-alt"></i></a></p>
+<h3 id="大模型下载"><a href="#大模型下载" class="headerlink" title="大模型下载"></a>大模型下载</h3><p>Hugging Face很卡，得用镜像</p>
+<p><a class="link"   href="https://hf-mirror.com/" >HF-Mirror<i class="fas fa-external-link-alt"></i></a></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install -U huggingface_hub</span><br><span class="line">export HF_ENDPOINT=https://hf-mirror.com</span><br><span class="line">huggingface-cli download bigscience/bloom-560m --local-dir bloom-560m</span><br></pre></td></tr></table></figure>
+<p><a class="link"   href="https://www.modelscope.cn/home" >首页 · 魔搭社区<i class="fas fa-external-link-alt"></i></a> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">modelscope download --model modelscope/Llama-2-13b-ms --local_dir Llama-2-13b</span><br></pre></td></tr></table></figure>
 <h3 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h3><p>挂在后台运行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tmux new -s session_name</span><br><span class="line">tmux attach -t session_name</span><br><span class="line"></span><br><span class="line">退出 ctrl b  D</span><br><span class="line">上下滚动 ctrl b [   退出 q</span><br><span class="line"></span><br><span class="line">tmux ls</span><br><span class="line">tmux kill-session -t 0</span><br></pre></td></tr></table></figure>
 <h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>ps查找进程，grep搜索。</p>
@@ -637,22 +640,6 @@
 
 
     
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
