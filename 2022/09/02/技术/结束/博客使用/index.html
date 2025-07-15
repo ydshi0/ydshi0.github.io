@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Jul 28 2024 11:30:07 GMT+0800">2024-07-28</span>
+                    <span class="datetime" data-updated="Mon Jun 09 2025 15:21:15 GMT+0800">2025-06-09</span>
                 </span>
             
         
@@ -309,6 +309,7 @@
 <p>图片还是别压缩了。</p>
 <p><del>下载compress插件，搭配<a class="link"   href="https://tinify.com/dashboard/overview" >压缩网站（tinify.com)<i class="fas fa-external-link-alt"></i></a>  。</del>   </p>
 <h3 id="数学公式"><a href="#数学公式" class="headerlink" title="数学公式"></a>数学公式</h3><p><a class="link"   href="https://www.jianshu.com/p/e8d433a2c5b7" >如何在 hexo 中支持 Mathjax<i class="fas fa-external-link-alt"></i></a>  这个实测简单好使</p>
+<p>浏览器需要安装插件：TeX All the Things</p>
 <h3 id="tips1"><a href="#tips1" class="headerlink" title="tips1"></a>tips1</h3><p>修改仓库,这样hexo d好使点</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repository: git@github.com:shiyandong/shiyandong.github.io.git</span><br><span class="line">#repository: https://github.com/shiyandong/shiyandong.github.io.git</span><br></pre></td></tr></table></figure>
 <h3 id="tips2"><a href="#tips2" class="headerlink" title="tips2"></a>tips2</h3><p>git bash默认的框太丑了，也不能缩放。得集成到windows terminal</p>
@@ -626,6 +627,22 @@
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
