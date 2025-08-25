@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Thu Apr 03 2025 15:18:28 GMT+0800">2025-04-03</span>
+                    <span class="datetime" data-updated="Mon Aug 25 2025 15:25:40 GMT+0800">2025-08-25</span>
                 </span>
             
         
@@ -304,7 +304,7 @@
 <p>查看容器        docker ps </p>
 <p>删除镜像        docker rmi</p>
 <p>删除容器        docker rm</p>
-<p>有时候容器用不了GPU，nvidia-smi 也看不到。尝试：</p>
+<p>容器中nvidia-smi 失效，尝试：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart container           </span><br></pre></td></tr></table></figure>
 <h4 id="cuda环境"><a href="#cuda环境" class="headerlink" title="cuda环境"></a>cuda环境</h4><p>pytorch，cuda要兼容。 </p>
 <p>cuda版本。nvidia-smi看到的cuda version比较奇怪</p>
@@ -312,10 +312,10 @@
 <p>pytorch依赖的cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import torch; print(torch.version.cuda)&quot;</span><br></pre></td></tr></table></figure>
 <p>cuda工具包一般在 /usr/local/  cuda</p>
-<h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>vscode下载ssh插件，打开服务器的文件夹</p>
-<p>VScode插件：Dev Containers 连接到容器内部，可以查看库函数</p>
-<p>Attach to Running Container…</p>
-<p>docker也可以用  <strong>conda </strong> 来管理环境的，不过默认在用base。</p>
+<h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>vscode 可以打开服务器里面的文件</p>
+<p>Dev Containers 连接到容器内部，打开容器里面的文件  Attach to Running Container…</p>
+<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202508251523225.png"  alt="FFB612785DECBF3565D380FCC55E1AA7"></p>
+<p>容器也可以用  <strong>conda </strong> 来管理环境</p>
 
                     
                 </div>
