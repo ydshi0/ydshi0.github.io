@@ -651,16 +651,16 @@ git clone 有时需要代理 GitHub Proxy 最新地址发布
                     
                     <h3 class="home-post-title border-box">
                         <a href="/2024/04/05/%E6%8A%80%E6%9C%AF/%E6%8E%A8%E7%90%86/">
-                            推理
+                            大模型推理
                         </a>
                     </h3>
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            111
-vLLM关键参数
-server端
-123--max-num-batched-tokens 2048 \     \\一个batch最多token数--max-num-seqs 256 \                \\一个batch最多请...
+                            整理一些大模型推理相关知识
+推理流程推理包含2个阶段Prefill , Decode。
+Prefill可以并行处理输入，生成KV cache缓存以及第一个output token，是computation-bound。
+Decode基于KV cach...
                         
                     </div>
 
