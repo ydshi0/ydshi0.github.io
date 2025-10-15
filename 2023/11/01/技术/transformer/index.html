@@ -9,7 +9,7 @@
     
     <title>
         
-            transformer |
+            大模型基础 |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        transformer
+                        大模型基础
                     </div>
                 
 
@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Mar 18 2025 00:22:30 GMT+0800">2025-03-18</span>
+                    <span class="datetime" data-updated="Fri Sep 26 2025 15:58:05 GMT+0800">2025-09-26</span>
                 </span>
             
         
@@ -265,7 +265,7 @@
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/transformer/">transformer</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">大模型基础</a></li>
                         
                     
                 </ul>
@@ -290,9 +290,12 @@
                     
 
                     
-                         <h3 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h3><p>维度大小是（v,h），v是词表总量，h是hidden_size。 每个词有个整数索引，embedding后就是对应索引的那行，python代码中张量直接套一个索引就得出了。<strong>megatron</strong>：并行是按v维度划分，分别存储weight的一部分，再all-gather得到完整的输出，但是代码中用mask置0，维度没变，所以是用all-reduce加在一起。</p>
+                         <h3 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h3><p>维度大小是（v,h），v是词表总量，h是hidden_size。 每个词有个整数索引，embedding后就是对应索引的那行，python代码中张量直接套一个索引就得出了。</p>
+<p>位置编码也很重要。RoPE</p>
 <h3 id="self-attention"><a href="#self-attention" class="headerlink" title="self-attention"></a>self-attention</h3><p>能提取序列的关系，取代了之前的RNN，方便并行。</p>
 <p>由input a1分别算出q，k，v。attention就是每个词之间的关系，q1乘其他词的k得到，最后拿attention乘对应的v 再加起来，就是output b1。要训练的就是Wq,Wk,Wv。</p>
+<p>计算的时候会有causal mask，</p>
+<p>M=0000−∞000−∞−∞00−∞−∞−∞0</p>
 <p>muti-head就是多个self-attention，可以提取不同角度的信息。</p>
 <p>资料</p>
 <p><a class="link"   href="https://www.youtube.com/watch?v=ugWDIIOHtPA&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&amp;index=61" >Transformer - YouTube<i class="fas fa-external-link-alt"></i></a>   讲的很清楚</p>
@@ -312,7 +315,7 @@
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/transformer/">transformer</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">大模型基础</a>
                                     </li>
                                 
                             </ul>
