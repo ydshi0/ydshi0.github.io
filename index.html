@@ -658,8 +658,8 @@ git clone 有时需要代理 GitHub Proxy 最新地址发布
                     <div class="home-post-content keep-markdown-body">
                         
                             docker-v挂载数据，工作目录命名为workspace。
-直接用宿主机的空间和网络。（方便跨机）
-1docker run -it --name ydshi_loongserve --gpus all --ipc=host --net=host -...
+直接用宿主机的空间和网络 —ipc=host —net=host 。（方便跨机）
+1docker run -it --name ydshi_loongserve --gpus all --...
                         
                     </div>
 

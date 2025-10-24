@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Mon Aug 25 2025 15:25:40 GMT+0800">2025-08-25</span>
+                    <span class="datetime" data-updated="Sat Oct 25 2025 01:34:25 GMT+0800">2025-10-25</span>
                 </span>
             
         
@@ -294,7 +294,7 @@
 
                     
                          <h4 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h4><p>-v挂载数据，工作目录命名为workspace。</p>
-<p>直接用宿主机的空间和网络。（方便跨机）</p>
+<p>直接用宿主机的空间和网络 —ipc=host —net=host 。（方便跨机）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name ydshi_loongserve --gpus all --ipc=host --net=host -v /nfs/ydshi:/workspace loongserve:latest /bin/bash</span><br></pre></td></tr></table></figure>
 <p>创建完容器之后重新打开</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start ydshi</span><br><span class="line">docker exec -it ydshi /bin/bash </span><br></pre></td></tr></table></figure>
@@ -306,16 +306,16 @@
 <p>删除容器        docker rm</p>
 <p>容器中nvidia-smi 失效，尝试：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart container           </span><br></pre></td></tr></table></figure>
+<h4 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h4><p>如果容器里面项目很多，也应该用conda管理环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n fast-dllm python=3.10           // 一定要指定python版本</span><br></pre></td></tr></table></figure>
 <h4 id="cuda环境"><a href="#cuda环境" class="headerlink" title="cuda环境"></a>cuda环境</h4><p>pytorch，cuda要兼容。 </p>
-<p>cuda版本。nvidia-smi看到的cuda version比较奇怪</p>
+<p>cuda版本。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --version</span><br></pre></td></tr></table></figure>
 <p>pytorch依赖的cuda版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import torch; print(torch.version.cuda)&quot;</span><br></pre></td></tr></table></figure>
-<p>cuda工具包一般在 /usr/local/  cuda</p>
 <h4 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h4><p>vscode 可以打开服务器里面的文件</p>
-<p>Dev Containers 连接到容器内部，打开容器里面的文件  Attach to Running Container…</p>
-<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202508251523225.png"  alt="FFB612785DECBF3565D380FCC55E1AA7"></p>
-<p>容器也可以用  <strong>conda </strong> 来管理环境</p>
+<p>Dev Containers 连接到容器内部，从而打开容器里面的文件进行跳转 （Attach to Running Container…） 。需要下载python拓展，选对解释器。</p>
+<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202510250134609.png"  alt="b5b86a764173152d010d7330665c1a6a"></p>
 
                     
                 </div>
@@ -404,7 +404,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda%E7%8E%AF%E5%A2%83"><span class="nav-text">cuda环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conda"><span class="nav-text">conda</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda%E7%8E%AF%E5%A2%83"><span class="nav-text">cuda环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
     </div>
 </div>
 
@@ -564,7 +564,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda%E7%8E%AF%E5%A2%83"><span class="nav-text">cuda环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conda"><span class="nav-text">conda</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda%E7%8E%AF%E5%A2%83"><span class="nav-text">cuda环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol>
     </div>
 </div>
 
