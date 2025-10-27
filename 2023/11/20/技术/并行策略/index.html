@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Feb 16 2025 11:33:42 GMT+0800">2025-02-16</span>
+                    <span class="datetime" data-updated="Tue Oct 28 2025 02:00:19 GMT+0800">2025-10-28</span>
                 </span>
             
         
@@ -323,6 +323,9 @@
 <p>从数据并行到专家并行需要转化切分维度，做all-to-all操作。</p>
 <p>在megatron中，是用all-gather、reduce-scatter实现all-to-all功能的。</p>
 <p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090303519.png"   alt="image-20240409030326828" style="zoom: 33%;" ></p>
+<ul>
+<li>[ ] SP</li>
+</ul>
 
                     
                 </div>
@@ -375,11 +378,11 @@
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/2023/11/01/%E6%8A%80%E6%9C%AF/transformer/"
-                                   title="大模型基础"
+                                   href="/2023/11/01/%E6%8A%80%E6%9C%AF/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"
+                                   title="大模型基础知识"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">大模型基础</span>
+                                        <span class="post-nav-title-item text-ellipsis">大模型基础知识</span>
                                         <span class="post-nav-item">Next posts</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -653,6 +656,22 @@
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>

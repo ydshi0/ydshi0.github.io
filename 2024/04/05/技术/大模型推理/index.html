@@ -9,7 +9,7 @@
     
     <title>
         
-            大模型基础 |
+            大模型推理 |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        大模型基础
+                        大模型推理
                     </div>
                 
 
@@ -245,13 +245,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2023-11-01</span>
+                <span class="datetime">2024-04-05</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Fri Sep 26 2025 15:58:05 GMT+0800">2025-09-26</span>
+                    <span class="datetime" data-updated="Thu Sep 18 2025 14:47:49 GMT+0800">2025-09-18</span>
                 </span>
             
         
@@ -265,7 +265,7 @@
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">大模型基础</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8E%A8%E7%90%86/">推理</a></li>
                         
                     
                 </ul>
@@ -290,15 +290,24 @@
                     
 
                     
-                         <h3 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h3><p>维度大小是（v,h），v是词表总量，h是hidden_size。 每个词有个整数索引，embedding后就是对应索引的那行，python代码中张量直接套一个索引就得出了。</p>
-<p>位置编码也很重要。RoPE</p>
-<h3 id="self-attention"><a href="#self-attention" class="headerlink" title="self-attention"></a>self-attention</h3><p>能提取序列的关系，取代了之前的RNN，方便并行。</p>
-<p>由input a1分别算出q，k，v。attention就是每个词之间的关系，q1乘其他词的k得到，最后拿attention乘对应的v 再加起来，就是output b1。要训练的就是Wq,Wk,Wv。</p>
-<p>计算的时候会有causal mask，</p>
-<p>M=0000−∞000−∞−∞00−∞−∞−∞0</p>
-<p>muti-head就是多个self-attention，可以提取不同角度的信息。</p>
+                         <p>整理一些大模型推理相关知识</p>
+<h4 id="推理流程"><a href="#推理流程" class="headerlink" title="推理流程"></a>推理流程</h4><p>推理包含2个阶段Prefill , Decode。</p>
+<p>Prefill可以并行处理输入，生成KV cache缓存以及第一个output token，是computation-bound。</p>
+<p>Decode基于KV cache自回归的生成后续token，一次迭代只能生成一个token，是memory-bound。</p>
+<h5 id="KV-cache"><a href="#KV-cache" class="headerlink" title="KV cache"></a>KV cache</h5><p>decode生成下一个token时，需要使用当前的Q(Query)，并结合之前token的KV（Key-Value）。</p>
+<h5 id="推理指标"><a href="#推理指标" class="headerlink" title="推理指标"></a>推理指标</h5><p>TTFT、TBT、Throughput、Goodput</p>
+<h4 id="推理架构"><a href="#推理架构" class="headerlink" title="推理架构"></a>推理架构</h4><p>PD分离</p>
+<p>将 Prefill 阶段和 Decode 阶段拆分到不同实例上执行，可以降低 TBT延迟，因为Decode 不再被长序列的 Prefill 阻塞。但请求不平衡时GPU利用率低，Throughput低。</p>
+<p>PD聚合</p>
+<p>通常与 Chunked Prefill 搭配使用。把Prefill 拆分成多个 chunk，在每个 chunk 内同时包含一部分 Prefill 和 Decode，能减少二者之间的干扰。chunksize 调大，延迟一般就会增加。</p>
+<h4 id="vLLM"><a href="#vLLM" class="headerlink" title="vLLM"></a>vLLM</h4><p>关键参数</p>
+<p>server端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--max-num-batched-tokens 2048 \     \\batch的最多token数</span><br><span class="line">--max-num-seqs 256 \                 \\batch的最多请求数量</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>client端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--ignore-eos \</span><br><span class="line">--burstiness 100 \     请求分布</span><br></pre></td></tr></table></figure>
 <p>资料</p>
-<p><a class="link"   href="https://www.youtube.com/watch?v=ugWDIIOHtPA&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&amp;index=61" >Transformer - YouTube<i class="fas fa-external-link-alt"></i></a>   讲的很清楚</p>
+<p><a class="link"   href="https://mp.weixin.qq.com/s/WxbMFoSrKl0xqsUkzPLJHw" >LLM推理入门指南②：深入解析KV缓存 (qq.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.youtube.com/watch?v=IGu7ivuy1Ag" >How a Transformer works at inference vs training time - YouTube<i class="fas fa-external-link-alt"></i></a></p>
 
                     
                 </div>
@@ -315,7 +324,7 @@
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">大模型基础</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8E%A8%E7%90%86/">推理</a>
                                     </li>
                                 
                             </ul>
@@ -334,14 +343,14 @@
                             <div class="prev-post">
                                 <a class="prev"
                                    rel="prev"
-                                   href="/2023/11/20/%E6%8A%80%E6%9C%AF/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/"
-                                   title="并行策略"
+                                   href="/2024/04/09/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/docker%E7%8E%AF%E5%A2%83/"
+                                   title="docker"
                                 >
                                     <span class="left arrow-icon flex-center">
                                         <i class="fas fa-chevron-left"></i>
                                     </span>
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">并行策略</span>
+                                        <span class="post-nav-title-item text-ellipsis">docker</span>
                                         <span class="post-nav-item">Prev posts</span>
                                     </span>
                                 </a>
@@ -351,11 +360,11 @@
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/2023/10/19/%E6%8A%80%E6%9C%AF/%E7%BB%93%E6%9D%9F/Megatron-LM/"
-                                   title="Megatron-LM"
+                                   href="/2024/03/13/%E6%8A%80%E6%9C%AF/%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/"
+                                   title="硬件知识"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">Megatron-LM</span>
+                                        <span class="post-nav-title-item text-ellipsis">硬件知识</span>
                                         <span class="post-nav-item">Next posts</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -383,7 +392,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#embedding"><span class="nav-text">embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-attention"><span class="nav-text">self-attention</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-text">推理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#KV-cache"><span class="nav-text">KV cache</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%8C%87%E6%A0%87"><span class="nav-text">推理指标</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%9E%B6%E6%9E%84"><span class="nav-text">推理架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vLLM"><span class="nav-text">vLLM</span></a></li></ol>
     </div>
 </div>
 
@@ -543,7 +552,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#embedding"><span class="nav-text">embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-attention"><span class="nav-text">self-attention</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-text">推理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#KV-cache"><span class="nav-text">KV cache</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%8C%87%E6%A0%87"><span class="nav-text">推理指标</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%9E%B6%E6%9E%84"><span class="nav-text">推理架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vLLM"><span class="nav-text">vLLM</span></a></li></ol>
     </div>
 </div>
 
@@ -629,6 +638,22 @@
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>

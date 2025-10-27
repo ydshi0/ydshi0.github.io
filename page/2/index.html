@@ -395,16 +395,19 @@ NVIDIA/Megatron-LM   官网里面给出...
                 <div class="home-post-item-bottom border-box">
                     
                     <h3 class="home-post-title border-box">
-                        <a href="/2023/11/01/%E6%8A%80%E6%9C%AF/transformer/">
-                            大模型基础
+                        <a href="/2023/11/01/%E6%8A%80%E6%9C%AF/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+                            大模型基础知识
                         </a>
                     </h3>
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            embedding维度大小是（v,h），v是词表总量，h是hidden_size。 每个词有个整数索引，embedding后就是对应索引的那行，python代码中张量直接套一个索引就得出了。
-位置编码也很重要。RoPE
-self-attention能...
+                            EmbeddingEmbedding层维度大小是 [v,h]，v是词汇表大小，h是hidden_size。每个token都对应词汇表中的一个索引，embedding后就是对应索引的那行。
+位置编码也很重要。
+
+[ ] RoPE
+
+AttentionA...
                         
                     </div>
 
@@ -425,7 +428,7 @@ self-attention能...
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">大模型基础</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">大模型基础知识</a></li>
                         
                     
                 </ul>
@@ -439,7 +442,7 @@ self-attention能...
     </div>
 
     
-        <a class="home-read-more" href="/2023/11/01/%E6%8A%80%E6%9C%AF/transformer/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+        <a class="home-read-more" href="/2023/11/01/%E6%8A%80%E6%9C%AF/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
@@ -558,62 +561,6 @@ checkpoi...
 
     
         <a class="home-read-more" href="/2023/05/09/%E7%94%9F%E6%B4%BB/%E8%8A%99%E8%8E%89%E8%8E%B2/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
-    
-</div>
-
-                </div>
-            </li>
-        
-            <li class="home-post-item">
-
-                
-
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2023/01/02/%E7%94%9F%E6%B4%BB/%E5%93%B2%E5%AD%A6%E6%80%9D%E6%83%B3/">
-                            哲学思想
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            加密文章
-                        
-                    </div>
-
-                    
-
-<div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%94%9F%E6%B4%BB/">生活</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/private/">private</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
-
-    
-        <a class="home-read-more" href="/2023/01/02/%E7%94%9F%E6%B4%BB/%E5%93%B2%E5%AD%A6%E6%80%9D%E6%83%B3/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
     
 </div>
 
@@ -963,6 +910,22 @@ Git Bash进入博客目录中（d:\blog，d:\blog\source\_posts都行）。
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
