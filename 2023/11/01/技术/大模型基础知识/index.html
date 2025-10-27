@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Oct 28 2025 01:59:48 GMT+0800">2025-10-28</span>
+                    <span class="datetime" data-updated="Tue Oct 28 2025 02:18:26 GMT+0800">2025-10-28</span>
                 </span>
             
         
@@ -290,29 +290,30 @@
                     
 
                     
-                         <h3 id="Embedding"><a href="#Embedding" class="headerlink" title="Embedding"></a>Embedding</h3><p>Embedding层维度大小是 [v,h]，v是词汇表大小，h是hidden_size。每个token都对应词汇表中的一个索引，embedding后就是对应索引的那行。</p>
+                         <h4 id="Embedding"><a href="#Embedding" class="headerlink" title="Embedding"></a>Embedding</h4><p>Embedding层维度大小是 [v,h]，v是词汇表大小，h是hidden_size。每个token都对应词汇表中的一个索引，embedding后就是对应索引的那行。</p>
 <p>位置编码也很重要。</p>
 <ul>
 <li>[ ] RoPE</li>
 </ul>
-<h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><p>Attention层能并行建模序列的全局依赖。</p>
+<h4 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h4><p>Attention层能并行建模序列的全局依赖。</p>
 <p>Multi-Head 是多组自注意力头，能在不同尺度上同时提取互补关系。</p>
-<p><strong>流程</strong></p>
-<p>输入$X$通过参数矩阵 $\mathbf{W}^Q, \mathbf{W}^K, \mathbf{W}^V$分别得到 $\mathbf{Q}, \mathbf{K}, \mathbf{V}$。</p>
-<script type="math/tex; mode=display">\text{Attention  Score} = \frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}}$$, 用$\sqrt{d_k}$  （ Key 向量的维度的平方根 ）进行缩放，以避免点积结果过大。
-
-将分数进行$\text{softmax}$ 归一化得到权重，拿权重乘对应的 $\mathbf{V}$再求和，得到最终的output。</script><p>\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}}\right) \mathbf{V}</p>
+<h5 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h5><p>输入$X$通过参数矩阵 $\mathbf{W}^Q, \mathbf{W}^K, \mathbf{W}^V$分别得到 $\mathbf{Q}, \mathbf{K}, \mathbf{V}$。</p>
+<p>$\text{Attention  Score} = \frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}}$,  用（ Key 向量的维度的平方根 ）进行缩放，以避免点积结果过大。</p>
+<p>将分数进行$\text{softmax}$ 归一化得到权重，拿权重乘对应的 $\mathbf{V}$再求和，得到最终的output。</p>
 <script type="math/tex; mode=display">
-**Attention mask**
-
-Attention Mask  通过在 $\text{softmax}$ 之前，将某些位置加上负无穷来实现的。</script><p>\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}} + \mathbf{M}\right) \mathbf{V}</p>
+\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}}\right) \mathbf{V}</script><h5 id="Attention-mask"><a href="#Attention-mask" class="headerlink" title="Attention mask"></a><strong>Attention mask</strong></h5><p>Attention Mask  通过在 $\text{softmax}$ 之前，将某些位置加上负无穷来实现的。</p>
 <script type="math/tex; mode=display">
-Causal Mask保持因果关系，上三角都是负无穷，在训练以及推理的prefill阶段会用到。</script><p>\mathbf{M}_{Causal} = \begin{pmatrix}<br>0 &amp; -\infty &amp; -\infty &amp; -\infty \\<br>0 &amp; 0 &amp; -\infty &amp; -\infty \\<br>0 &amp; 0 &amp; 0 &amp; -\infty \\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{pmatrix}</p>
-<p>$$</p>
-<h4 id="MHA，GQA"><a href="#MHA，GQA" class="headerlink" title="MHA，GQA"></a>MHA，GQA</h4><p>标准多头注意力（MHA）</p>
-<p><code>num_attention_heads = num_key_value_heads = h</code>。每个头都有自己的一套 <strong>Q/K/V</strong> 。</p>
+\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}} + \mathbf{M}\right) \mathbf{V}</script><p>Causal Mask保持因果关系，上三角都是负无穷，在训练以及推理的prefill阶段会用到。</p>
+<script type="math/tex; mode=display">
+\mathbf{M}_{Causal} = \begin{pmatrix}
+0 & -\infty & -\infty & -\infty \\
+0 & 0 & -\infty & -\infty \\
+0 & 0 & 0 & -\infty \\
+0 & 0 & 0 & 0
+\end{pmatrix}</script><h4 id="MHA，GQA"><a href="#MHA，GQA" class="headerlink" title="MHA，GQA"></a>MHA，GQA</h4><p>标准多头注意力（MHA）</p>
+<p>num_attention_heads = num_key_value_heads = h。每个头都有自己的一套 <strong>Q/K/V</strong> 。</p>
 <p>Grouped-Query Attention（GQA）</p>
-<p><code>num_key_value_heads = h_kv &lt; h</code>。把 <strong>h</strong> 个 <em>query头</em> 分成 <strong>h / h_kv</strong> 个组；同一组的多个 <strong>Q</strong> 头共享一套 <strong>K/V</strong>。</p>
+<p>num_key_value_heads = h_kv &lt; h。把 <strong>h</strong> 个 <em>query头</em> 分成 <strong>h / h_kv</strong> 个组；同一组的多个 <strong>Q</strong> 头共享一套 <strong>K/V</strong>。</p>
 <p>资料</p>
 <p><a class="link"   href="https://www.youtube.com/watch?v=ugWDIIOHtPA&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&amp;index=61" >Transformer - YouTube<i class="fas fa-external-link-alt"></i></a>   讲的很清楚</p>
 
@@ -399,7 +400,7 @@ Causal Mask保持因果关系，上三角都是负无穷，在训练以及推理
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-mask"><span class="nav-text">Attention mask</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li></ol>
     </div>
 </div>
 
@@ -559,7 +560,7 @@ Causal Mask保持因果关系，上三角都是负无穷，在训练以及推理
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-mask"><span class="nav-text">Attention mask</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li></ol>
     </div>
 </div>
 
@@ -645,22 +646,6 @@ Causal Mask保持因果关系，上三角都是负无穷，在训练以及推理
 
 
     
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
