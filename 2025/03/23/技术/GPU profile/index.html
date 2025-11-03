@@ -9,7 +9,7 @@
     
     <title>
         
-            nsys profile |
+            GPU profile |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        nsys profile
+                        GPU profile
                     </div>
                 
 
@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Mar 23 2025 16:21:27 GMT+0800">2025-03-23</span>
+                    <span class="datetime" data-updated="Mon Nov 03 2025 14:49:42 GMT+0800">2025-11-03</span>
                 </span>
             
         
@@ -290,10 +290,12 @@
                     
 
                     
-                         <p>111</p>
-<p>有 nsight system，nsight compute2个工具</p>
-<h4 id="system"><a href="#system" class="headerlink" title="system"></a>system</h4><p>可以exprot成数据库，然后用SQL语句对数据库进行分析。</p>
-<p>关键参数</p>
+                         <hr>
+<p>111</p>
+<h4 id="Nsight-system"><a href="#Nsight-system" class="headerlink" title="Nsight system"></a>Nsight system</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace=node --force-overwrite true \</span><br><span class="line"></span><br><span class="line">\\ 标记</span><br><span class="line">torch.cuda.nvtx.range_push(&quot;Prefill&quot;)</span><br><span class="line">torch.cuda.nvtx.range_pop()</span><br></pre></td></tr></table></figure>
+<p>可以exprot成数据库，然后用SQL语句对数据库进行分析。</p>
+<p>Nsight system还是功能更强大点。</p>
+<h4 id="Pytorch-profiler"><a href="#Pytorch-profiler" class="headerlink" title="Pytorch profiler"></a>Pytorch profiler</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True, profile_memory=True, use_cuda=True) as prof:</span><br><span class="line"></span><br><span class="line">\\标记</span><br><span class="line">with record_function(&quot;Prefill&quot;):</span><br></pre></td></tr></table></figure>
 
                     
                 </div>
@@ -378,7 +380,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#system"><span class="nav-text">system</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nsight-system"><span class="nav-text">Nsight system</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pytorch-profiler"><span class="nav-text">Pytorch profiler</span></a></li></ol>
     </div>
 </div>
 
@@ -538,7 +540,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#system"><span class="nav-text">system</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nsight-system"><span class="nav-text">Nsight system</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pytorch-profiler"><span class="nav-text">Pytorch profiler</span></a></li></ol>
     </div>
 </div>
 
@@ -624,6 +626,22 @@
 
 
     
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </body>
 </html>
