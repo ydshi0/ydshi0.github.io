@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Nov 04 2025 03:17:13 GMT+0800">2025-11-04</span>
+                    <span class="datetime" data-updated="Mon Nov 10 2025 17:06:51 GMT+0800">2025-11-10</span>
                 </span>
             
         
@@ -291,6 +291,15 @@
 
                     
                          <h4 id="Embedding"><a href="#Embedding" class="headerlink" title="Embedding"></a>Embedding</h4><p>Embedding层维度大小是 [v,h]，v是词汇表大小，h是hidden_size。每个token都对应词汇表中的一个索引，embedding后就是对应索引的那行。</p>
+<h5 id="旋转位置编码（RoPE）"><a href="#旋转位置编码（RoPE）" class="headerlink" title="旋转位置编码（RoPE）"></a>旋转位置编码（RoPE）</h5><p>“猫 追 狗”，”狗 追 猫”。如果没有位置信息，Attention 会认为这两句话的“追”字上下文完全一样，这显然是错误的。因此，必须用一种方法告诉模型每个 token 的位置。</p>
+<p>RoPE 不是 Token Embedding + 位置信息，而是对 Query ($q$) 和 Key ($k$) 向量进行“旋转” (Rotate)，实现了在 Attention 计算中只体现“相对位置”的效果。</p>
+<p>1 <strong>分组：</strong> RoPE 会把 $q$ 和 $k$ 向量的 embedding 维度两两一组 (e.g., $(d_1, d_2), (d_3, d_4), …$)。</p>
+<p>2 <strong>旋转矩阵：</strong> 对于一个 2D 向量 $(x, y)$，左乘旋转矩阵$R_{\theta}$时，就是逆时针旋转 $\theta$ 角度</p>
+<script type="math/tex; mode=display">
+R_{\theta} = \begin{pmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}</script><p>3 <strong>定义旋转</strong>  RoPE 定义了一个与绝对位置 $m$ 和维度 $i$ 相关的旋转角度 $\theta_{m,i} = m \cdot \lambda_i$。通常 $\lambda_i = 10000^{-2i/d}$。</p>
+<p>4 <strong>计算</strong></p>
+<script type="math/tex; mode=display">
+(q'_m)^T k'_n = (R_{m, \theta_i} q_m)^T (R_{n, \theta_i} k_n)=q_m^T R_{m-n, \theta_i} k_n</script><p>相对距离 $|m-n|$ 越大时，编码后的点积（Attention）会自然衰减。</p>
 <h4 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h4><p>Attention能并行建模序列的全局依赖。</p>
 <p>Multi-Head 多头自注意力头，能在不同尺度上同时提取互补关系。d_model 变成 d_model / h。</p>
 <p><img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202511032003389.png"   alt="3FAD301ECAC948E7FACCC52DDA257CF3" style="zoom:33%;" ></p>
@@ -307,20 +316,17 @@
 0 & 0 & -\infty & -\infty \\
 0 & 0 & 0 & -\infty \\
 0 & 0 & 0 & 0
-\end{pmatrix}</script><h4 id="MHA，GQA"><a href="#MHA，GQA" class="headerlink" title="MHA，GQA"></a>MHA，GQA</h4><p>标准多头注意力（MHA）</p>
-<p>num_attention_heads = num_key_value_heads = h。每个头都有自己的一套 <strong>Q/K/V</strong> 。</p>
-<p>Grouped-Query Attention（GQA）</p>
-<p>num_key_value_heads = h_kv &lt; h。 <strong>h</strong> 个 <em>query头</em> 会分成 <strong>h / h_kv</strong> 个组，同一组的多个 <strong>Q</strong> 共享一套 <strong>K/V</strong>。</p>
-<h4 id="旋转位置编码（RoPE）"><a href="#旋转位置编码（RoPE）" class="headerlink" title="旋转位置编码（RoPE）"></a>旋转位置编码（RoPE）</h4><p>“猫 追 狗”，”狗 追 猫”。如果没有位置信息，Attention 会认为这两句话的“追”字上下文完全一样，这显然是错误的。因此，必须用一种方法告诉模型每个 token 的位置。</p>
-<p>RoPE 不是 Token Embedding + 位置信息，而是对 Query ($q$) 和 Key ($k$) 向量进行“旋转” (Rotate)，实现了在 Attention 计算中只体现“相对位置”的效果。</p>
-<p>1 <strong>分组：</strong> RoPE 会把 $q$ 和 $k$ 向量的 embedding 维度两两一组 (e.g., $(d_1, d_2), (d_3, d_4), …$)。</p>
-<p>2 <strong>旋转矩阵：</strong> 对于一个 2D 向量 $(x, y)$，左乘旋转矩阵$R_{\theta}$时，就是逆时针旋转 $\theta$ 角度</p>
+\end{pmatrix}</script><h5 id="MHA，GQA"><a href="#MHA，GQA" class="headerlink" title="MHA，GQA"></a>MHA，GQA</h5><p>多头注意力（MHA），每个头都有一套 <strong>Q/K/V</strong> </p>
+<p>num_attention_heads = num_key_value_heads = h。。</p>
+<p>Grouped-Query Attention 分组查询注意力，<strong>h</strong> 个 <em>query</em>会分组（ <strong>h / h_kv</strong> ），同一组的多个 <strong>Q</strong> 共享一套 <strong>K/V</strong>。</p>
+<p>num_key_value_heads = h_kv &lt; h。 </p>
+<h4 id="Feed-Forward-Network-FFN"><a href="#Feed-Forward-Network-FFN" class="headerlink" title="Feed-Forward Network (FFN)"></a>Feed-Forward Network (FFN)</h4><p>FFN由两层线性变换和中间的非线性激活函数组成。</p>
 <script type="math/tex; mode=display">
-R_{\theta} = \begin{pmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}</script><p>3 <strong>定义旋转</strong>  RoPE 定义了一个与绝对位置 $m$ 和维度 $i$ 相关的旋转角度 $\theta_{m,i} = m \cdot \lambda_i$。通常 $\lambda_i = 10000^{-2i/d}$。</p>
-<p>4 <strong>计算</strong></p>
+FFN(x) = \text{Linear}_2(\text{Activation}(\text{Linear}_1(x)))</script><p>激活函数（如ReLU、GELU）引入了非线性，极大地增强了模型的表示能力。</p>
+<h4 id="Add-amp-Norm"><a href="#Add-amp-Norm" class="headerlink" title="Add &amp; Norm"></a>Add &amp; Norm</h4><p>残差连接和 LayerNorm</p>
 <script type="math/tex; mode=display">
-(q'_m)^T k'_n = (R_{m, \theta_i} q_m)^T (R_{n, \theta_i} k_n)=q_m^T R_{m-n, \theta_i} k_n</script><p>相对距离 $|m-n|$ 越大时，编码后的点积（Attention）会自然衰减。</p>
-<p>资料</p>
+y=x+f(x)</script><p>资料</p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/667864459" >图解RoPE旋转位置编码及其特性 - 知乎<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   href="https://www.youtube.com/watch?v=ugWDIIOHtPA&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&amp;index=61" >Transformer - YouTube<i class="fas fa-external-link-alt"></i></a>   讲的很清楚</p>
 
                     
@@ -406,7 +412,7 @@ R_{\theta} = \begin{pmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \t
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-mask"><span class="nav-text">Attention mask</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%88RoPE%EF%BC%89"><span class="nav-text">旋转位置编码（RoPE）</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%88RoPE%EF%BC%89"><span class="nav-text">旋转位置编码（RoPE）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-mask"><span class="nav-text">Attention mask</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Feed-Forward-Network-FFN"><span class="nav-text">Feed-Forward Network (FFN)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Add-amp-Norm"><span class="nav-text">Add &amp; Norm</span></a></li></ol>
     </div>
 </div>
 
@@ -566,7 +572,7 @@ R_{\theta} = \begin{pmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \t
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-mask"><span class="nav-text">Attention mask</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%88RoPE%EF%BC%89"><span class="nav-text">旋转位置编码（RoPE）</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%88RoPE%EF%BC%89"><span class="nav-text">旋转位置编码（RoPE）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-mask"><span class="nav-text">Attention mask</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MHA%EF%BC%8CGQA"><span class="nav-text">MHA，GQA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Feed-Forward-Network-FFN"><span class="nav-text">Feed-Forward Network (FFN)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Add-amp-Norm"><span class="nav-text">Add &amp; Norm</span></a></li></ol>
     </div>
 </div>
 
