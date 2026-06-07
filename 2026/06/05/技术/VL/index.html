@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Fri Jun 05 2026 23:02:19 GMT+0800">2026-06-05</span>
+                    <span class="datetime" data-updated="Sun Jun 07 2026 18:31:50 GMT+0800">2026-06-07</span>
                 </span>
             
         
@@ -297,7 +297,7 @@
 <h4 id="1-1-概况">1.1 概况</h4>
 <p><strong>Vision Transformer (ViT)</strong> 由 Google 在论文 <em>“An Image is Worth 16x16 Words”</em> 中提出，核心思想是：</p>
 <blockquote>
-<p><strong>把图像当作&quot;句子&quot;，把图像 patch 当作&quot;token&quot;</strong>，直接用标准的Transformer Encoder。</p>
+<p>把图像当作&quot;句子&quot;，把图像 patch 当作&quot;token&quot;，直接用标准的Transformer Encoder。</p>
 </blockquote>
 <p>它首次证明了<strong>Transformer 架构</strong>在大规模图像分类上可以超越 CNN</p>
 <p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260605224007902.png"  alt="85a63a284e997adfc469400a6b280762"></p>
@@ -322,18 +322,18 @@
 </li>
 </ol>
 <h4 id="2-2-ViT-forward">2.2 ViT forward</h4>
-<p>把 <code>H×W×C</code> 的图像切成固定大小的 patch，每个 patch 处理成一个 token</p>
+<p>把 H×W×C 的图像切成固定大小的 patch，每个 patch 处理成一个 token</p>
 <p>加上 pos embedding 当作 Encoder 输入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Image → Patch Embedding → + Pos Embedding → Transformer Encoder → MLP</span><br><span class="line">       (切块 + 投影)                     (L 层 MHA + MLP)      </span><br></pre></td></tr></table></figure>
 <p>原论文做分类任务会插入前置 <code>[CLS]</code> token ， MLP映射到类别 logits。VL模型MLP是升维到LLM隐藏层维度。</p>
 <p>Patch Embedding过程</p>
 <ul>
-<li>取像素：一个 14×14 的 RGB patch 含 <code>14 × 14 × 3 = 588</code> 个像素值。</li>
+<li>取像素：一个 14×14 的 RGB patch 含 14 × 14 × 3 = 588个像素值。</li>
 <li>Flatten 拉直：按固定顺序排成一个长度 588 的一维向量。</li>
-<li>线性投影：乘一个矩阵 <code>E (588 × D)</code>，压成 D 维向量，即该 patch 的 token。</li>
-<li>切分后的 patch 数量（序列长度）为： <code>(H / P) × (W / P)</code> ，其中 <code>P</code> 是 patch 边长</li>
+<li>线性投影：乘一个矩阵 E (588 × D)，压成 D 维向量，即该 patch 的 token。</li>
+<li>切分后的 patch 数量（序列长度）为： (H / P) × (W / P) ，其中 P 是 patch 边长</li>
 </ul>
-<p>工程上用一个 <code>Conv2d(in=3, out=D, kernel=14, stride=14)</code> 一次性完成&quot;切块 + 拉直 + 投影&quot;</p>
+<p>工程上用一个 Conv2d(in=3, out=D, kernel=14, stride=14) 一次性完成&quot;切块 + 拉直 + 投影&quot;</p>
 <h4 id="2-3-Transformer-Encoder">2.3 Transformer Encoder</h4>
 <p>每个 Block 由 MHA与 MLP 组成，均带前置 LayerNorm 与残差连接</p>
 <ul>
@@ -343,14 +343,14 @@
 <p>在多模态模型中，ViT 充当 <strong>视觉编码器</strong>，其输出经过一个 Projector  投影后，作为视觉 token 拼接到 LLM 的输入序列中：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">图像 → ViT encoder → Projector  → vision embeddings</span><br><span class="line">                                                ↘</span><br><span class="line">文本 → tokenizer ─────────────────────────────→ LLM (prefill + decode)</span><br></pre></td></tr></table></figure>
 <p><strong>视觉 token 在 LLM 序列中的位置</strong></p>
-<p>LLM 的输入，文本与图像按出现顺序混排。输入中的 <code>&lt;image&gt;</code> 占位符，会被替换成 ViT 输出的视觉 token。</p>
+<p>LLM 的输入，文本与图像按出现顺序混排。输入中的 image 占位符，会被替换成 ViT 输出的视觉 token。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">原始输入:  这  张  &lt;image&gt;          图  里  有  什  么  ？</span><br><span class="line">                     │ 展开成 N 个视觉 token</span><br><span class="line">                     ▼</span><br><span class="line">LLM 序列:  这  张  [img₁][img₂]...[imgₙ]  图  里  有  什  么  ？</span><br><span class="line">          └─文本─┘   └─── 视觉 token───┘   └──── 文本 ────┘</span><br></pre></td></tr></table></figure>
 <h3 id="3-Qwen3-VL">3 Qwen3-VL</h3>
 <h4 id="3-1-模型组成">3.1 模型组成</h4>
 <p>Qwen3-VL 由两个子模型组成：</p>
 <ul>
-<li><strong>ViT</strong>：<code>SigLIP-SO-400M</code>，参数量约 <strong>400M</strong></li>
-<li><strong>LLM</strong>：Qwen3 系列（如 7B / 32B / 72B / MoE 235B 等）</li>
+<li><strong>ViT</strong>：SigLIP-SO-400M，参数量约 <strong>400M</strong></li>
+<li><strong>LLM</strong>：Qwen3 系列</li>
 </ul>
 <h4 id="3-2-ViT-推理开销">3.2 ViT 推理开销</h4>
 <p>虽然 ViT 参数量远小于 LLM，但它常常是 <strong>VL 推理的隐藏瓶颈</strong>：</p>
@@ -486,7 +486,7 @@
 <p>decode 每次只算一个 token，形状稳定（batch 分桶即可）；<strong>ViT 与 prefill</strong> 则有两个麻烦：</p>
 <ul>
 <li><strong>序列长度 N 不固定</strong>：动态分辨率下每张图 patch 数都不同 → 按 shape <strong>分桶</strong>，每桶录一张图</li>
-<li><strong>varlen attention 动态</strong>：<code>cu_seqlens</code> 随输入变化，无法录进图 → <strong>分段捕获</strong>，attention 之外的规整部分录图，attention 留在图外正常 launch</li>
+<li><strong>varlen attention 动态</strong>：cu_seqlens 随输入变化，无法录进图 → <strong>分段捕获</strong>，attention 之外的规整部分录图，attention 留在图外正常 launch</li>
 </ul>
 
                     
