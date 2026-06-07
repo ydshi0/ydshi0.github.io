@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Jun 07 2026 18:31:50 GMT+0800">2026-06-07</span>
+                    <span class="datetime" data-updated="Sun Jun 07 2026 20:46:39 GMT+0800">2026-06-07</span>
                 </span>
             
         
@@ -353,11 +353,11 @@
 <li><strong>LLM</strong>：Qwen3 系列</li>
 </ul>
 <h4 id="3-2-ViT-推理开销">3.2 ViT 推理开销</h4>
-<p>虽然 ViT 参数量远小于 LLM，但它常常是 <strong>VL 推理的隐藏瓶颈</strong>：</p>
+<p>虽然 ViT 参数量远小于 LLM，但它也是瓶颈：</p>
 <ol>
 <li><strong>高分辨率 → 长序列</strong>：3840 × 2160 的图，patch=14 时序列长度约 42000，计算量很大。</li>
-<li><strong>多图 / 视频</strong>：单条 prompt 可能含十几张图甚至上百帧视频，ViT 要算很多次。</li>
-<li><strong>没有 KV cache 复用</strong>：每张新图都要从头算，类似prefill</li>
+<li><strong>多图 / 视频</strong>：单条 prompt 可能含十几张图甚至上百帧视频。</li>
+<li><strong>没有 KV cache 复用</strong>：每张新图都要从头算，类似prefill是计算bound</li>
 </ol>
 <h4 id="3-3-Qwen3-VL-改进">3.3 Qwen3-VL 改进</h4>
 <p>Qwen3-VL 的主要改进：</p>
