@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed Nov 12 2025 16:52:10 GMT+0800">2025-11-12</span>
+                    <span class="datetime" data-updated="Mon Jun 08 2026 22:57:05 GMT+0800">2026-06-08</span>
                 </span>
             
         
@@ -290,15 +290,36 @@
                     
 
                     
-                         <hr>
-<h4 id="Nsight-system">Nsight system</h4>
-<p>Nsight system功能更强大。</p>
-<p>可以exprot成数据库，然后用SQL语句对数据库进行分析。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace=node --force-overwrite=true \</span><br><span class="line"></span><br><span class="line">\\ 标记</span><br><span class="line">torch.cuda.nvtx.range_push(&quot;Prefill&quot;)</span><br><span class="line">torch.cuda.nvtx.range_pop()</span><br></pre></td></tr></table></figure>
-<p>torch.compile会导致nsys错误，可视化后出现嵌套。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.forward = torch.compile(model.forward, mode=&#x27;reduce-overhead&#x27;, fullgraph=False, dynamic=True)</span><br></pre></td></tr></table></figure>
-<h4 id="Pytorch-profiler">Pytorch profiler</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from torch.profiler import profile, record_function, ProfilerActivity</span><br><span class="line"></span><br><span class="line">with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True, profile_memory=True) as prof:</span><br><span class="line"></span><br><span class="line">prof.export_chrome_trace(&quot;profiler_trace.json&quot;)</span><br><span class="line">\\标记</span><br><span class="line">with record_function(&quot;Prefill&quot;):</span><br></pre></td></tr></table></figure>
+                         <h1>GPU profile 工具总结</h1>
+<h3 id="1-nvidia-smi">1. nvidia-smi</h3>
+<p>GPU-Util含义</p>
+<p>20% = 过去采样周期内，大约 20% 的时间有 kernel 在 GPU 上执行</p>
+<p>哪怕 80 个 SM 只有 1 个在跑 kernel，那段时间也算&quot;在用&quot;</p>
+<hr>
+<h3 id="2-dcgmi-DCGM">2. dcgmi (DCGM)</h3>
+<p>更细粒度的 GPU 监控，通过硬件计数器采集，开销极小，适合生产环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dcgmi dmon -e 1002,1003,1004</span><br><span class="line"></span><br><span class="line"><span class="comment"># 常用指标 ID</span></span><br><span class="line"><span class="comment"># 1001: GPU 利用率（和 nvidia-smi GPU-Util 一样）</span></span><br><span class="line"><span class="comment"># 1002: SM Active（SM 活跃比例）</span></span><br><span class="line"><span class="comment"># 1003: SM Occupancy（SM 占用率）</span></span><br><span class="line"><span class="comment"># 1004: Tensor Core Active</span></span><br><span class="line"><span class="comment"># 1005: DRAM Active（显存带宽利用率）</span></span><br></pre></td></tr></table></figure>
+<p>SM Active：有多少比例的 SM 上正在执行 warp（衡量 SM 是否被分配了工作）</p>
+<p>SM Occupancy：每个活跃 SM 上实际运行的 warp 数 / 该 SM 最大支持的 warp 数（衡量 SM 内部是否被填满）</p>
+<p>Active 低说明 kernel 没用到足够多的 SM，Occupancy 低说明每个 SM 上的并行度不够。</p>
+<hr>
+<h3 id="3-Nsight-Systems-nsys">3. Nsight Systems (nsys)</h3>
+<p>时间线级分析工具，看全局执行流程：CPU-GPU 交互、kernel 调度、通信与计算重叠等</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nsys profile -o report.nsys-rep \</span><br><span class="line">    --trace-fork-before-exec=<span class="literal">true</span> \</span><br><span class="line">    --cuda-graph-trace=node \</span><br><span class="line">    --force-overwrite=<span class="literal">true</span> \</span><br><span class="line">    python your_script.py</span><br></pre></td></tr></table></figure>
+<p>NVTX 标记：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">torch.cuda.nvtx.range_push(<span class="string">&quot;Prefill&quot;</span>)</span><br><span class="line"><span class="comment"># ... prefill 逻辑 ...</span></span><br><span class="line">torch.cuda.nvtx.range_pop()</span><br></pre></td></tr></table></figure>
+<p>可导出为 SQLite 数据库，用 SQL 分析：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nsys <span class="built_in">export</span> --<span class="built_in">type</span>=sqlite report.nsys-rep</span><br></pre></td></tr></table></figure>
+<p><strong>torch.compile</strong> 可能导致 nsys 出问题</p>
+<hr>
+<h3 id="4-Nsight-Compute-ncu">4. Nsight Compute (ncu)</h3>
+<p>单 kernel 级深度分析，有插桩开销，kernel 会显著变慢。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只分析特定 kernel，跳过前 100 次，分析 10 次</span></span><br><span class="line">ncu --kernel-name <span class="string">&quot;regex:gemm&quot;</span> --launch-skip 100 --launch-count 10 -o report python your_script.py</span><br></pre></td></tr></table></figure>
+<p>先用 nsys 找到热点 kernel，再用 ncu 深入分析。</p>
+<hr>
+<h3 id="5-PyTorch-Profiler">5. PyTorch Profiler</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.profiler <span class="keyword">import</span> profile, record_function, ProfilerActivity</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> profile(</span><br><span class="line">    activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],</span><br><span class="line">    record_shapes=<span class="literal">True</span>,</span><br><span class="line">    profile_memory=<span class="literal">True</span></span><br><span class="line">) <span class="keyword">as</span> prof:</span><br><span class="line">    <span class="keyword">with</span> record_function(<span class="string">&quot;Prefill&quot;</span>):</span><br><span class="line">        <span class="comment"># 这里面的所有操作会被标记为 &quot;Prefill&quot;</span></span><br><span class="line">        output = model(input_ids)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> record_function(<span class="string">&quot;Decode&quot;</span>):</span><br><span class="line">        <span class="comment"># 标记为 &quot;Decode&quot;</span></span><br><span class="line">        output = model.generate(input_ids)</span><br><span class="line"></span><br><span class="line">prof.export_chrome_trace(<span class="string">&quot;profiler_trace.json&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>导出的 json 可在 <strong>Perfetto</strong> 中打开</p>
 
                     
                 </div>
@@ -383,7 +404,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nsight-system"><span class="nav-text">Nsight system</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pytorch-profiler"><span class="nav-text">Pytorch profiler</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">GPU profile 工具总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-nvidia-smi"><span class="nav-text">1. nvidia-smi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-dcgmi-DCGM"><span class="nav-text">2. dcgmi (DCGM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Nsight-Systems-nsys"><span class="nav-text">3. Nsight Systems (nsys)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Nsight-Compute-ncu"><span class="nav-text">4. Nsight Compute (ncu)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-PyTorch-Profiler"><span class="nav-text">5. PyTorch Profiler</span></a></li></ol></li></ol>
     </div>
 </div>
 
@@ -543,7 +564,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nsight-system"><span class="nav-text">Nsight system</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pytorch-profiler"><span class="nav-text">Pytorch profiler</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">GPU profile 工具总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-nvidia-smi"><span class="nav-text">1. nvidia-smi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-dcgmi-DCGM"><span class="nav-text">2. dcgmi (DCGM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Nsight-Systems-nsys"><span class="nav-text">3. Nsight Systems (nsys)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Nsight-Compute-ncu"><span class="nav-text">4. Nsight Compute (ncu)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-PyTorch-Profiler"><span class="nav-text">5. PyTorch Profiler</span></a></li></ol></li></ol>
     </div>
 </div>
 
