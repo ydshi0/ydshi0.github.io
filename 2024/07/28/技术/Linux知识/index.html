@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Thu Jun 04 2026 23:26:23 GMT+0800">2026-06-04</span>
+                    <span class="datetime" data-updated="Tue Jun 09 2026 15:39:53 GMT+0800">2026-06-09</span>
                 </span>
             
         
@@ -290,19 +290,13 @@
                     
 
                     
-                         <h3 id="git">git</h3>
+                         <h3 id="Git">Git</h3>
 <p>github 私有仓库，使用PAT密钥方式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">git config --local user.email [XXX]</span><br><span class="line">git config --local user.name [XXX]</span><br><span class="line">//设置信息，保证上传时显示头像</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">git config --global url.&quot;https://ghproxy.net/https://github.com/&quot;.insteadOf &quot;https://github.com/&quot;</span><br><span class="line">//代理网站 https://ghfast.top/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">git pull    //拉取代码</span><br><span class="line">git push     //上传代码</span><br><span class="line">git branch    //查看分支</span><br><span class="line">git status     //查看状态</span><br><span class="line">git add </span><br><span class="line">git commit -m &quot;XXX&quot;</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">git stash   </span><br><span class="line">git stash pop</span><br><span class="line">git stash list</span><br><span class="line">//暂存区是一个栈，可以多次暂存</span><br><span class="line"></span><br><span class="line">git config core.fileMode false      //忽略权限改变</span><br></pre></td></tr></table></figure>
 <p>VScode插件：Git History 查看提交历史</p>
-<h3 id="网络">网络</h3>
-<h5 id="Clash-Verge">Clash Verge</h5>
-<p>http代理</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$env:HTTP_PROXY=&quot;http://127.0.0.1:7897&quot;; $env:HTTPS_PROXY=&quot;http://127.0.0.1:7897&quot;</span><br></pre></td></tr></table></figure>
-<p>ssh代理</p>
-<p>需要下载Nmap，然后打开socks协议端口。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    User git</span><br><span class="line">    Port 22</span><br><span class="line">    IdentityFile C:\Users\11762/.ssh/id_rsa</span><br><span class="line">    ProxyCommand ncat --proxy 127.0.0.1:50801 --proxy-type socks5 %h 22</span><br></pre></td></tr></table></figure>
-<p>ssh连接</p>
+<h4 id="ssh连接">ssh连接</h4>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_ed25519.pub user@host</span><br><span class="line">//设置免密登录 </span><br></pre></td></tr></table></figure>
+<p>需要把公钥上传到远程服务器，私钥保留在本地</p>
 <h5 id="大模型下载">大模型下载</h5>
 <p>通过Hugging Face下载，镜像</p>
 <p><a class="link"   href="https://www.modelscope.cn/home" >首页 · 魔搭社区<i class="fas fa-external-link-alt"></i></a></p>
@@ -404,7 +398,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Clash-Verge"><span class="nav-text">Clash Verge</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD"><span class="nav-text">大模型下载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux"><span class="nav-text">tmux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-C"><span class="nav-text">Windows C++</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git"><span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh%E8%BF%9E%E6%8E%A5"><span class="nav-text">ssh连接</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD"><span class="nav-text">大模型下载</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux"><span class="nav-text">tmux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-C"><span class="nav-text">Windows C++</span></a></li></ol>
     </div>
 </div>
 
@@ -564,7 +558,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Clash-Verge"><span class="nav-text">Clash Verge</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD"><span class="nav-text">大模型下载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux"><span class="nav-text">tmux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-C"><span class="nav-text">Windows C++</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git"><span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh%E8%BF%9E%E6%8E%A5"><span class="nav-text">ssh连接</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD"><span class="nav-text">大模型下载</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux"><span class="nav-text">tmux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-C"><span class="nav-text">Windows C++</span></a></li></ol>
     </div>
 </div>
 
