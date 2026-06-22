@@ -542,13 +542,17 @@ SwiGLU
 
                     <div class="home-post-content keep-markdown-body">
                         
-                            
-投机推理
-原始方法：target Model + draft model
-小模型快速生成多个候选 token ，大模型做一次forward并行验证。
-小模型占用显存和算力，带来额外负担。
-主流方法：Eagle
-基于大模型自身的中间层隐藏状态，直接预...
+                            投机推理（Speculative Decoding）
+
+一、投机推理是什么
+核心思路
+投机解码把生成拆成三步：
+
+Draft（起草）：用一个&quot;便宜&quot;的方式快速生成 
+    
+      
+      #mjx-e19b0f6{
+...
                         
                     </div>
 
