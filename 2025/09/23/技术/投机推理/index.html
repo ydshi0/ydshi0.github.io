@@ -210,594 +210,444 @@
             <div class="main-content border-box">
                 
 
-                    
-<div class="fade-in-down-animation">
-    <div class="post-page-container border-box">
-        <div class="post-content-container border-box">
-            
+                    @import "../../common/stylus-variables.styl"
 
-            <div class="post-content-bottom border-box">
-                
-                    <div class="post-title">
-                        投机推理
-                    </div>
-                
+$avatar-width = 3.2rem
+$arrow-icon-width = 1rem
+$post-nav-max-width = 14rem
+$post-title-font-size = 1.6rem
+$toc-container-width = 15rem
+$spacer-padding = 2rem
 
-                
-                    <div class="post-header border-box">
-                        
-                            <div class="avatar-box border-box">
-                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
-                            </div>
-                        
-                        <div class="info-box">
-                            <div class="author border-box">
-                                <span class="name">eric</span>
-                                
-                            </div>
-                            <div class="meta-info border-box">
-                                
 
-<div class="post-meta-info-container border-box post">
-    <div class="post-meta-info border-box">
-        
+.post-page-container {
+  display flex
+  justify-content space-between
+  width 100%
+  height 100%
 
-        
-            <span class="meta-info-item post-create-date">
-                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2025-09-23</span>
-            </span>
+  &.show-toc {
+    .pc-post-toc {
+      display block
+    }
 
-            
-                <span class="meta-info-item post-update-date">
-                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Mon Jun 22 2026 16:43:25 GMT+0800">2026-06-22</span>
-                </span>
-            
-        
+    .post-content-container {
+      width 'calc(100% - %s)' % $toc-container-width
+    }
+  }
 
-        
 
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%95%E6%9C%BA%E6%8E%A8%E7%90%86/">投机推理</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
+  &.encrypt {
+    .post-aging-tips {
+      display none !important
+    }
+  }
 
-        
-        
-        
-        
-    </div>
 
-    
-</div>
+  +keep-tablet() {
+    .pc-post-toc {
+      display none !important
+    }
 
-                            </div>
-                        </div>
-                    </div>
-                
+    .post-content-container {
+      width 100% !important
+    }
+  }
 
-                <div class="post-content keep-markdown-body ">
-                    
 
-                    
-                         <h1>投机推理（Speculative Decoding）</h1>
-<hr>
-<h2 id="一、投机推理是什么">一、投机推理是什么</h2>
-<p><strong>核心思路</strong></p>
-<p>投机解码把生成拆成三步：</p>
-<ol>
-<li><strong>Draft（起草）</strong>：用一个&quot;便宜&quot;的方式快速生成 
-    <span id="mjx-e19b0f6">
-      <style>
-      #mjx-e19b0f6{
-        display:contents;
-        mjx-assistive-mml {
-          user-select: text !important;
-          clip: auto !important;
-          color: rgba(0,0,0,0);
-        }
-        
-mjx-container[jax="SVG"] {
-  direction: ltr;
-}
+  .post-content-container {
+    order 0
+    width 100%
+    height 100%
 
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-  min-height: 1px;
-  min-width: 1px;
-}
 
-mjx-container[jax="SVG"] > svg a {
-  fill: blue;
-  stroke: blue;
-}
+    keep-container(1, 0, 2rem)
 
-mjx-assistive-mml {
-  position: absolute !important;
-  top: 0px;
-  left: 0px;
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 1px 0px 0px 0px !important;
-  border: 0px !important;
-  display: block !important;
-  width: auto !important;
-  overflow: hidden !important;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+    +keep-mobile() {
+      padding 0 0.2rem !important
+      box-shadow none !important
 
-mjx-assistive-mml[display="block"] {
-  width: 100% !important;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][display="true"][width="full"] {
-  display: flex;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > g > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
-  stroke-width: 3;
-}
-
-g[data-mml-node="xypic"] path {
-  stroke-width: inherit;
-}
-
-.MathJax g[data-mml-node="xypic"] path {
-  stroke-width: inherit;
-}
-
+      &:hover {
+        box-shadow none !important
       }
-      </style>
-      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.109ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 490 647" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math></mjx-assistive-mml></mjx-container>
-    </span>
-   个 token（draft tokens）。</li>
-<li><strong>Verify（验证）</strong>：用大模型<strong>一次前向</strong>（并行）对这  
-    <span id="mjx-0947f188">
-      <style>
-      #mjx-0947f188{
-        display:contents;
-        mjx-assistive-mml {
-          user-select: text !important;
-          clip: auto !important;
-          color: rgba(0,0,0,0);
+    }
+
+
+    .post-content-top {
+      display flex
+      align-items flex-end
+      width 100%
+      padding-top $spacer-padding
+      padding-right $spacer-padding
+      overflow hidden
+      background-color var(--background-color-2)
+      border-top-left-radius var(--box-border-radius)
+      border-top-right-radius var(--box-border-radius)
+
+      +keep-tablet() {
+        height 12.8rem
+        padding-top $spacer-padding * 0.8
+        padding-right $spacer-padding  * 0.8
+
+        .cover-post-title {
+          padding $spacer-padding * 0.5 * 0.8 $spacer-padding * 0.8 !important
+          font-size $post-title-font-size * 0.9 !important
+          line-height 1.5 !important
         }
-        
-mjx-container[jax="SVG"] {
-  direction: ltr;
-}
-
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-  min-height: 1px;
-  min-width: 1px;
-}
-
-mjx-container[jax="SVG"] > svg a {
-  fill: blue;
-  stroke: blue;
-}
-
-mjx-assistive-mml {
-  position: absolute !important;
-  top: 0px;
-  left: 0px;
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 1px 0px 0px 0px !important;
-  border: 0px !important;
-  display: block !important;
-  width: auto !important;
-  overflow: hidden !important;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-mjx-assistive-mml[display="block"] {
-  width: 100% !important;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][display="true"][width="full"] {
-  display: flex;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > g > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
-  stroke-width: 3;
-}
-
-g[data-mml-node="xypic"] path {
-  stroke-width: inherit;
-}
-
-.MathJax g[data-mml-node="xypic"] path {
-  stroke-width: inherit;
-}
-
       }
-      </style>
-      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.109ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 490 647" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math></mjx-assistive-mml></mjx-container>
-    </span>
-   个 token 同时打分。</li>
-<li><strong>Accept（接受）</strong>：通过一个采样校验规则，接受其中前 k 个正确的 token，拒绝后面的并丢弃。</li>
-</ol>
-<p>speculative sampling 的拒绝采样规则，可证明整体等价于直接从大模型采样。</p>
-<p>发展路径：</p>
-<ul>
-<li><strong>让 draft 更准</strong> → 提高接受率 → 提高平均接受长度；</li>
-<li><strong>让 draft 更便宜</strong> → 起草本身别拖后腿。</li>
-</ul>
-<h2 id="二、draft方法">二、draft方法</h2>
-<h3 id="n-gram">n-gram</h3>
-<p>查找重复出现的 n-gram（连续的 n 个词）来进行预测。例如，如果 “the quick brown fox” 经常出现，模型生成 “the quick brown” 之后，它就会预测下一个词是 “fox”。用到的是字典树（Trie）。</p>
-<h4 id="独立draft-model">独立draft model</h4>
-<p>用一个独立的小模型当 drafter（比如用 7B 给 70B 起草）</p>
-<p>局限：小模型本身也要占用显存和算力，带来额外负担；</p>
-<h4 id="Medusa"><strong>Medusa</strong></h4>
-<p>在大模型上额外添加多个并行解码头，各头独立预测后续不同位置的 token（t+1、t+2、t+3……），不依赖自回归</p>
-<h2 id="三、EAGLE-1：在特征层做草稿">三、EAGLE-1：在特征层做草稿</h2>
-<p><strong>核心洞察</strong></p>
-<p>EAGLE 不在 <strong>token 层面</strong> 做草稿，而是在 <strong>feature</strong>（特征，即 LM head 之前的最后一层 hidden state）层面做自回归预测。</p>
-<ol>
-<li><strong>特征序列比 token 序列更有规律、更容易预测</strong>。直接预测下一个 token 不确定性很大，但预测下一个 hidden feature 更平滑、更可学。</li>
-<li><strong>特征级自回归存在不确定性</strong>：仅靠当前特征去预测下一个特征是有歧义的——因为下一步实际采样到哪个 token 是随机的。所以<strong>必须把&quot;已经采样出的 token&quot;也作为输入</strong>，来消除这个歧义。</li>
-</ol>
-<p><strong>架构</strong></p>
-<p>EAGLE 的 draft 模型极其轻量，本质就是 一层 decoder</p>
-<ul>
-<li>输入 = <code>当前 token 的 embedding</code> ⊕ <code>上一步的 feature</code>（两者 concat 后过一个 FC 降维）</li>
-<li>输出 = 预测的<strong>下一个 feature</strong></li>
-<li>再把这个 feature 喂给<strong>大模型的 LM head</strong>（共享）→ 得到 token 分布 → 采样出 token</li>
-<li>这个 token 又作为下一步输入，自回归地生成一条 draft 链</li>
-</ul>
-<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260622163723259.png"   alt="image-20260622163646960" style="zoom: 50%;" >
-<h2 id="四、Tree-Attention（树形注意力）">四、Tree Attention（树形注意力）</h2>
-<p>普通投机解码只猜一条链 <code>A → B → C</code>，一旦某处断掉，后面全废。</p>
-<p>EAGLE 是猜一棵<strong>树</strong>（每步保留 top-k 个候选，展开成树状），用 tree attention一次前向并行验证整棵树。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     root（已确定的最后一个 token）</span><br><span class="line">    /        \</span><br><span class="line">   A          B          ← 第 1 层候选</span><br><span class="line"> /   \       /</span><br><span class="line">C     D     E             ← 第 2 层候选</span><br></pre></td></tr></table></figure>
-<p>我们希望把树上的节点塞进同一个 batch 并行算。Transformer 默认是因果注意力——每个位置能看到它前面所有位置。但在树里，<strong>C 只应该看到祖先 <code>root→A→C</code>，绝不能看到 B、D、E</strong>（它们在别的分支）。</p>
-<p>解决办法：<strong>自定义 attention mask</strong>，让每个节点只能 attend 到自己的祖先链。</p>
-<p><strong>第 1 步：展平。</strong> 把树按某种顺序（如 BFS）拍平成一维序列：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">序列位置：  0=A  1=B  2=C  3=D  4=E</span><br></pre></td></tr></table></figure>
-<p><strong>第 2 步：构造 tree mask。</strong> 规则：位置 i 能 attend 到位置 j，当且仅当 j 是 i 的祖先或 j == i。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">        key:  A    B    C    D    E</span><br><span class="line">query A      ✓</span><br><span class="line">query B           ✓</span><br><span class="line">query C      ✓         ✓</span><br><span class="line">query D      ✓              ✓</span><br><span class="line">query E           ✓              ✓</span><br></pre></td></tr></table></figure>
-<p>它只保留祖先关系。实现上就是把不可见位置加 <code>-inf</code>（softmax 后变 0）。</p>
-<p><strong>第 3 步：位置编码。</strong> 每个节点的 position id 是它在树中的深度。因为 C、D 都是第 2 层，逻辑位置相同</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">节点：    A  B  C  D  E</span><br><span class="line">depth：   1  1  2  2  2     ← 用作 position id（root 为 0）</span><br></pre></td></tr></table></figure>
-<h2 id="五、EAGLE-2：动态草稿树">五、EAGLE-2：动态草稿树</h2>
-<p>EAGLE-1 的 draft 树是<strong>静态固定</strong>的，没考虑上下文难易。EAGLE-2 发现：<strong>draft 预测出的置信度（概率）能很好地近似真实接受率</strong>，于是用它来<strong>动态</strong>决定树形状——只改建树算法，不改架构、不重新训练：</p>
-<ol>
-<li><strong>Expand</strong>：只对累计置信度（根到该节点的概率乘积）最高的节点继续展开，把算力花在最可能被接受的分支上。</li>
-<li><strong>Rerank</strong>：再按全局置信度排序，只挑 top-m 个节点送进大模型验证（保证仍是合法子树）。</li>
-</ol>
-<h2 id="六、EAGLE-3：去掉特征回归，可-scale">六、EAGLE-3：去掉特征回归，可 scale</h2>
-<p>EAGLE-1/2 有两个限制：</p>
-<ol>
-<li><strong>特征回归损失成为瓶颈</strong>：训练数据增多时效果很快饱和，无法 scale。</li>
-<li><strong>只用最后一层特征</strong>，信息不够丰富。</li>
-</ol>
-<p><strong>两大改动</strong></p>
-<ol>
-<li>
-<p>放弃 feature prediction，改为融合多层特征</p>
-<p>EAGLE-3 <strong>不再预测&quot;下一个 feature&quot;</strong>，从而<strong>去掉了特征回归损失</strong>。从大模型采集<strong>低层、中层、高层三处的 hidden states</strong>，拼接（concat）融合作为 draft 的输入。但任然共享LM head</p>
-</li>
-<li>
-<p>Training-Time Test（训练时模拟多步）</p>
-<p>EAGLE-1/2 训练时是 <strong>teacher forcing</strong>：每一步的输入都用大模型的真实 feature。但<strong>推理时</strong>，draft 是把自己上一步的输出当输入，自回归地连猜好几步——训练和推理<strong>不一致（exposure bias）</strong>，误差会累积。</p>
-<p>EAGLE-3 在训练时就<strong>模拟多步自回归</strong>：让 draft 用自己预测的结果作为后续输入来训练，使训练、推理对齐。</p>
-<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260622164130642.png"   alt="image-20260622163829182" style="zoom:50%;" >
-</li>
-</ol>
-<h2 id="七、MTP（Multi-Token-Prediction）">七、MTP（Multi-Token Prediction）</h2>
-<p>EAGLE 是<strong>推理外挂的草稿器</strong>，MTP 是<strong>训练期就让模型学会多步预测</strong>。</p>
-<p>标准 LM 的训练目标是&quot;给定前文，预测<strong>下一个</strong> token&quot;。MTP 把目标改成&quot;给定前文，<strong>同时预测未来 n 个</strong> token&quot;。</p>
-<p>在共享的主干（trunk）之上，挂 n 个独立的输出头，并行算出 n 个位置的预测</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">            ┌─► head_1 ─► 预测 token_&#123;t+1&#125;</span><br><span class="line">hidden_t ──►├─► head_2 ─► 预测 token_&#123;t+2&#125;</span><br><span class="line">            ├─► head_3 ─► 预测 token_&#123;t+3&#125;</span><br><span class="line">            └─► head_4 ─► 预测 token_&#123;t+4&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>DeepSeek-V3  MTP</strong></p>
-<p>它用的是<strong>串行（causal chain）的 MTP 模块</strong>——每个模块依次预测下一个 token，并把上一步的表示传给下一步，保留了 token 之间的依赖。</p>
-<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260622164141394.png"   alt="image-20260622164004689" style="zoom:50%;" >
-<ol>
-<li><strong>共享嵌入层（Shared Embedding）：</strong> 共享embedding层</li>
-<li><strong>特征融合：</strong> 将最后一层的隐状态经过 RMSNorm 后，与采样结果token 的 embedding进行拼接</li>
-<li><strong>线性投影（Linear Projection）：</strong> 将拼接后的向量投影到模型的隐藏维度</li>
-<li><strong>独立 Transformer Block：</strong> 每个 MTP 模块拥有一个独立的 Transformer block（单层）</li>
-<li><strong>共享输出头（Shared Output Head）：</strong> 共享LM head</li>
-</ol>
-<p><strong>额外参数：</strong> 每个 MTP 的额外参数仅为：1 层 RMSNorm + 1 个线性投影 + 1 层 Transformer block。</p>
-
-                    
-                </div>
-
-                
-
-                <div class="post-bottom-tags-and-share border-box">
-                    <div>
-                        
-                            <ul class="post-tags-box border-box">
-                                
-                                    <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
-                                    </li>
-                                
-                                    <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%95%E6%9C%BA%E6%8E%A8%E7%90%86/">投机推理</a>
-                                    </li>
-                                
-                            </ul>
-                        
-                    </div>
-                    <div>
-                        
-                    </div>
-                </div>
-
-                
-
-                
-                    <div class="post-nav border-box">
-                        
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/2026/01/27/%E6%8A%80%E6%9C%AF/fusedmoelora/"
-                                   title="fusedmoelora"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">fusedmoelora</span>
-                                        <span class="post-nav-item">Prev posts</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
-                        
-                            <div class="next-post">
-                                <a class="next"
-                                   rel="next"
-                                   href="/2025/04/07/%E7%94%9F%E6%B4%BB/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%B8%B8%E8%AF%86/"
-                                   title="经济学常识"
-                                >
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">经济学常识</span>
-                                        <span class="post-nav-item">Next posts</span>
-                                    </span>
-                                    <span class="right arrow-icon flex-center">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                        
-                    </div>
-                
-
-                
-                    
 
 
+      +keep-mobile() {
+        height 11.8rem
+        padding-top $spacer-padding * 0.6
+        padding-right $spacer-padding  * 0.6
+
+        .cover-post-title {
+          padding $spacer-padding * 0.5 * 0.6 $spacer-padding * 0.6 !important
+          font-size $post-title-font-size * 0.8 !important
+          line-height 1.4 !important
+        }
+      }
 
 
+      .cover-post-title {
+        position relative
+        z-index $z-index-1
+        box-sizing border-box
+        max-width 100%
+        max-height 100%
+        padding $spacer-padding * 0.5 $spacer-padding
+        overflow-y auto
+        color var(--text-color-2)
+        font-weight 600
+        font-size $post-title-font-size
+        line-height 1.6
+        background var(--background-color-1-transparent)
+        border-top-right-radius var(--box-border-radius)
+        -webkit-backdrop-filter blur(2px)
+        backdrop-filter blur(2px)
+      }
 
 
-                
-            </div>
-        </div>
+      .post-cover {
+        position absolute
+        top 0
+        left 0
+        box-sizing border-box
+        width 100%
+        height 100%
+        object-fit cover
+      }
+    }
 
-        
-            <div class="pc-post-toc right-toc">
-                <div class="post-toc-wrap border-box">
-    <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">投机推理（Speculative Decoding）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%8A%95%E6%9C%BA%E6%8E%A8%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">一、投机推理是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81draft%E6%96%B9%E6%B3%95"><span class="nav-text">二、draft方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#n-gram"><span class="nav-text">n-gram</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8Bdraft-model"><span class="nav-text">独立draft model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Medusa"><span class="nav-text">Medusa</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81EAGLE-1%EF%BC%9A%E5%9C%A8%E7%89%B9%E5%BE%81%E5%B1%82%E5%81%9A%E8%8D%89%E7%A8%BF"><span class="nav-text">三、EAGLE-1：在特征层做草稿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Tree-Attention%EF%BC%88%E6%A0%91%E5%BD%A2%E6%B3%A8%E6%84%8F%E5%8A%9B%EF%BC%89"><span class="nav-text">四、Tree Attention（树形注意力）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81EAGLE-2%EF%BC%9A%E5%8A%A8%E6%80%81%E8%8D%89%E7%A8%BF%E6%A0%91"><span class="nav-text">五、EAGLE-2：动态草稿树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81EAGLE-3%EF%BC%9A%E5%8E%BB%E6%8E%89%E7%89%B9%E5%BE%81%E5%9B%9E%E5%BD%92%EF%BC%8C%E5%8F%AF-scale"><span class="nav-text">六、EAGLE-3：去掉特征回归，可 scale</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81MTP%EF%BC%88Multi-Token-Prediction%EF%BC%89"><span class="nav-text">七、MTP（Multi-Token Prediction）</span></a></li></ol></li></ol>
-    </div>
-</div>
 
-            </div>
-        
-    </div>
-</div>
+    .post-content-bottom {
+      padding $spacer-padding
+
+      &.has-cover {
+        padding-top $spacer-padding * 0.5
+      }
+
+      +keep-mobile() {
+        padding $spacer-padding * 0.5 0 !important
+      }
+
+      .post-title {
+        color var(--text-color-2)
+        font-weight 600
+        font-size $post-title-font-size
+        line-height 1.6
+        text-align var(--post-title-align)
+
+        +keep-tablet() {
+          font-size $post-title-font-size * 0.9
+        }
+
+        +keep-mobile() {
+          font-size $post-title-font-size * 0.8
+        }
+      }
+
+
+      .post-header {
+        display flex
+        justify-content flex-start
+        width 100%
+        margin-top 1rem
+
+        +keep-tablet() {
+          margin-top 0.9rem
+          transform scale(0.9)
+          transform-origin left top
+        }
+
+        .avatar-box {
+          display var(--post-author-avatar)
+          flex-shrink 0
+          width $avatar-width
+          height $avatar-width
+          margin-right 0.8rem
+          padding 0.1rem
+          border 1px solid var(--border-color)
+          border-radius 50%
+
+          img {
+            width 100%
+            height 100%
+            background var(--avatar-background-color)
+            border-radius 50%
+          }
+        }
+
+
+        .info-box {
+          display flex
+          flex-direction column
+          justify-content space-between
+          box-sizing border-box
+          width 100%
+          height 100%
+          padding 0.2rem 0
+
+          .author {
+            display var(--post-author-name)
+            align-items center
+            font-weight 600
+            font-size 1.18rem
+
+            .name {
+              color var(--text-color-3)
+            }
+
+            .author-badge {
+              margin-left 0.8rem
+              padding 0 0.4rem
+              color #fff
+              font-weight 500
+              font-size 0.8rem
+              background var(--primary-color)
+              border-radius 0.4rem
+            }
+          }
+
+          .meta-info {
+            margin-top 0.1rem
+          }
+        }
+      }
+
+
+      .post-content {
+        margin-top calc(var(--component-gap) * 0.8)
+        padding-bottom calc(var(--component-gap) * 0.8)
+        color var(--text-color-3)
+        text-align justify
+        word-wrap break-word
+
+        +keep-tablet() {
+          margin-top calc(var(--component-gap) * 0.6)
+          padding-bottom calc(var(--component-gap) * 0.6)
+        }
+
+
+        .post-aging-tips {
+          position relative
+          display none
+          box-sizing border-box
+          margin-bottom 1.8rem
+          padding 1rem
+          color var(--keep-warning-color)
+          line-height 1.6
+          background var(--keep-warning-background-color)
+          border 0.1rem solid var(--keep-warning-border-color)
+          border-radius 0.4rem
+
+          i {
+            margin-right 0.4rem
+            color var(--keep-warning-color)
+          }
+
+          .days {
+            color var(--keep-warning-color)
+          }
+        }
+
+
+        .post-encrypt-box {
+          margin-left $avatar-width + 0.8rem
+          padding 1rem 0
+
+          .password-input {
+            width 60%
+            margin 0
+            padding 0.8rem 1.2rem
+            color var(--text-color-3)
+            font-weight 400 !important
+            font-size 1.2rem
+            letter-spacing 2px
+            background none
+            border none
+            border-bottom 0.2rem solid var(--border-color)
+            outline none
+
+            +keep-tablet() {
+              width 80%
+            }
+
+            &.error {
+              border 0.2rem solid var(--keep-danger-color)
+            }
+
+            &::placeholder {
+              color var(--text-color-4)
+              font-size 1.1rem
+              letter-spacing 1px
+            }
+
+            &:hover
+            &:focus {
+              background var(--background-color-2)
+            }
+          }
+        }
+
+        if (hexo-config('post') && hexo-config('post.copyright_info') == true) {
+          border-bottom 2px dashed var(--border-color)
+        }
+      }
+
+
+      .post-bottom-tags-and-share {
+        display flex
+        justify-content space-between
+        width 100%
+        margin-top 1rem
+
+        .post-tags-box {
+          display flex
+          flex-wrap wrap
+          align-items center
+          justify-content flex-start
+          width 100%
+          font-size 0.96rem
+
+
+          .tag-item {
+            margin-right 0.4rem
+            line-height 2
+
+            .icon {
+              color var(--text-color-3)
+              font-size 0.88rem
+            }
+          }
+        }
+      }
+
+
+      .post-nav {
+        height 2.8rem
+        margin-top var(--component-gap)
+
+        .prev-post
+        .next-post {
+          box-sizing border-box
+          max-width $post-nav-max-width
+          height 100%
+          keep-container(1, 0.8rem, 0)
+          border-radius 0.32rem
+
+
+          a {
+            position relative
+            display block
+            box-sizing border-box
+            width 100%
+            height 100%
+
+            &.prev {
+              padding-left $arrow-icon-width
+            }
+
+            &.next {
+              padding-right $arrow-icon-width
+            }
+
+            .arrow-icon {
+              position absolute
+              top 0
+              width $arrow-icon-width
+              height 100%
+
+              &.left {
+                left 0
+              }
+
+              &.right {
+                right 0
+              }
+            }
+
+            .title {
+              width 100%
+              height 100%
+            }
+          }
+        }
+
+        .prev-post {
+          float left
+        }
+
+        .next-post {
+          float right
+        }
+
+        .post-nav-item {
+          display none
+
+          +keep-tablet() {
+            display inline-block
+          }
+        }
+
+
+        .post-nav-title-item {
+          +keep-tablet() {
+            display none
+          }
+        }
+      }
+    }
+  }
+
+
+  .pc-post-toc {
+    position sticky
+    top calc(var(--header-height) + var(--component-gap))
+    display none
+    flex-shrink 0
+    box-sizing border-box
+    width $toc-container-width
+    max-height calc(100vh - calc(var(--header-height) + var(--component-gap)))
+    transition-t("top, display, max-height", "0, 0, 0", "0.2, 0.1, 0.2", "ease, ease, ease")
+
+    &.right-toc {
+      order 1
+      padding 2rem 0 2rem 1.8rem
+    }
+
+    &.left-toc {
+      order -1
+      padding 2rem 1.8rem 2rem 0
+    }
+
+    .header-shrink & {
+      top calc(var(--header-shrink-height) + var(--component-gap))
+      max-height calc(100vh - calc(var(--header-shrink-height) + var(--component-gap)))
+    }
+  }
+}
 
 
                 
