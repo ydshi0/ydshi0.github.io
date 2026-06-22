@@ -210,444 +210,225 @@
             <div class="main-content border-box">
                 
 
-                    @import "../../common/stylus-variables.styl"
-
-$avatar-width = 3.2rem
-$arrow-icon-width = 1rem
-$post-nav-max-width = 14rem
-$post-title-font-size = 1.6rem
-$toc-container-width = 15rem
-$spacer-padding = 2rem
-
-
-.post-page-container {
-  display flex
-  justify-content space-between
-  width 100%
-  height 100%
-
-  &.show-toc {
-    .pc-post-toc {
-      display block
-    }
-
-    .post-content-container {
-      width 'calc(100% - %s)' % $toc-container-width
-    }
-  }
-
-
-  &.encrypt {
-    .post-aging-tips {
-      display none !important
-    }
-  }
-
-
-  +keep-tablet() {
-    .pc-post-toc {
-      display none !important
-    }
-
-    .post-content-container {
-      width 100% !important
-    }
-  }
-
-
-  .post-content-container {
-    order 0
-    width 100%
-    height 100%
-
-
-    keep-container(1, 0, 2rem)
-
-    +keep-mobile() {
-      padding 0 0.2rem !important
-      box-shadow none !important
-
-      &:hover {
-        box-shadow none !important
-      }
-    }
-
-
-    .post-content-top {
-      display flex
-      align-items flex-end
-      width 100%
-      padding-top $spacer-padding
-      padding-right $spacer-padding
-      overflow hidden
-      background-color var(--background-color-2)
-      border-top-left-radius var(--box-border-radius)
-      border-top-right-radius var(--box-border-radius)
-
-      +keep-tablet() {
-        height 12.8rem
-        padding-top $spacer-padding * 0.8
-        padding-right $spacer-padding  * 0.8
-
-        .cover-post-title {
-          padding $spacer-padding * 0.5 * 0.8 $spacer-padding * 0.8 !important
-          font-size $post-title-font-size * 0.9 !important
-          line-height 1.5 !important
-        }
-      }
-
-
-      +keep-mobile() {
-        height 11.8rem
-        padding-top $spacer-padding * 0.6
-        padding-right $spacer-padding  * 0.6
-
-        .cover-post-title {
-          padding $spacer-padding * 0.5 * 0.6 $spacer-padding * 0.6 !important
-          font-size $post-title-font-size * 0.8 !important
-          line-height 1.4 !important
-        }
-      }
-
-
-      .cover-post-title {
-        position relative
-        z-index $z-index-1
-        box-sizing border-box
-        max-width 100%
-        max-height 100%
-        padding $spacer-padding * 0.5 $spacer-padding
-        overflow-y auto
-        color var(--text-color-2)
-        font-weight 600
-        font-size $post-title-font-size
-        line-height 1.6
-        background var(--background-color-1-transparent)
-        border-top-right-radius var(--box-border-radius)
-        -webkit-backdrop-filter blur(2px)
-        backdrop-filter blur(2px)
-      }
-
-
-      .post-cover {
-        position absolute
-        top 0
-        left 0
-        box-sizing border-box
-        width 100%
-        height 100%
-        object-fit cover
-      }
-    }
-
-
-    .post-content-bottom {
-      padding $spacer-padding
-
-      &.has-cover {
-        padding-top $spacer-padding * 0.5
-      }
-
-      +keep-mobile() {
-        padding $spacer-padding * 0.5 0 !important
-      }
-
-      .post-title {
-        color var(--text-color-2)
-        font-weight 600
-        font-size $post-title-font-size
-        line-height 1.6
-        text-align var(--post-title-align)
-
-        +keep-tablet() {
-          font-size $post-title-font-size * 0.9
-        }
-
-        +keep-mobile() {
-          font-size $post-title-font-size * 0.8
-        }
-      }
-
-
-      .post-header {
-        display flex
-        justify-content flex-start
-        width 100%
-        margin-top 1rem
-
-        +keep-tablet() {
-          margin-top 0.9rem
-          transform scale(0.9)
-          transform-origin left top
-        }
-
-        .avatar-box {
-          display var(--post-author-avatar)
-          flex-shrink 0
-          width $avatar-width
-          height $avatar-width
-          margin-right 0.8rem
-          padding 0.1rem
-          border 1px solid var(--border-color)
-          border-radius 50%
-
-          img {
-            width 100%
-            height 100%
-            background var(--avatar-background-color)
-            border-radius 50%
-          }
-        }
-
-
-        .info-box {
-          display flex
-          flex-direction column
-          justify-content space-between
-          box-sizing border-box
-          width 100%
-          height 100%
-          padding 0.2rem 0
-
-          .author {
-            display var(--post-author-name)
-            align-items center
-            font-weight 600
-            font-size 1.18rem
-
-            .name {
-              color var(--text-color-3)
-            }
-
-            .author-badge {
-              margin-left 0.8rem
-              padding 0 0.4rem
-              color #fff
-              font-weight 500
-              font-size 0.8rem
-              background var(--primary-color)
-              border-radius 0.4rem
-            }
-          }
-
-          .meta-info {
-            margin-top 0.1rem
-          }
-        }
-      }
-
-
-      .post-content {
-        margin-top calc(var(--component-gap) * 0.8)
-        padding-bottom calc(var(--component-gap) * 0.8)
-        color var(--text-color-3)
-        text-align justify
-        word-wrap break-word
-
-        +keep-tablet() {
-          margin-top calc(var(--component-gap) * 0.6)
-          padding-bottom calc(var(--component-gap) * 0.6)
-        }
-
-
-        .post-aging-tips {
-          position relative
-          display none
-          box-sizing border-box
-          margin-bottom 1.8rem
-          padding 1rem
-          color var(--keep-warning-color)
-          line-height 1.6
-          background var(--keep-warning-background-color)
-          border 0.1rem solid var(--keep-warning-border-color)
-          border-radius 0.4rem
-
-          i {
-            margin-right 0.4rem
-            color var(--keep-warning-color)
-          }
-
-          .days {
-            color var(--keep-warning-color)
-          }
-        }
-
-
-        .post-encrypt-box {
-          margin-left $avatar-width + 0.8rem
-          padding 1rem 0
-
-          .password-input {
-            width 60%
-            margin 0
-            padding 0.8rem 1.2rem
-            color var(--text-color-3)
-            font-weight 400 !important
-            font-size 1.2rem
-            letter-spacing 2px
-            background none
-            border none
-            border-bottom 0.2rem solid var(--border-color)
-            outline none
-
-            +keep-tablet() {
-              width 80%
-            }
-
-            &.error {
-              border 0.2rem solid var(--keep-danger-color)
-            }
-
-            &::placeholder {
-              color var(--text-color-4)
-              font-size 1.1rem
-              letter-spacing 1px
-            }
-
-            &:hover
-            &:focus {
-              background var(--background-color-2)
-            }
-          }
-        }
-
-        if (hexo-config('post') && hexo-config('post.copyright_info') == true) {
-          border-bottom 2px dashed var(--border-color)
-        }
-      }
-
-
-      .post-bottom-tags-and-share {
-        display flex
-        justify-content space-between
-        width 100%
-        margin-top 1rem
-
-        .post-tags-box {
-          display flex
-          flex-wrap wrap
-          align-items center
-          justify-content flex-start
-          width 100%
-          font-size 0.96rem
-
-
-          .tag-item {
-            margin-right 0.4rem
-            line-height 2
-
-            .icon {
-              color var(--text-color-3)
-              font-size 0.88rem
-            }
-          }
-        }
-      }
-
-
-      .post-nav {
-        height 2.8rem
-        margin-top var(--component-gap)
-
-        .prev-post
-        .next-post {
-          box-sizing border-box
-          max-width $post-nav-max-width
-          height 100%
-          keep-container(1, 0.8rem, 0)
-          border-radius 0.32rem
-
-
-          a {
-            position relative
-            display block
-            box-sizing border-box
-            width 100%
-            height 100%
-
-            &.prev {
-              padding-left $arrow-icon-width
-            }
-
-            &.next {
-              padding-right $arrow-icon-width
-            }
-
-            .arrow-icon {
-              position absolute
-              top 0
-              width $arrow-icon-width
-              height 100%
-
-              &.left {
-                left 0
-              }
-
-              &.right {
-                right 0
-              }
-            }
-
-            .title {
-              width 100%
-              height 100%
-            }
-          }
-        }
-
-        .prev-post {
-          float left
-        }
-
-        .next-post {
-          float right
-        }
-
-        .post-nav-item {
-          display none
-
-          +keep-tablet() {
-            display inline-block
-          }
-        }
-
-
-        .post-nav-title-item {
-          +keep-tablet() {
-            display none
-          }
-        }
-      }
-    }
-  }
-
-
-  .pc-post-toc {
-    position sticky
-    top calc(var(--header-height) + var(--component-gap))
-    display none
-    flex-shrink 0
-    box-sizing border-box
-    width $toc-container-width
-    max-height calc(100vh - calc(var(--header-height) + var(--component-gap)))
-    transition-t("top, display, max-height", "0, 0, 0", "0.2, 0.1, 0.2", "ease, ease, ease")
-
-    &.right-toc {
-      order 1
-      padding 2rem 0 2rem 1.8rem
-    }
-
-    &.left-toc {
-      order -1
-      padding 2rem 1.8rem 2rem 0
-    }
-
-    .header-shrink & {
-      top calc(var(--header-shrink-height) + var(--component-gap))
-      max-height calc(100vh - calc(var(--header-shrink-height) + var(--component-gap)))
-    }
-  }
-}
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        warmup技术
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">eric</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-05-08</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Mon Jun 22 2026 16:44:16 GMT+0800">2026-06-22</span>
+                </span>
+            
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/warmup/">warmup</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <hr>
+<h3 id="CUDA-Graph">CUDA Graph</h3>
+<ol>
+<li>CPU 每次向 GPU 提交 kernel 都要走一次 CUDA API 调用，有固定的调度延迟。</li>
+<li>CUDA Graph 在预热阶段把所有 kernel 启动、内存操作录制成一张静态图，之后每次 replay 只需一次 API 调用把整张图提交给 GPU，<strong>CPU 侧的调度开销</strong>从 N 次压缩到 1 次。</li>
+</ol>
+<h3 id="torch-compile">torch.compile</h3>
+<ol>
+<li>分析算子图，把多个相邻的显存带宽瓶颈算子（elementwise、norm、激活函数）合并成一个 Triton kernel。中间结果不写回 HBM，直接在寄存器里流转，减少 HBM 读写次数。</li>
+<li>Triton 编译器会对 tile size 等参数做 auto-tuning，找到当前硬件下的最优配置。</li>
+</ol>
+<h3 id="DeepGEMM-warmup">DeepGEMM warmup</h3>
+<p>DeepGEMM 使用 JIT 编译 CUDA kernel，首次推理时会触发 nvcc 编译导致延迟，需要warmup预编译kernel。</p>
+<h4 id="理论">理论</h4>
+<p>GEMM 问题：C[M, N] = A[M, K] × B[N, K]^T，其中 M 是 token 数（动态），N、K 是模型权重维度（固定）。<br>
+切分：M 按 BLOCK_M 切分（候选值 64, 128, 256），N 按 BLOCK_N 切分（候选值 16 到 min(256, N)，步长 16）。<br>
+SM 利用率模型：<br>
+total_blocks = ceil(M / BLOCK_M) × ceil(N / BLOCK_N)<br>
+waves = ceil(total_blocks / NUM_SMs)<br>
+utilization = total_blocks / (waves × NUM_SMs)</p>
+<p>最后一轮 wave 可能&quot;装不满&quot;所有 SM，造成尾部浪费。不同 M 值改变 total_blocks，从而改变利用率。<br>
+Kernel 选择：对所有 (BLOCK_M, BLOCK_N) 组合二重循环，选 waves 最少且最后一轮最满的组合。相同 N、K 下，不同 M 值可能选出不同的最优组合。</p>
+<h4 id="VLLM参数配置">VLLM参数配置</h4>
+<p>relax：</p>
+<ul>
+<li>小值覆盖：[1, 2, 4, 8, 16, …, 64]，共 11 个值，覆盖 batch_size 极小时的场景。</li>
+<li>block_m 倍数：覆盖所有 block_m（64/128/256）的整数倍。因为 num_m_blocks = ceil(M / block_m)，M 每跨过一个 block_m 倍数边界，M 方向的 block 数就多一个，改变total_blocks，从而可能改变最优 (block_m, block_n) 选择，触发新 kernel 编译。</li>
+<li>wave 转换点：对每组 (block_m, block_n) 候选，反推使 total_blocks = wave × NUM_SMs 的临界 M 值（M = wave × NUM_SMs × block_m / ceil(N / block_n)）。M 跨过这些值时，waves 数从wave 变为 wave+1，DeepGEMM 的第一优先级（waves 最少）可能导致最优 tile 组合切换，触发新 kernel 编译。</li>
+</ul>
+<p>full：从 1 到 max_tokens</p>
+<p>skip：不预热</p>
+<h3 id="VLLM-dummy-run">VLLM dummy run</h3>
+<p><strong>主要用于显存峰值 Profiling</strong></p>
+<ol>
+<li>启动后用最大 batch size（max_num_tokens）跑一次完整的假 forward pass，触发和真实推理完全相同的显存分配路径</li>
+<li>用 memory_profiling 上下文管理器在 forward 前后各拍一次快照，测出三项：模型权重、forward 过程中的激活峰值（torch peak）、非 Torch 内存（NCCL buffer、attention backend buffer 等）</li>
+</ol>
+<h4 id="–gpu-memory-utilization">–gpu-memory-utilization</h4>
+<ol>
+<li>gpu_memory_utilization 在加载权重之前就算定：requested_memory = 总显存 × utilization，这是 vLLM 允许自己使用的总预算上限，与实际用了多少无关</li>
+<li>profile run 在预算内量出&quot;已知消耗项&quot;，最终：available_kv_cache = requested_memory - 权重 - 激活峰值 - 非Torch内存</li>
+</ol>
+<h4 id="Scheduler-调度">Scheduler 调度</h4>
+<ol>
+<li>一个 block 包含 block_size（默认16）个 token 的 KV，num_blocks = available_kv_cache // 单个 block 的字节数</li>
+<li>Scheduler 以 num_blocks 为容量上限，每条请求按 ceil(seq_len / block_size) 申请 block，当前调度所需 block 超过剩余 free block数时，暂停调度新请求或抢占低优先级请求，以此避免真实的显存 OOM</li>
+</ol>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/warmup/">warmup</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/05/28/%E6%8A%80%E6%9C%AF/AI%20coding/"
+                                   title="AI coding"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">AI coding</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/01/27/%E6%8A%80%E6%9C%AF/fusedmoelora/"
+                                   title="fusedmoelora"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">fusedmoelora</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA-Graph"><span class="nav-text">CUDA Graph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#torch-compile"><span class="nav-text">torch.compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepGEMM-warmup"><span class="nav-text">DeepGEMM warmup</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-text">理论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VLLM%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE"><span class="nav-text">VLLM参数配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLLM-dummy-run"><span class="nav-text">VLLM dummy run</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%80%93gpu-memory-utilization"><span class="nav-text">–gpu-memory-utilization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler-%E8%B0%83%E5%BA%A6"><span class="nav-text">Scheduler 调度</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
 
 
                 
