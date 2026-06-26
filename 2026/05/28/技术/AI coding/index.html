@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed Jun 03 2026 16:31:50 GMT+0800">2026-06-03</span>
+                    <span class="datetime" data-updated="Tue Jun 23 2026 23:27:56 GMT+0800">2026-06-23</span>
                 </span>
             
         
@@ -295,10 +295,13 @@
 <p>一定要尽可能用上最新的模型，多和AI聊天</p>
 <h3 id="Claude-code">Claude code</h3>
 <p>CC比网页端效果好很多</p>
-<p>让CC先说方案，讨论清楚方案后再执行，效果会更好</p>
+<p>让CC先说方案，讨论清楚方案后再执行，效果会更好，可以把方案写在md文档中</p>
 <p>~/.claude/settings.json    参数配置文件，包括API key等</p>
 <p>~/.claude/projects  上下文历史，需要手动删除</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">claude --model claude-opus-4-7   //切换模型，如果切换不了考虑更新CC版本</span><br><span class="line">/resume 切换上下文历史</span><br><span class="line">/rewind 回退对话</span><br><span class="line">claude --permission-mode  bypassPermissions  // 给足权限，不用一直yes</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>使用auto mode，不需要一直确认yes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">claude --model claude-opus-4-7   //切换模型，如果切换不了考虑更新CC版本</span><br><span class="line">/resume 切换上下文历史</span><br><span class="line">/rewind 回退对话</span><br><span class="line">claude --permission-mode  bypassPermissions  // 最高权限</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>vscode CC插件效果很好，可以给会话重命名</p>
+<p>vscode使用分屏，把claude单独放在右侧，方便查找</p>
 
                     
                 </div>

@@ -9,7 +9,7 @@
     
     <title>
         
-            多模态推理 |
+            RDMA 学习笔记 |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        多模态推理
+                        RDMA 学习笔记
                     </div>
                 
 
@@ -245,13 +245,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2026-06-05</span>
+                <span class="datetime">2026-06-26</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Thu Jun 11 2026 19:47:04 GMT+0800">2026-06-11</span>
+                    <span class="datetime" data-updated="Fri Jun 26 2026 14:37:27 GMT+0800">2026-06-26</span>
                 </span>
             
         
@@ -265,7 +265,7 @@
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">多模态推理</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RDMA/">RDMA</a></li>
                         
                     
                 </ul>
@@ -290,201 +290,121 @@
                     
 
                     
-                         <blockquote>
-<p>本文先介绍 Vision Transformer (ViT) 模型的结构，再到视觉-语言（VL）多模态模型，最后介绍 Qwen3-VL、开源推理框架层面的工程优化。</p>
-</blockquote>
-<h3 id="1-ViT-模型">1 ViT 模型</h3>
-<h4 id="1-1-概况">1.1 概况</h4>
-<p><strong>Vision Transformer (ViT)</strong> 由 Google 在论文 <em>“An Image is Worth 16x16 Words”</em> 中提出，核心思想是：</p>
-<blockquote>
-<p>把图像当作&quot;句子&quot;，把图像 patch 当作&quot;token&quot;，直接用标准的Transformer Encoder。</p>
-</blockquote>
-<p>它首次证明了<strong>Transformer 架构</strong>在大规模图像分类上可以超越 CNN</p>
-<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260605224007902.png"  alt="85a63a284e997adfc469400a6b280762"></p>
-<h4 id="1-2-与-CNN-的区别">1.2 与 CNN 的区别</h4>
-<p>CNN 每层只看局部小窗口，要堆很多层才能&quot;看到&quot;整张图；ViT 第一层就通过自注意力看到全图，更容易建模长距离关系。</p>
-<p>CNN计算量随输入增加近似线性，ViT是 <strong>O(N²)</strong></p>
-<h3 id="2-计算流程">2 计算流程</h3>
-<h4 id="2-1-预处理-Preprocess">2.1 预处理 (Preprocess)</h4>
-<p>预处理通常包含：</p>
-<ol>
-<li>
-<p><strong>解码 (Decode)</strong>：图像/视频从压缩格式还原为像素张量（JPEG/PNG → tensor）。</p>
-<blockquote>
-<p>[3840, 2160]  -&gt; [3840, 2160, 3]   多了 RGB 通道维</p>
-</blockquote>
-</li>
-<li>
-<p><strong>Resize / Smart Resize</strong>：把像素张量<strong>缩放</strong>到模型可接受的分辨率</p>
-</li>
-<li>
-<p><strong>Normalize</strong>：减均值除方差</p>
-</li>
-</ol>
-<h4 id="2-2-ViT-forward">2.2 ViT forward</h4>
-<p>把 H×W×C 的图像切成固定大小的 patch，每个 patch 处理成一个 token</p>
-<p>加上 pos embedding 当作 Encoder 输入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Image → Patch Embedding → + Pos Embedding → Transformer Encoder → MLP</span><br><span class="line">       (切块 + 投影)                     (L 层 MHA + MLP)      </span><br></pre></td></tr></table></figure>
-<p>原论文做分类任务会插入前置 <code>[CLS]</code> token ， MLP映射到类别 logits。VL模型MLP是升维到LLM隐藏层维度。</p>
-<p>Patch Embedding过程</p>
+                         <h3 id="〇、前置知识">〇、前置知识</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ibv_devices       列出所有 RDMA 设备</span><br><span class="line">ibstatus          查看每个端口状态</span><br><span class="line">hostname -I       查看本地 IP</span><br></pre></td></tr></table></figure>
+<p><code>ibstatus</code> 里 <code>link_layer</code> 字段是判断环境的关键：</p>
 <ul>
-<li>取像素：一个 14×14 的 RGB patch 含 14 × 14 × 3 = 588个像素值。</li>
-<li>Flatten 拉直：按固定顺序排成一个长度 588 的一维向量。</li>
-<li>线性投影：乘一个矩阵 E (588 × D)，压成 D 维向量，即该 patch 的 token。</li>
-<li>切分后的 patch 数量（序列长度）为： (H / P) × (W / P) ，其中 P 是 patch 边长</li>
+<li><code>link_layer: InfiniBand</code> → IB 环境</li>
+<li><code>link_layer: Ethernet</code> → RoCE 环境</li>
 </ul>
-<p>工程上用一个 Conv2d(in=3, out=D, kernel=14, stride=14) 一次性完成&quot;切块 + 拉直 + 投影&quot;</p>
-<h4 id="2-3-VL（视觉-语言）多模型">2.3 VL（视觉-语言）多模型</h4>
-<p>在多模态模型中，ViT 充当 <strong>视觉编码器</strong>，其输出经过一个 Projector  投影后，作为视觉 token 拼接到 LLM 的输入序列中：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">图像 → ViT encoder → Projector  → vision embeddings</span><br><span class="line">                                                ↘</span><br><span class="line">文本 → tokenizer ─────────────────────────────→ LLM (prefill + decode)</span><br></pre></td></tr></table></figure>
-<p><strong>视觉 token 在 LLM 序列中的位置</strong></p>
-<p>LLM 的输入，文本与图像按出现顺序混排。输入中的 image 占位符，会被替换成 ViT 输出的视觉 token。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">原始输入:  这  张  &lt;image&gt;          图  里  有  什  么  ？</span><br><span class="line">                     │ 展开成 N 个视觉 token</span><br><span class="line">                     ▼</span><br><span class="line">LLM 序列:  这  张  [img₁][img₂]...[imgₙ]  图  里  有  什  么  ？</span><br><span class="line">          └─文本─┘   └─── 视觉 token───┘   └──── 文本 ────┘</span><br></pre></td></tr></table></figure>
-<h4 id="2-4-ViT-推理开销">2.4 ViT 推理开销</h4>
-<p>虽然 ViT 参数量远小于 LLM，但它也是瓶颈：</p>
-<ol>
-<li><strong>高分辨率 → 长序列</strong>：3840 × 2160 的图，patch=14 时序列长度约 42000，计算量很大。</li>
-<li><strong>多图 / 视频</strong>：单条 prompt 可能含十几张图甚至上百帧视频。</li>
-<li><strong>没有 KV cache 复用</strong>：每张新图都要从头算，类似prefill是计算bound</li>
-</ol>
-<h3 id="3-Qwen3-VL">3 Qwen3-VL</h3>
-<h4 id="3-1-模型组成">3.1 模型组成</h4>
-<p>Qwen3-VL 由两个子模型组成：</p>
+<p>NIC：网卡</p>
+<h3 id="一、RDMA-介绍">一、RDMA 介绍</h3>
+<p><strong>RDMA（Remote Direct Memory Access，远程直接内存访问）</strong>：让网卡绕过对端的 CPU 和内核，直接读写远程内存。</p>
+<p>核心收益是 <strong>kernel bypass（绕过内核）+ zero copy（零拷贝）</strong>：数据不经过内核协议栈、不在内核与用户态之间反复拷贝，由网卡直接在用户态内存和网络之间搬运，从而做到<strong>低延迟、高带宽、低 CPU 占用</strong>。</p>
+<p><strong>IB 和 RoCE 都是实现 RDMA 的方式</strong>：</p>
 <ul>
-<li><strong>ViT</strong>：SigLIP-SO-400M，参数量约 <strong>400M</strong></li>
-<li><strong>LLM</strong>：Qwen3 系列</li>
+<li><strong>IB</strong> 是一套从物理层到传输层完整自成体系的独立网络；</li>
+<li><strong>RoCE</strong> 则是把 IB 的传输层（RDMA 那套机制）搬到以太网上跑。</li>
 </ul>
-<h4 id="3-2-Qwen3-VL-改进">3.2 Qwen3-VL 改进</h4>
-<p>Qwen3-VL 的主要改进：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">方向</th>
-<th>传统 VL</th>
-<th>Qwen3-VL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">分辨率</td>
-<td>固定 (336/448)</td>
-<td>**原生动态分辨率 **，按图片真实长宽切 patch</td>
-</tr>
-<tr>
-<td style="text-align:left">位置编码</td>
-<td>1D</td>
-<td><strong>2D / 3D RoPE (M-RoPE)</strong>，支持时间-高-宽三维位置</td>
-</tr>
-<tr>
-<td style="text-align:left">视频</td>
-<td>抽帧后当多图</td>
-<td><strong>原生视频建模</strong>，时序 patch + 时间维 RoPE</td>
-</tr>
-<tr>
-<td style="text-align:left">Connector</td>
-<td>单层 MLP / Q-Former</td>
-<td><strong>Patch Merger + MLP</strong>，更高效压缩 token</td>
-</tr>
-<tr>
-<td style="text-align:left">Encoder</td>
-<td>CLIP ViT-L</td>
-<td><strong>SigLIP-SO-400M</strong>，对比学习 + sigmoid loss，跨语言更强</td>
-</tr>
-<tr>
-<td style="text-align:left">OCR / Grounding</td>
-<td>较弱</td>
-<td>显著增强，支持 bbox / 坐标输出</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>OCR / Grounding：“图里写了什么，分别在哪？”</p>
-</blockquote>
-<p><strong>2D RoPE</strong></p>
-<p>1D RoPE：每个 token 有位置 m，对 Q/K 按 (cos mθ, sin mθ) 旋转，attention 内积时自然得到相对位置</p>
-<p>2D RoPE：每个 patch 有坐标 (h, w)，把 Q/K 特征维<strong>劈成两半</strong>——前一半用 h 旋转，后一半用 w 旋转</p>
-<p><strong>Connector</strong></p>
-<ol>
-<li><strong>降 token 数</strong>：压缩视觉 token ，减轻 LLM prefill 压力。</li>
-<li><strong>对齐维度</strong>：把 ViT 的隐藏维（SigLIP 为 1152）投影到 LLM 隐藏维（如 Qwen 7B 的 3584）。</li>
-</ol>
-<p>Qwen3-VL 的 Connector = <strong>Patch Merger（2×2 空间合并）+ MLP</strong>。</p>
-<p>合并的是 <strong>2D 空间上相邻的 2×2 = 4 个 patch token</strong>，保留局部结构。</p>
-<h4 id="3-3-deepstack">3.3 deepstack</h4>
-<p>Qwen3 ViT 传输给LLM的不仅是最后的vision embedding，还有中间hidden states。qwen3 vit一共27层transformer，中间[8, 16, 24]层的输出都会经过 PatchMerger，作为输出。</p>
-<h3 id="4-开源框架">4 开源框架</h3>
-<p>VL 推理与纯 LLM 推理最大的不同：<strong>多了一个&quot;非自回归&quot;的 ViT 前置阶段</strong>。</p>
-<h4 id="4-1-通用优化">4.1 通用优化</h4>
-<ol>
-<li>
-<p>kernel 优化、混合精度</p>
-</li>
-<li>
-<p><strong>预处理异步化</strong>：CPU 上的 resize / normalize 放到独立线程池或 worker 进程，避免阻塞 GPU。</p>
-</li>
-<li>
-<p><strong>图像缓存</strong>：相同图片的视觉 token 做哈希缓存，多轮对话中复用。</p>
-</li>
-<li>
-<p><strong>批处理 (batching)</strong>：把多张图、多请求的 patch 序列 batch 到一起送入 ViT。</p>
-</li>
-</ol>
-<h4 id="4-2-sglang-的特色：ViT-分离">4.2 sglang 的特色：ViT 分离</h4>
-<p>sglang 在 PD 分离（Prefill / Decode 分离）之上，把 <strong>ViT 独立部署在专门的 GPU 节点</strong>：</p>
-<p>sglang ViT 节点包含 connector</p>
-<pre class="mermaid">flowchart LR
-    A["ViT 节点<br/>(encoder)"] -- "vision embeddings" --> B["Prefill 节点<br/>(prefill)"]
-    B -- "KV cache" --> C["Decode 节点<br/>(decode)"]</pre>
-<p><strong>分离 ViT的好处</strong></p>
-<ol>
-<li><strong>不同最优硬件</strong>：ViT 可用算力强但显存小的卡</li>
-<li><strong>独立扩缩容</strong>：图密集场景多开 ViT 节点；纯文本场景把 ViT 节点缩容。</li>
-<li><strong>降低 prefill 节点压力</strong>：prefill 节点不再被 ViT 占用 SM，TTFT 更稳定。</li>
-</ol>
-<p><strong>跨节点传输：使用 RDMA</strong></p>
-<p>以 4K 图像 + SigLIP-SO-400M + Qwen 7B 为例：</p>
-<table>
-<thead>
-<tr>
-<th>项</th>
-<th>取值</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ViT 输出 token 数</td>
-<td>(3840/14) × (2160/14) ≈ 274 × 154 ≈ 42,000</td>
-<td>connector 之前</td>
-</tr>
-<tr>
-<td>合并后 token 数 N</td>
-<td>42,000 ÷ 4 ≈ 10,500</td>
-<td>经 Patch Merger（2×2）</td>
-</tr>
-<tr>
-<td>传输维度 H_llm</td>
-<td>3584</td>
-<td>MLP 投影到 LLM 隐藏维</td>
-</tr>
-<tr>
-<td>字节数</td>
-<td>2</td>
-<td>FP16</td>
-</tr>
-</tbody>
-</table>
-<p>传输数据量 ≈ N’ × H_llm × 2 ≈ 10,500 × 3584 × 2 ≈ 75 MB</p>
+<p>两者共享同一套编程接口（<strong>verbs</strong>），但底层链路 / 网络完全不同。</p>
+<h3 id="二、IB-与-RoCE-的异同">二、IB 与 RoCE 的异同</h3>
+<h4 id="InfiniBand（IB）">InfiniBand（IB）</h4>
+<p>IB 不只是一个协议，而是一整套独立的网络技术栈，跟以太网 / TCP-IP 是平行、互不兼容的两套体系。它自己定义了全部四层：</p>
 <ul>
-<li>GPUDirect RDMA直接 GPU-to-GPU，相比走 TCP / gRPC，延迟从毫秒级降到几十微秒级。</li>
+<li><strong>物理层</strong>：专用线缆、连接器、速率（QDR / EDR / HDR / NDR）</li>
+<li><strong>链路层</strong>：基于 <strong>LID</strong> 的寻址，credit-based（信用）流控，<strong>天生无损</strong></li>
+<li><strong>网络层</strong>：GID + 子网，靠 <strong>Subnet Manager（SM）</strong> 集中分配地址和算路由</li>
+<li><strong>传输层</strong>：可靠传输 + RDMA 语义（QP 队列对）</li>
 </ul>
-<h4 id="4-3-CUDA-Graph-难点">4.3 CUDA Graph 难点</h4>
-<p>CUDA Graph 把一连串 kernel 录制 成固定图，replay 时省掉 CPU launch 开销，前提是 <strong>shape 固定</strong>。</p>
-<p>decode 每次只算一个 token，形状稳定（batch 分桶即可）；<strong>ViT 与 prefill</strong> 则有两个麻烦：</p>
+<p><strong>关键特点</strong>：不用 IP、不用 MAC、不用 TCP；链路层信用流控让它<strong>开箱即无损</strong>、不丢包，这是 RDMA 高效运行的前提。</p>
+<h4 id="RoCE（RDMA-over-Converged-Ethernet）">RoCE（RDMA over Converged Ethernet）</h4>
+<p><strong>动机</strong>：IB 性能好但要单独建网、太贵。RoCE 的做法是<strong>保留 IB 的传输层，把下面的 IB 链路层 / 网络层换成以太网 / IP</strong>，从而在普通以太网上也能跑 RDMA。</p>
 <ul>
-<li><strong>序列长度 N 不固定</strong>：动态分辨率下每张图 patch 数都不同 → 按 shape <strong>分桶</strong>，每桶录一张图</li>
-<li><strong>varlen attention 动态</strong>：cu_seqlens 随输入变化，无法录进图 → <strong>分段捕获</strong>，attention 之外的规整部分录图，attention 留在图外正常 launch</li>
+<li><strong>RoCEv1</strong>：直接封装在以太网帧里（Ethertype 0x8915），只能二层内通信，已基本淘汰。</li>
+<li><strong>RoCEv2</strong>：封装进 <strong>UDP/IP（UDP 端口 4791）</strong>，<strong>可路由</strong>，能跨三层组网。现在说 RoCE 默认就是指 v2。</li>
 </ul>
+<p><strong>两者最关键的工程差异：无损网络谁来保证</strong></p>
+<ul>
+<li><strong>IB</strong> 靠链路层 credit 流控，天生无损，开箱即用。</li>
+<li><strong>RoCE</strong> 跑在以太网上，而以太网默认会丢包，RDMA 对丢包又极其敏感。所以必须把以太网改造成&quot;<strong>无损以太网</strong>&quot;，依赖两套机制：
+<ul>
+<li><strong>PFC</strong>（Priority Flow Control，优先级流控）：链路级反压，不丢包。</li>
+<li><strong>ECN + DCQCN</strong>（显式拥塞通知 + 拥塞控制算法）：端到端拥塞通知与控制。</li>
+</ul>
+</li>
+</ul>
+<h4 id="共享的部分：verbs-RDMA-语义">共享的部分：verbs / RDMA 语义</h4>
+<p>无论 IB 还是 RoCE，上层应用看到的都是同一套 <strong>verbs API</strong>（QP 队列对、CQ 完成队列、MR 内存注册、Send/Recv、RDMA Read/Write）。这意味着应用代码在两种底层上基本可以通用。</p>
+<p><strong>硬件差异</strong></p>
+<ul>
+<li><strong>网卡：常常是同一张卡。</strong> 例如 ConnectX 系列（VPI）可同时支持 IB 和 Ethernet 两种模式。</li>
+<li><strong>交换机：完全是两套，不能混用。</strong>
+<ul>
+<li>IB 用 IB 交换机（NVIDIA Quantum，跑 LID 转发 + SM）；</li>
+<li>RoCE 用支持 PFC/ECN 的以太网交换机。</li>
+</ul>
+</li>
+</ul>
+<h3 id="三、连接的建立：寻址（LID-GID）与-QP">三、连接的建立：寻址（LID / GID）与 QP</h3>
+<h4 id="1-寻址：LID-与-GID">1. 寻址：LID 与 GID</h4>
+<p>RDMA 用两种地址寻址，建立连接（QP 互联）时绕不开：</p>
+<ul>
+<li><strong>LID</strong>：16 位本地短地址，SM 分配，子网内交换机靠它转发。<strong>IB 独有</strong>，类比二层 MAC。</li>
+<li><strong>GID</strong>：128 位全局地址，含固化 GUID，可跨子网路由。<strong>IB 和 RoCE 都有</strong>（RoCE 用它装 IP），类比 IPv6。</li>
+</ul>
+<h4 id="2-连接的基本单位：QP">2. 连接的基本单位：QP</h4>
+<p>RDMA 通信的基本单位是 <strong>QP（Queue Pair，队列对）</strong>。一个 QP 包含两个队列：</p>
+<ul>
+<li><strong>SQ（Send Queue）</strong>：发送队列，放发送类的 WR</li>
+<li><strong>RQ（Receive Queue）</strong>：接收队列，放接收用的 WR</li>
+</ul>
+<p>通信双方各自创建一个 QP，然后把两个 QP <strong>配对连接</strong>起来，之后数据就在这对 QP 之间流动。</p>
+<p>而要把两端的 QP 接起来，双方必须<strong>交换参数</strong>。</p>
+<p><strong>QPN（Queue Pair Number，队列号）</strong></p>
+<p>QPN 是<strong>本地网卡为每个 QP 分配的唯一编号</strong>，24 位。作用类似 TCP 里的端口号——用来在一张网卡上<strong>区分 / 寻址成千上万个 QP</strong>。一个数据包到达网卡后，网卡靠包头里的<strong>目的 QPN</strong> 知道&quot;这个包该投递到哪个 QP&quot;。</p>
+<p><strong>怎么来的</strong></p>
+<ul>
+<li>调用 <code>ibv_create_qp()</code> 创建 QP 时，驱动 / 网卡自动分配一个 QPN，可从 <code>qp-&gt;qp_num</code> 读到。</li>
+<li><strong>不能自己指定</strong>普通 QP 的号（由硬件分配）。</li>
+</ul>
+<p><strong>怎么用：必须交换给对端</strong></p>
+<p>RDMA 不像 TCP 有内核帮你握手，<strong>QP 的连接参数得自己带外（out-of-band）交换</strong>——通常通过一条 TCP/socket 连接，或用 <code>rdma_cm</code> 帮你做。要互联，双方至少要互相告诉对方：</p>
+<ul>
+<li>自己的 <strong>QPN</strong>（对端发包时填进&quot;目的 QPN&quot;）</li>
+<li>自己的 <strong>LID</strong>（IB）或 <strong>GID</strong>（RoCE，本质是 IP/MAC 信息），用于二 / 三层寻址</li>
+<li>自己的起始 <strong>PSN</strong>（<strong>可靠传输的核心</strong>）</li>
+</ul>
+<p>然后各自调用 <code>ibv_modify_qp()</code>，把状态从 <strong>INIT → RTR（Ready to Receive）→ RTS（Ready to Send）</strong>，在 RTR 阶段把<strong>对端的 QPN</strong> 填进 <code>dest_qp_num</code>。</p>
+<h3 id="四、核心原语">四、核心原语</h3>
+<p>RDMA 提供两类语义，区别在于<strong>对端 CPU 是否参与</strong>。</p>
+<h4 id="1-双边操作（Two-sided）：Send-Recv">1. 双边操作（Two-sided）：Send / Recv</h4>
+<ul>
+<li>类似传统 socket 的收发：发送端 <code>ibv_post_send</code>（Send），<strong>接收端必须提前 <code>ibv_post_recv</code> 挂好接收缓冲区</strong>。</li>
+<li>数据落到对端<strong>哪块内存，由接收端决定</strong>（它挂的 recv buffer）。</li>
+<li><strong>需要对端参与</strong>，适合控制消息、握手、小消息、不知道对端地址的场景。</li>
+</ul>
+<h4 id="2-单边操作（One-sided）：RDMA-Write-Read">2. 单边操作（One-sided）：RDMA Write / Read</h4>
+<ul>
+<li>发送端直接指定<strong>远程内存地址 + rkey</strong>，网卡直接读写对端内存，<strong>对端 CPU 完全不感知、不参与</strong>，故称&quot;单边&quot;。这是 RDMA 性能优势最突出的地方。</li>
+<li>前提：对端要把目标内存通过 <code>ibv_reg_mr</code> <strong>注册</strong>，并把 <strong>远程地址 + rkey</strong> 带外告诉发送端。</li>
+</ul>
+<h4 id="3-关键配套概念">3. 关键配套概念</h4>
+<ul>
+<li><strong>MR（Memory Region，内存注册）</strong>：用 <code>ibv_reg_mr</code> 把一段内存注册给网卡，得到 <strong>lkey（本地用）</strong> 和 <strong>rkey（给远端用）</strong>。注册的本质是把内存 <strong>pin 住（防止换页）+ 建立虚拟地址到物理地址的映射</strong>，让网卡能直接 DMA。</li>
+<li><strong>WR / WQE</strong>：Work Request，描述一次操作（缓冲区地址、长度、操作类型等），下发到队列里变成 WQE。</li>
+<li><strong>CQ / CQE</strong>：Completion Queue，操作完成后网卡放一个 CQE 进去，应用通过 <code>ibv_poll_cq</code> 轮询（或事件通知）获知完成。</li>
+</ul>
+<h4 id="4-一次单边-RDMA-Write-的大致流程">4. 一次单边 RDMA Write 的大致流程</h4>
+<ol>
+<li>双方建链，交换 QPN / GID / PSN，QP 进入 RTS。</li>
+<li>对端注册目标 MR，把 <strong>远程地址 + rkey</strong> 带外发给本端。</li>
+<li>本端 <code>ibv_post_send</code> 一个 Write WR（带本地 lkey、远程地址、rkey）。</li>
+<li>网卡直接把本地内存数据 DMA 写入对端内存，<strong>对端 CPU 无感知</strong>。</li>
+<li>本端 CQ 出现 CQE，表示写入完成。</li>
+</ol>
+<h3 id="五、GPUDirect-RDMA">五、GPUDirect RDMA</h3>
+<h4 id="1-GPUDirect-RDMA">1. GPUDirect RDMA</h4>
+<p><strong>nvidia-peermem</strong>：把 NVIDIA GPU 显存<strong>注册</strong>到 Linux 的 RDMA 子系统里，让 Mellanox/ConnectX 网卡通过 <strong>PCIe peer-to-peer DMA</strong> 直接读写 GPU 的 HBM，数据不绕道主机内存。它是实现 GPUDirect RDMA 的关键软件组件，是多机多卡训练 / 推理打满网络带宽的基础。</p>
 
                     
                 </div>
@@ -501,7 +421,7 @@
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">多模态推理</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/RDMA/">RDMA</a>
                                     </li>
                                 
                             </ul>
@@ -517,31 +437,15 @@
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/2026/06/26/%E6%8A%80%E6%9C%AF/RDMA%E5%AD%A6%E4%B9%A0/"
-                                   title="RDMA 学习笔记"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">RDMA 学习笔记</span>
-                                        <span class="post-nav-item">Prev posts</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/2026/06/02/%E7%94%9F%E6%B4%BB/%E6%B8%B8%E6%88%8F%E7%BD%91%E7%BB%9C%E8%AE%BE%E7%BD%AE/"
-                                   title="游戏网络设置"
+                                   href="/2026/06/05/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/"
+                                   title="多模态推理"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">游戏网络设置</span>
+                                        <span class="post-nav-title-item text-ellipsis">多模态推理</span>
                                         <span class="post-nav-item">Next posts</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -569,7 +473,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-ViT-%E6%A8%A1%E5%9E%8B"><span class="nav-text">1 ViT 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E6%A6%82%E5%86%B5"><span class="nav-text">1.1 概况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E4%B8%8E-CNN-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.2 与 CNN 的区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%AE%A1%E7%AE%97%E6%B5%81%E7%A8%8B"><span class="nav-text">2 计算流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E9%A2%84%E5%A4%84%E7%90%86-Preprocess"><span class="nav-text">2.1 预处理 (Preprocess)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-ViT-forward"><span class="nav-text">2.2 ViT forward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-VL%EF%BC%88%E8%A7%86%E8%A7%89-%E8%AF%AD%E8%A8%80%EF%BC%89%E5%A4%9A%E6%A8%A1%E5%9E%8B"><span class="nav-text">2.3 VL（视觉-语言）多模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-ViT-%E6%8E%A8%E7%90%86%E5%BC%80%E9%94%80"><span class="nav-text">2.4 ViT 推理开销</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Qwen3-VL"><span class="nav-text">3 Qwen3-VL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E6%A8%A1%E5%9E%8B%E7%BB%84%E6%88%90"><span class="nav-text">3.1 模型组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Qwen3-VL-%E6%94%B9%E8%BF%9B"><span class="nav-text">3.2 Qwen3-VL 改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-deepstack"><span class="nav-text">3.3 deepstack</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%BC%80%E6%BA%90%E6%A1%86%E6%9E%B6"><span class="nav-text">4 开源框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E9%80%9A%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-text">4.1 通用优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-sglang-%E7%9A%84%E7%89%B9%E8%89%B2%EF%BC%9AViT-%E5%88%86%E7%A6%BB"><span class="nav-text">4.2 sglang 的特色：ViT 分离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-CUDA-Graph-%E9%9A%BE%E7%82%B9"><span class="nav-text">4.3 CUDA Graph 难点</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%80%87%E3%80%81%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-text">〇、前置知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81RDMA-%E4%BB%8B%E7%BB%8D"><span class="nav-text">一、RDMA 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81IB-%E4%B8%8E-RoCE-%E7%9A%84%E5%BC%82%E5%90%8C"><span class="nav-text">二、IB 与 RoCE 的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#InfiniBand%EF%BC%88IB%EF%BC%89"><span class="nav-text">InfiniBand（IB）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RoCE%EF%BC%88RDMA-over-Converged-Ethernet%EF%BC%89"><span class="nav-text">RoCE（RDMA over Converged Ethernet）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E7%9A%84%E9%83%A8%E5%88%86%EF%BC%9Averbs-RDMA-%E8%AF%AD%E4%B9%89"><span class="nav-text">共享的部分：verbs &#x2F; RDMA 语义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%EF%BC%9A%E5%AF%BB%E5%9D%80%EF%BC%88LID-GID%EF%BC%89%E4%B8%8E-QP"><span class="nav-text">三、连接的建立：寻址（LID &#x2F; GID）与 QP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%AF%BB%E5%9D%80%EF%BC%9ALID-%E4%B8%8E-GID"><span class="nav-text">1. 寻址：LID 与 GID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%9AQP"><span class="nav-text">2. 连接的基本单位：QP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A0%B8%E5%BF%83%E5%8E%9F%E8%AF%AD"><span class="nav-text">四、核心原语</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%8C%E8%BE%B9%E6%93%8D%E4%BD%9C%EF%BC%88Two-sided%EF%BC%89%EF%BC%9ASend-Recv"><span class="nav-text">1. 双边操作（Two-sided）：Send &#x2F; Recv</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%95%E8%BE%B9%E6%93%8D%E4%BD%9C%EF%BC%88One-sided%EF%BC%89%EF%BC%9ARDMA-Write-Read"><span class="nav-text">2. 单边操作（One-sided）：RDMA Write &#x2F; Read</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%94%AE%E9%85%8D%E5%A5%97%E6%A6%82%E5%BF%B5"><span class="nav-text">3. 关键配套概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%B8%80%E6%AC%A1%E5%8D%95%E8%BE%B9-RDMA-Write-%E7%9A%84%E5%A4%A7%E8%87%B4%E6%B5%81%E7%A8%8B"><span class="nav-text">4. 一次单边 RDMA Write 的大致流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81GPUDirect-RDMA"><span class="nav-text">五、GPUDirect RDMA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-GPUDirect-RDMA"><span class="nav-text">1. GPUDirect RDMA</span></a></li></ol></li></ol>
     </div>
 </div>
 
@@ -729,7 +633,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-ViT-%E6%A8%A1%E5%9E%8B"><span class="nav-text">1 ViT 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E6%A6%82%E5%86%B5"><span class="nav-text">1.1 概况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E4%B8%8E-CNN-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.2 与 CNN 的区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%AE%A1%E7%AE%97%E6%B5%81%E7%A8%8B"><span class="nav-text">2 计算流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E9%A2%84%E5%A4%84%E7%90%86-Preprocess"><span class="nav-text">2.1 预处理 (Preprocess)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-ViT-forward"><span class="nav-text">2.2 ViT forward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-VL%EF%BC%88%E8%A7%86%E8%A7%89-%E8%AF%AD%E8%A8%80%EF%BC%89%E5%A4%9A%E6%A8%A1%E5%9E%8B"><span class="nav-text">2.3 VL（视觉-语言）多模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-ViT-%E6%8E%A8%E7%90%86%E5%BC%80%E9%94%80"><span class="nav-text">2.4 ViT 推理开销</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Qwen3-VL"><span class="nav-text">3 Qwen3-VL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E6%A8%A1%E5%9E%8B%E7%BB%84%E6%88%90"><span class="nav-text">3.1 模型组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Qwen3-VL-%E6%94%B9%E8%BF%9B"><span class="nav-text">3.2 Qwen3-VL 改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-deepstack"><span class="nav-text">3.3 deepstack</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%BC%80%E6%BA%90%E6%A1%86%E6%9E%B6"><span class="nav-text">4 开源框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E9%80%9A%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-text">4.1 通用优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-sglang-%E7%9A%84%E7%89%B9%E8%89%B2%EF%BC%9AViT-%E5%88%86%E7%A6%BB"><span class="nav-text">4.2 sglang 的特色：ViT 分离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-CUDA-Graph-%E9%9A%BE%E7%82%B9"><span class="nav-text">4.3 CUDA Graph 难点</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%80%87%E3%80%81%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-text">〇、前置知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81RDMA-%E4%BB%8B%E7%BB%8D"><span class="nav-text">一、RDMA 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81IB-%E4%B8%8E-RoCE-%E7%9A%84%E5%BC%82%E5%90%8C"><span class="nav-text">二、IB 与 RoCE 的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#InfiniBand%EF%BC%88IB%EF%BC%89"><span class="nav-text">InfiniBand（IB）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RoCE%EF%BC%88RDMA-over-Converged-Ethernet%EF%BC%89"><span class="nav-text">RoCE（RDMA over Converged Ethernet）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E7%9A%84%E9%83%A8%E5%88%86%EF%BC%9Averbs-RDMA-%E8%AF%AD%E4%B9%89"><span class="nav-text">共享的部分：verbs &#x2F; RDMA 语义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%EF%BC%9A%E5%AF%BB%E5%9D%80%EF%BC%88LID-GID%EF%BC%89%E4%B8%8E-QP"><span class="nav-text">三、连接的建立：寻址（LID &#x2F; GID）与 QP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%AF%BB%E5%9D%80%EF%BC%9ALID-%E4%B8%8E-GID"><span class="nav-text">1. 寻址：LID 与 GID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%9AQP"><span class="nav-text">2. 连接的基本单位：QP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A0%B8%E5%BF%83%E5%8E%9F%E8%AF%AD"><span class="nav-text">四、核心原语</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%8C%E8%BE%B9%E6%93%8D%E4%BD%9C%EF%BC%88Two-sided%EF%BC%89%EF%BC%9ASend-Recv"><span class="nav-text">1. 双边操作（Two-sided）：Send &#x2F; Recv</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%95%E8%BE%B9%E6%93%8D%E4%BD%9C%EF%BC%88One-sided%EF%BC%89%EF%BC%9ARDMA-Write-Read"><span class="nav-text">2. 单边操作（One-sided）：RDMA Write &#x2F; Read</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%94%AE%E9%85%8D%E5%A5%97%E6%A6%82%E5%BF%B5"><span class="nav-text">3. 关键配套概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%B8%80%E6%AC%A1%E5%8D%95%E8%BE%B9-RDMA-Write-%E7%9A%84%E5%A4%A7%E8%87%B4%E6%B5%81%E7%A8%8B"><span class="nav-text">4. 一次单边 RDMA Write 的大致流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81GPUDirect-RDMA"><span class="nav-text">五、GPUDirect RDMA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-GPUDirect-RDMA"><span class="nav-text">1. GPUDirect RDMA</span></a></li></ol></li></ol>
     </div>
 </div>
 
