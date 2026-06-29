@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Mon Jun 29 2026 20:53:42 GMT+0800">2026-06-29</span>
+                    <span class="datetime" data-updated="Mon Jun 29 2026 21:35:28 GMT+0800">2026-06-29</span>
                 </span>
             
         
@@ -301,18 +301,18 @@
 <h3 id="张量并行">张量并行</h3>
 <p>**Tensor Parallelism **，TP 从 hidden维度切分。attention 层一个 GPU 放若干 head，只要在 g 处做 all-reduce 加在一起就行。</p>
 <p>先做一个列并行，再做一个行并行。</p>
-<img     src="/Users/syd/blog/pictures/202404090304716-20260629204803091.png"   alt="image-20231212014706267" style="zoom: 50%;" >
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090304716.png"   alt="image-20231212014706267" style="zoom: 50%;" >
 <p>列并行:把权重A按照列来分割。</p>
-<img     src="/Users/syd/blog/pictures/202407271554204-20260629204803037.png"   alt="8b6de7e8bac53785e73ab3926c018084" style="zoom:50%;" >
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202407271554204.png"   alt="8b6de7e8bac53785e73ab3926c018084" style="zoom:50%;" >
 <p>行并行:把权重A按照行分割成两部分。</p>
-<img     src="/Users/syd/blog/pictures/202407271554850-20260629204803037.png"   alt="44d156d16fb9b042f7524e9a1db24d87" style="zoom:50%;" >
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202407271554850.png"   alt="44d156d16fb9b042f7524e9a1db24d87" style="zoom:50%;" >
 <h3 id="序列并行">序列并行</h3>
 <p><strong>Context Parallelism (CP)</strong>，推理的序列并行，当<strong>单条序列长到一张卡放不下</strong>时（比如 128K、1M 上下文），把序列切到多卡协同算 attention。推理主要用在<strong>长上下文的 prefill 阶段</strong>。下面讲它的实现 Ring Attention。</p>
 <h4 id="核心思路">核心思路</h4>
 <p>把 Q、K、V 都沿 sequence 维度切成 N 块，每张卡分到一块 
-    <span id="mjx-f1bfe9b8">
+    <span id="mjx-fe24da9">
       <style>
-      #mjx-f1bfe9b8{
+      #mjx-fe24da9{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -471,9 +471,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="2.529ex" height="2.032ex" role="img" focusable="false" viewBox="0 -704 1118 898" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D444" d="M399 -80Q399 -47 400 -30T402 -11V-7L387 -11Q341 -22 303 -22Q208 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435Q740 255 592 107Q529 47 461 16L444 8V3Q444 2 449 -24T470 -66T516 -82Q551 -82 583 -60T625 -3Q631 11 638 11Q647 11 649 2Q649 -6 639 -34T611 -100T557 -165T481 -194Q399 -194 399 -87V-80ZM636 468Q636 523 621 564T580 625T530 655T477 665Q429 665 379 640Q277 591 215 464T153 216Q153 110 207 59Q231 38 236 38V46Q236 86 269 120T347 155Q372 155 390 144T417 114T429 82T435 55L448 64Q512 108 557 185T619 334T636 468ZM314 18Q362 18 404 39L403 49Q399 104 366 115Q354 117 347 117Q344 117 341 117T337 118Q317 118 296 98T274 52Q274 18 314 18Z"></path></g><g data-mml-node="mi" transform="translate(824,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>Q</mi><mi>i</mi></msub></math></mjx-assistive-mml></mjx-container>
     </span>
    和一块 
-    <span id="mjx-1a084a5">
+    <span id="mjx-38ec5f88">
       <style>
-      #mjx-1a084a5{
+      #mjx-38ec5f88{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -633,9 +633,9 @@ g[data-mml-node="xypic"] path {
     </span>
   。</p>
 <p>问题：attention 是全局的，
-    <span id="mjx-2893111">
+    <span id="mjx-c2fb8e68">
       <style>
-      #mjx-2893111{
+      #mjx-c2fb8e68{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -796,9 +796,9 @@ g[data-mml-node="xypic"] path {
    要和<strong>所有</strong> K、V 算。怎么办？——<strong>把 KV 块在卡之间组成一个环（ring）传一圈</strong>：</p>
 <ol>
 <li>每张卡用手头的 
-    <span id="mjx-074a7ac8">
+    <span id="mjx-54be35b8">
       <style>
-      #mjx-074a7ac8{
+      #mjx-54be35b8{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -958,9 +958,9 @@ g[data-mml-node="xypic"] path {
     </span>
    和当前 KV 块算一次「局部 attention」，同时把 KV 块发给下一张卡、从上一张卡收一块新 KV（环形流转，通信与计算重叠）。</li>
 <li>收到新 KV 后继续和 
-    <span id="mjx-c1487588">
+    <span id="mjx-26fe9b5">
       <style>
-      #mjx-c1487588{
+      #mjx-26fe9b5{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1120,9 +1120,9 @@ g[data-mml-node="xypic"] path {
     </span>
    算，用 <strong>online softmax</strong>（维护 running max/sum）把结果累加上去。</li>
 <li>转满 
-    <span id="mjx-49aa247">
+    <span id="mjx-a2d928c8">
       <style>
-      #mjx-49aa247{
+      #mjx-a2d928c8{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1281,9 +1281,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="5.906ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 2610.4 765" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(1110.2,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2110.4,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi><mo>−</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container>
     </span>
    步，每张卡的 
-    <span id="mjx-18d130d">
+    <span id="mjx-5ebbf928">
       <style>
-      #mjx-18d130d{
+      #mjx-5ebbf928{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1449,9 +1449,9 @@ g[data-mml-node="xypic"] path {
 <ul>
 <li>
 <p><strong>因果 mask 下 Q_i 只和 
-    <span id="mjx-c31fd7d">
+    <span id="mjx-49f99928">
       <style>
-      #mjx-c31fd7d{
+      #mjx-49f99928{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1613,9 +1613,9 @@ g[data-mml-node="xypic"] path {
 </li>
 <li>
 <p><strong>每层 attention 通信 
-    <span id="mjx-4bc71198">
+    <span id="mjx-aeab403">
       <style>
-      #mjx-4bc71198{
+      #mjx-aeab403{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1774,9 +1774,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="5.906ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 2610.4 765" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(1110.2,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2110.4,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi><mo>−</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container>
     </span>
    次</strong>（= CP-1）：KV 走遍其余卡需 
-    <span id="mjx-b07e7558">
+    <span id="mjx-3543cab">
       <style>
-      #mjx-b07e7558{
+      #mjx-3543cab{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1935,9 +1935,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="5.906ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 2610.4 765" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(1110.2,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2110.4,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi><mo>−</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container>
     </span>
    跳；各卡并发，总耗时也只 
-    <span id="mjx-bf965a18">
+    <span id="mjx-2c7af18">
       <style>
-      #mjx-bf965a18{
+      #mjx-2c7af18{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -2104,9 +2104,9 @@ g[data-mml-node="xypic"] path {
 <img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260629204953269.png"   alt="image-20260629204944197" style="zoom: 50%;" >
 <h4 id="显存：序列长度近似随卡数线性扩展">显存：序列长度近似随卡数线性扩展</h4>
 <p>每卡序列相关显存 
-    <span id="mjx-fa317de8">
+    <span id="mjx-3830352">
       <style>
-      #mjx-fa317de8{
+      #mjx-3830352{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -2265,9 +2265,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="10.076ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4453.8 1000" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g><g data-mml-node="mi" transform="translate(1055.8,0)"><path data-c="1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path></g><g data-mml-node="mo" transform="translate(1818.8,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(2207.8,0)"><path data-c="1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(2676.8,0)"><g data-mml-node="mo"><path data-c="2F" d="M423 750Q432 750 438 744T444 730Q444 725 271 248T92 -240Q85 -250 75 -250Q68 -250 62 -245T56 -231Q56 -221 230 257T407 740Q411 750 423 750Z"></path></g></g><g data-mml-node="mi" transform="translate(3176.8,0)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(4064.8,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>≈</mo><mi>O</mi><mo stretchy="false">(</mo><mi>s</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><mi>N</mi><mo stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>
     </span>
   ，所以序列 
-    <span id="mjx-c0d25f08">
+    <span id="mjx-ecc0e2c8">
       <style>
-      #mjx-c0d25f08{
+      #mjx-ecc0e2c8{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -2426,9 +2426,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.023ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.023ex" role="img" focusable="false" viewBox="0 -442 469 452" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>s</mi></math></mjx-assistive-mml></mjx-container>
     </span>
    翻倍只需卡数 
-    <span id="mjx-3bd4f018">
+    <span id="mjx-db152bb8">
       <style>
-      #mjx-3bd4f018{
+      #mjx-db152bb8{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -2587,9 +2587,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></mjx-assistive-mml></mjx-container>
     </span>
    翻倍，每卡显存不变 → 最大序列长度 
-    <span id="mjx-2ed6673">
+    <span id="mjx-5849295">
       <style>
-      #mjx-2ed6673{
+      #mjx-5849295{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -2748,9 +2748,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 778 453" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="221D" d="M56 124T56 216T107 375T238 442Q260 442 280 438T319 425T352 407T382 385T406 361T427 336T442 315T455 297T462 285L469 297Q555 442 679 442Q687 442 722 437V398H718Q710 400 694 400Q657 400 623 383T567 343T527 294T503 253T495 235Q495 231 520 192T554 143Q625 44 696 44Q717 44 719 46H722V-5Q695 -11 678 -11Q552 -11 457 141Q455 145 454 146L447 134Q362 -11 235 -11Q157 -11 107 56ZM93 213Q93 143 126 87T220 31Q258 31 292 48T349 88T389 137T413 178T421 196Q421 200 396 239T362 288Q322 345 288 366T213 387Q163 387 128 337T93 213Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>∝</mo></math></mjx-assistive-mml></mjx-container>
     </span>
    卡数。说「近似」是因权重每卡存完整一份（CP 不切权重）等固定成本不随 
-    <span id="mjx-eb4b2c1">
+    <span id="mjx-df446bb">
       <style>
-      #mjx-eb4b2c1{
+      #mjx-df446bb{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -2930,9 +2930,9 @@ g[data-mml-node="xypic"] path {
 </blockquote>
 <h3 id="流水线并行">流水线并行</h3>
 <p><strong>Pipeline Parallelism (PP)</strong>，按 layer（模型层）维度切分，卡间传 activation。</p>
-<p><img   src="/Users/syd/blog/pictures/202404090303061-20260629204803021.png"  alt="image-20240409030253495"></p>
+<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090303061.png"  alt="image-20240409030253495"></p>
 <p><strong>Gpipe</strong>。算完前向再算反向。</p>
-<p><img   src="/Users/syd/blog/pictures/202404090303897-20260629204803071.png"  alt="image-20240409030306593"></p>
+<p><img   src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/202404090303897.png"  alt="image-20240409030306593"></p>
 <p><strong>1F1B、交错流水线</strong> 。上面是1F1B，保持进行中的微批次数量里只有4个（与管道深度一样），这样相比Gpipe显存会更小。</p>
 <p>layers 16，pp4配置下。1F1B划分：1-4，5-8，9-12，13-16。交错流水线可以1-2，9-10；3-4，11-12；5-6，13-14；7-8，15-16这样划分，可以理解为先把模型划分成几块（2块），再依次划分给GPU。这样需要更多轮1234才能算完（2次）一个前（反）向，但是时间也相应减小了，使得bubble占比更小。</p>
 
