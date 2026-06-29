@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="eric">
+    
+    <title>
+        
+            warmup技术 |
+        
+        introspection
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+        
+            
+                
+<link rel="stylesheet" href="/css/custom.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null},"math":{"enable":true,"specific":false,"engine":"mathjax"}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"icp":{"enable":false,"record_code":null,"url":null},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               introspection
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                TAGS
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                            TAGS
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        warmup技术
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">eric</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-05-08</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Tue Jun 30 2026 03:14:31 GMT+0800">2026-06-30</span>
+                </span>
+            
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/warmup/">warmup</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <hr>
+<h3 id="CUDA-Graph">CUDA Graph</h3>
+<ol>
+<li>CPU 每次向 GPU 提交 kernel 都要走一次 CUDA API 调用，有固定的调度延迟。</li>
+<li>CUDA Graph 在预热阶段把所有 kernel 启动、内存操作录制成一张静态图，之后每次 replay 只需一次 API 调用把整张图提交给 GPU，<strong>CPU 侧的调度开销</strong>从 N 次压缩到 1 次。</li>
+</ol>
+<h3 id="torch-compile">torch.compile</h3>
+<ol>
+<li>分析算子图，把多个相邻的显存带宽瓶颈算子（elementwise、norm、激活函数）合并成一个 Triton kernel。中间结果不写回 HBM，直接在寄存器里流转，减少 HBM 读写次数。</li>
+<li>Triton 编译器会对 tile size 等参数做 auto-tuning，找到当前硬件下的最优配置。</li>
+</ol>
+<h3 id="DeepGEMM-warmup">DeepGEMM warmup</h3>
+<p>DeepGEMM 使用 JIT 编译 CUDA kernel，首次推理时会触发 nvcc 编译导致延迟，需要warmup预编译kernel。</p>
+<h4 id="理论">理论</h4>
+<p>GEMM 问题：C[M, N] = A[M, K] × B[N, K]^T，其中 M 是 token 数（动态），N、K 是模型权重维度（固定）。<br>
+切分：M 按 BLOCK_M 切分（候选值 64, 128, 256），N 按 BLOCK_N 切分（候选值 16 到 min(256, N)，步长 16）。<br>
+SM 利用率模型：<br>
+total_blocks = ceil(M / BLOCK_M) × ceil(N / BLOCK_N)<br>
+waves = ceil(total_blocks / NUM_SMs)<br>
+utilization = total_blocks / (waves × NUM_SMs)</p>
+<p>最后一轮 wave 可能&quot;装不满&quot;所有 SM，造成尾部浪费。不同 M 值改变 total_blocks，从而改变利用率。<br>
+Kernel 选择：对所有 (BLOCK_M, BLOCK_N) 组合二重循环，选 waves 最少且最后一轮最满的组合。相同 N、K 下，不同 M 值可能选出不同的最优组合。</p>
+<h4 id="VLLM参数配置">VLLM参数配置</h4>
+<p>relax：</p>
+<ul>
+<li>小值覆盖：[1, 2, 4, 8, 16, …, 64]，共 11 个值，覆盖 batch_size 极小时的场景。</li>
+<li>block_m 倍数：覆盖所有 block_m（64/128/256）的整数倍。因为 num_m_blocks = ceil(M / block_m)，M 每跨过一个 block_m 倍数边界，M 方向的 block 数就多一个，改变total_blocks，从而可能改变最优 (block_m, block_n) 选择，触发新 kernel 编译。</li>
+<li>wave 转换点：对每组 (block_m, block_n) 候选，反推使 total_blocks = wave × NUM_SMs 的临界 M 值（M = wave × NUM_SMs × block_m / ceil(N / block_n)）。M 跨过这些值时，waves 数从wave 变为 wave+1，DeepGEMM 的第一优先级（waves 最少）可能导致最优 tile 组合切换，触发新 kernel 编译。</li>
+</ul>
+<p>full：从 1 到 max_tokens</p>
+<p>skip：不预热</p>
+<h3 id="VLLM-dummy-run">VLLM dummy run</h3>
+<p><strong>主要用于显存峰值 Profiling</strong></p>
+<ol>
+<li>启动后用最大 batch size（max_num_tokens）跑一次完整的假 forward pass，触发和真实推理完全相同的显存分配路径</li>
+<li>用 memory_profiling 上下文管理器在 forward 前后各拍一次快照，测出三项：模型权重、forward 过程中的激活峰值（torch peak）、非 Torch 内存（NCCL buffer、attention backend buffer 等）</li>
+</ol>
+<h4 id="–gpu-memory-utilization">–gpu-memory-utilization</h4>
+<ol>
+<li>gpu_memory_utilization 在加载权重之前就算定：requested_memory = 总显存 × utilization，这是 vLLM 允许自己使用的总预算上限，与实际用了多少无关</li>
+<li>profile run 在预算内量出&quot;已知消耗项&quot;，最终：available_kv_cache = requested_memory - 权重 - 激活峰值 - 非Torch内存</li>
+</ol>
+<h4 id="Scheduler-调度">Scheduler 调度</h4>
+<ol>
+<li>一个 block 包含 block_size（默认16）个 token 的 KV，num_blocks = available_kv_cache // 单个 block 的字节数</li>
+<li>Scheduler 以 num_blocks 为容量上限，每条请求按 ceil(seq_len / block_size) 申请 block，当前调度所需 block 超过剩余 free block数时，暂停调度新请求或抢占低优先级请求，以此避免真实的显存 OOM</li>
+</ol>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/warmup/">warmup</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/05/28/Work/AI%20coding/"
+                                   title="AI coding"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">AI coding</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2025/09/23/Work/%E6%8A%95%E6%9C%BA%E6%8E%A8%E7%90%86/"
+                                   title="投机推理"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">投机推理</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA-Graph"><span class="nav-text">CUDA Graph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#torch-compile"><span class="nav-text">torch.compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepGEMM-warmup"><span class="nav-text">DeepGEMM warmup</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-text">理论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VLLM%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE"><span class="nav-text">VLLM参数配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLLM-dummy-run"><span class="nav-text">VLLM dummy run</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%80%93gpu-memory-utilization"><span class="nav-text">–gpu-memory-utilization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler-%E8%B0%83%E5%BA%A6"><span class="nav-text">Scheduler 调度</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA-Graph"><span class="nav-text">CUDA Graph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#torch-compile"><span class="nav-text">torch.compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepGEMM-warmup"><span class="nav-text">DeepGEMM warmup</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-text">理论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VLLM%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE"><span class="nav-text">VLLM参数配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLLM-dummy-run"><span class="nav-text">VLLM dummy run</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%80%93gpu-memory-utilization"><span class="nav-text">–gpu-memory-utilization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler-%E8%B0%83%E5%BA%A6"><span class="nav-text">Scheduler 调度</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+
+</body>
+</html>
