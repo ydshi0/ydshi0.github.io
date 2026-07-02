@@ -9,7 +9,7 @@
     
     <title>
         
-            大模型推理 |
+            推理调度 |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        大模型推理
+                        推理调度
                     </div>
                 
 
@@ -245,13 +245,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2024-04-05</span>
+                <span class="datetime">2026-07-02</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Tue Jun 30 2026 03:12:34 GMT+0800">2026-06-30</span>
+                    <span class="datetime" data-updated="Thu Jul 02 2026 18:04:53 GMT+0800">2026-07-02</span>
                 </span>
             
         
@@ -262,10 +262,10 @@
             <span class="post-tag meta-info-item border-box">
                 <ul class="post-tag-ul">
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8E%A8%E7%90%86/">推理</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B0%83%E5%BA%A6/">调度</a></li>
                         
                     
                 </ul>
@@ -290,29 +290,74 @@
                     
 
                     
-                         <p>整理一些大模型推理相关知识</p>
-<h4 id="推理流程">推理流程</h4>
-<p>推理包含2个阶段Prefill , Decode。</p>
-<p>Prefill可以并行处理输入，生成KV cache缓存以及第一个output token，是computation-bound。</p>
-<p>Decode基于KV cache自回归的生成后续token，一次迭代只能生成一个token，是memory-bound。</p>
-<h5 id="KV-cache">KV cache</h5>
-<p>decode生成下一个token时，需要使用当前的Q(Query)，并结合之前token的KV（Key-Value）。</p>
-<h5 id="推理指标">推理指标</h5>
-<p>TTFT、TBT、Throughput、Goodput</p>
-<h4 id="推理架构">推理架构</h4>
-<p>PD分离</p>
-<p>将 Prefill 阶段和 Decode 阶段拆分到不同实例上执行，可以降低 TBT延迟，因为Decode 不再被长序列的 Prefill 阻塞。但请求不平衡时GPU利用率低，Throughput低。</p>
-<p>PD聚合</p>
-<p>通常与 Chunked Prefill 搭配使用。把Prefill 拆分成多个 chunk，在每个 chunk 内同时包含一部分 Prefill 和 Decode，能减少二者之间的干扰。chunksize 调大，延迟一般就会增加。</p>
-<h4 id="vLLM">vLLM</h4>
-<p>关键参数</p>
-<p>server端</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--max-num-batched-tokens 2048 \     \\batch的最多token数</span><br><span class="line">--max-num-seqs 256 \                 \\batch的最多请求数量</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>client端</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--ignore-eos \</span><br><span class="line">--burstiness 100 \     请求分布</span><br></pre></td></tr></table></figure>
-<p>资料</p>
-<p><a class="link"   href="https://mp.weixin.qq.com/s/WxbMFoSrKl0xqsUkzPLJHw" >LLM推理入门指南②：深入解析KV缓存 (qq.com)<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://www.youtube.com/watch?v=IGu7ivuy1Ag" >How a Transformer works at inference vs training time - YouTube<i class="fas fa-external-link-alt"></i></a></p>
+                         <h3 id="一、推理的两个阶段">一、推理的两个阶段</h3>
+<p><strong>Prefill</strong></p>
+<ul>
+<li>并行处理整个 Prompt，计算所有输入 Token 的 KV Cache，并生成第 1个输出 Token。</li>
+<li><strong>Compute-bound</strong>，计算量大，能够充分利用 GPU 算力。</li>
+</ul>
+<p><strong>Decode</strong></p>
+<ul>
+<li>基于 KV Cache 自回归生成 Token，每个 iteration只能生成一个 Token。</li>
+<li><strong>Memory-bound</strong>，大量时间花在读取 KV Cache，GPU算力难以打满，通常依靠 Batch 提高利用率。</li>
+</ul>
+<h3 id="二、调度的目标">二、调度的目标</h3>
+<p>推理调度（Scheduling）的目标，是决定每个 iteration GPU应该执行哪些请求，在 <strong>TTFT（Time To First<br>
+Token）</strong>、**ITL（Inter-Token Latency）**和系统吞吐量（Throughput）之间取得平衡。</p>
+<ul>
+<li>
+<p><strong>TTFT</strong>：从请求到达，到生成第一个 Token 的时间</p>
+</li>
+<li>
+<p><strong>ITL</strong>：相邻两个输出 Token 的时间间隔</p>
+</li>
+<li>
+<p><strong>Throughput</strong>：单位时间内系统生成的 Token 数</p>
+</li>
+</ul>
+<h3 id="三、调度策略">三、调度策略</h3>
+<h4 id="3-1-Static-Batch">3.1 Static Batch</h4>
+<p>早期推理引擎采用<strong>静态 Batch</strong>。</p>
+<p>先收集一批请求，再统一执行；只有当这一批全部完成后，GPU 才能处理下一批。</p>
+<p>因此，短请求必须等待长请求结束，GPU 经常因为等待而闲置，吞吐较低。</p>
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260702165226720.png"   alt="image-20260702160405153" style="zoom:50%;" >
+<h4 id="3-2-Continuous-Batching">3.2 Continuous Batching</h4>
+<p>Orca 提出了 <strong>Continuous Batching</strong>。它将调度粒度从整个请求降低到每个 iteration。</p>
+<p>Scheduler可以重新决定下一轮 Batch的组成。完成的请求立即退出，等待队列中的新请求也能立刻补入，无需等待整个Batch 完成。</p>
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260702180422646.png"   alt="截屏2026-07-02 18.04.02" style="zoom:50%;" >
+<h4 id="3-3-新问题：Prefill-阻塞-Decode">3.3 新问题：Prefill 阻塞 Decode</h4>
+<p>为了降低新请求的 TTFT，调度器通常会优先执行 Prefill。</p>
+<p>例如，A、B 正在稳定 Decode（每步约 10 ms），此时来了两个 32K Prompt的请求 C、D。如果立即执行它们的 Prefill，GPU 可能连续占用数百毫秒，导致A、B 无法继续 Decode，ITL 明显升高。</p>
+<h4 id="3-4-Chunked-Prefill">3.4 Chunked Prefill</h4>
+<p>将一个长 Prompt 划分为多个固定大小的 Chunk（例如 2048Token），每个 iteration 只处理一个 Chunk。</p>
+<p>两个 Chunk 之间，调度器可以插入其他请求的 Decode，使Prefill 与 Decode 在同一个 Batch 中执行。</p>
+<p><strong>收益：</strong></p>
+<ul>
+<li>Decode 不再被长时间阻塞，ITL 更平滑。</li>
+<li>Compute-bound 与 Memory-bound 混合执行，提高 GPU 利用率。</li>
+</ul>
+<p><strong>代价：</strong></p>
+<ul>
+<li>长 Prompt 的 TTFT 会略有增加，因为需要分多次完成 Prefill。</li>
+</ul>
+<p>本质上，是牺牲少量单请求 TTFT，换取整体吞吐和在线请求更低的延迟。</p>
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260702165336421.png"   alt="image-20260702161157278" style="zoom:50%;" >
+<h3 id="四、框架实现">四、框架实现</h3>
+<h4 id="4-1-流程">4.1 流程</h4>
+<p>调度器给 iteration 设置一个 Token 上限（vLLM 中对应 <code>max_num_batched_tokens</code>）。</p>
+<ol>
+<li>优先放入所有 Decode 请求。</li>
+<li>剩余预算用于放入 Prefill 请求。</li>
+<li>如果最后一个 prefill 塞不下整段，就只取能塞下的那部分，剩下的下一步再做</li>
+</ol>
+<h4 id="4-2-Chunked-Attention-如何计算">4.2 Chunked Attention 如何计算</h4>
+<p>每一步只做两件事：</p>
+<ol>
+<li>对<strong>当前 chunk 的新 token</strong> 算 Q、K、V（Q 只用一次，K/V 追加进 cache）</li>
+<li>Attention 的 K/V 范围 = <strong>cache 里的历史 + 当前 chunk 新算的</strong>；chunk 内部仍是 causal mask，对历史 KV 全部可见</li>
+</ol>
+<p>用 mask 图看，整块 prefill 是个下三角，chunked prefill 只是把它<strong>按行切成横带</strong>，一步算一条：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">     被 attend 的 Key →</span><br><span class="line">     x x x  y y y  z z</span><br><span class="line">Q x [ ■ . .  . . .  . . ]   ← step1: 只算 x 这 3 行</span><br><span class="line">  x [ ■ ■ .  . . .  . . ]</span><br><span class="line">  x [ ■ ■ ■  . . .  . . ]</span><br><span class="line">  y [ ■ ■ ■  ■ . .  . . ]   ← step2: 只算 y 这 3 行，x 列读 cache</span><br><span class="line">  y [ ■ ■ ■  ■ ■ .  . . ]</span><br><span class="line">  y [ ■ ■ ■  ■ ■ ■  . . ]</span><br><span class="line">  z [ ■ ■ ■  ■ ■ ■  ■ . ]   ← step3: 只算 z 这 2 行，x/y 列读 cache</span><br><span class="line">  z [ ■ ■ ■  ■ ■ ■  ■ ■ ]        并 sample 出第 1 个输出 token</span><br></pre></td></tr></table></figure>
 
                     
                 </div>
@@ -325,11 +370,11 @@
                             <ul class="post-tags-box border-box">
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8E%A8%E7%90%86/">推理</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%B0%83%E5%BA%A6/">调度</a>
                                     </li>
                                 
                             </ul>
@@ -345,31 +390,15 @@
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/2024/04/09/Work/%E7%BB%93%E6%9D%9F/docker%E7%8E%AF%E5%A2%83/"
-                                   title="Docker &amp; Conda"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">Docker &amp; Conda</span>
-                                        <span class="post-nav-item">Prev posts</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/2024/03/13/Work/%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86/"
-                                   title="硬件知识"
+                                   href="/2026/07/01/Work/EPLB/"
+                                   title="EPLB"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">硬件知识</span>
+                                        <span class="post-nav-title-item text-ellipsis">EPLB</span>
                                         <span class="post-nav-item">Next posts</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -397,7 +426,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-text">推理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#KV-cache"><span class="nav-text">KV cache</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%8C%87%E6%A0%87"><span class="nav-text">推理指标</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%9E%B6%E6%9E%84"><span class="nav-text">推理架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vLLM"><span class="nav-text">vLLM</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%8E%A8%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-text">一、推理的两个阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%B0%83%E5%BA%A6%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="nav-text">二、调度的目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-text">三、调度策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-Static-Batch"><span class="nav-text">3.1 Static Batch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Continuous-Batching"><span class="nav-text">3.2 Continuous Batching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%9APrefill-%E9%98%BB%E5%A1%9E-Decode"><span class="nav-text">3.3 新问题：Prefill 阻塞 Decode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-Chunked-Prefill"><span class="nav-text">3.4 Chunked Prefill</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A1%86%E6%9E%B6%E5%AE%9E%E7%8E%B0"><span class="nav-text">四、框架实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E6%B5%81%E7%A8%8B"><span class="nav-text">4.1 流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-Chunked-Attention-%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97"><span class="nav-text">4.2 Chunked Attention 如何计算</span></a></li></ol></li></ol>
     </div>
 </div>
 
@@ -557,7 +586,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-text">推理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#KV-cache"><span class="nav-text">KV cache</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%8C%87%E6%A0%87"><span class="nav-text">推理指标</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E7%90%86%E6%9E%B6%E6%9E%84"><span class="nav-text">推理架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vLLM"><span class="nav-text">vLLM</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%8E%A8%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-text">一、推理的两个阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%B0%83%E5%BA%A6%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="nav-text">二、调度的目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-text">三、调度策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-Static-Batch"><span class="nav-text">3.1 Static Batch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Continuous-Batching"><span class="nav-text">3.2 Continuous Batching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%9APrefill-%E9%98%BB%E5%A1%9E-Decode"><span class="nav-text">3.3 新问题：Prefill 阻塞 Decode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-Chunked-Prefill"><span class="nav-text">3.4 Chunked Prefill</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A1%86%E6%9E%B6%E5%AE%9E%E7%8E%B0"><span class="nav-text">四、框架实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E6%B5%81%E7%A8%8B"><span class="nav-text">4.1 流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-Chunked-Attention-%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97"><span class="nav-text">4.2 Chunked Attention 如何计算</span></a></li></ol></li></ol>
     </div>
 </div>
 

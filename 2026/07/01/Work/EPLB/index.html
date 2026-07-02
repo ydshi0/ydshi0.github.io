@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed Jul 01 2026 03:31:18 GMT+0800">2026-07-01</span>
+                    <span class="datetime" data-updated="Wed Jul 01 2026 12:41:41 GMT+0800">2026-07-01</span>
                 </span>
             
         
@@ -290,7 +290,7 @@
                     
 
                     
-                         <h1>EPLB：专家并行负载均衡</h1>
+                         <h2 id="EPLB：专家并行负载均衡">EPLB：专家并行负载均衡</h2>
 <p><strong>Expert Parallelism Load Balancer</strong><br>
 仓库：<a class="link"   href="https://github.com/deepseek-ai/EPLB" >https://github.com/deepseek-ai/EPLB<i class="fas fa-external-link-alt"></i></a>（核心仅 <code>eplb.py</code> 一个文件）</p>
 <hr>
@@ -306,7 +306,7 @@
 </ul>
 <p>后果：整个 EP 组的速度由<strong>最忙的那张 GPU</strong>决定。一张卡上的专家被挤爆，其它卡都在空等它的 All-to-All 结果，GPU 利用率严重下降。</p>
 <hr>
-<h2 id="二、EPLB-的核心思想">二、EPLB 的核心思想</h2>
+<h3 id="二、EPLB-的核心思想">二、EPLB 的核心思想</h3>
 <h4 id="2-1-冗余专家（Redundant-Experts）">2.1 冗余专家（Redundant Experts）</h4>
 <p>对<strong>热点专家做复制</strong>：一个逻辑专家可以在多张 GPU 上有多个副本，token 被分摊到这些副本上，从而把热点的负载切开。</p>
 <table>
@@ -353,15 +353,15 @@
 <p><strong>装箱</strong> balanced_packing</p>
 <p>把专家均匀分到各 GPU（贪心，类似 LPT 最长作业优先；每个 GPU 专家数相等、总负载尽量接近）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">专家按负载从大到小排序</span><br><span class="line">依次放入「当前最轻且没满」的 GPU</span><br></pre></td></tr></table></figure>
-<h4 id="层次化（仅-prefill）">层次化（仅 prefill）</h4>
+<p><strong>层次化</strong></p>
 <p>如果模型有 <strong>group-limited routing</strong>（DeepSeek ）且处于 <strong>prefill</strong>（EP 小），就在两步前面<strong>加一步</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">⓪ 先按 group 把专家整组装箱到各 node</span><br><span class="line">   ↓ 之后「复制 + 装箱」的作用域从「全集群」缩到「每个 node 内」</span><br><span class="line">① 复制（node 内）</span><br><span class="line">② 装箱（到 node 内各 GPU）</span><br></pre></td></tr></table></figure>
 <p>唯一目的：<strong>让同 group 专家落在同一台机器</strong>，token 的 All-to-All 尽量走机内 NVLink，省跨机通信。</p>
 <p><strong>为什么只有 prefill 加？</strong></p>
 <p>prefill 大 batch、通信量大 → 省跨机收益最大，值得加；</p>
-<h4 id="对外入口-rebalance-experts">对外入口 <code>rebalance_experts</code></h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">能整除 → 层次化（带 ⓪）；否则 → 全局（仅 ①②，传 num_groups=1, num_nodes=1）</span><br><span class="line">最后由 phy2log 反推 log2phy</span><br></pre></td></tr></table></figure>
-<p>输出三件套：<code>phy2log</code>（副本→专家）/ <code>log2phy</code>（专家→副本）/ <code>logcnt</code>（各专家副本数）。</p>
+<p>对外入口 <code>rebalance_experts</code></p>
+<p>能整除 → 层次化（带 ⓪）；否则 → 全局（仅 ①②，传 num_groups=1, num_nodes=1）</p>
+<p>输出：<code>phy2log</code>（副本→专家）/ <code>log2phy</code>（专家→副本）/ <code>logcnt</code>（各专家副本数）。</p>
 <blockquote>
 <p>直播亲眼看到哈兰德进球了，挪威2:1获胜进入世界杯16强。</p>
 </blockquote>
@@ -396,6 +396,22 @@
 
                 
                     <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/07/02/Work/%E6%8E%A8%E7%90%86%E8%B0%83%E5%BA%A6/"
+                                   title="推理调度"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">推理调度</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
                         
                         
                             <div class="next-post">
@@ -433,7 +449,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">EPLB：专家并行负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="nav-text">一、背景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%B8%93%E5%AE%B6%E5%B9%B6%E8%A1%8C%EF%BC%88Expert-Parallelism-EP%EF%BC%89"><span class="nav-text">1.1 专家并行（Expert Parallelism, EP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-MoE-%E7%9A%84%E8%B4%9F%E8%BD%BD%E4%B8%8D%E5%9D%87%E8%A1%A1%E7%8E%B0%E8%B1%A1"><span class="nav-text">1.2 MoE 的负载不均衡现象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81EPLB-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">二、EPLB 的核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E5%86%97%E4%BD%99%E4%B8%93%E5%AE%B6%EF%BC%88Redundant-Experts%EF%BC%89"><span class="nav-text">2.1 冗余专家（Redundant Experts）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%90%AF%E5%8F%91%E5%BC%8F%E6%89%93%E5%8C%85%EF%BC%88Heuristic-Packing%EF%BC%89"><span class="nav-text">2.2 启发式打包（Heuristic Packing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-group-limited-routing-%E9%99%8D%E4%BD%8E%E8%B7%A8%E6%9C%BA%E9%80%9A%E4%BF%A1"><span class="nav-text">2.3 group-limited routing 降低跨机通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E9%80%BB%E8%BE%91%EF%BC%9A%E5%A4%8D%E5%88%B6-%E8%A3%85%E7%AE%B1%EF%BC%88%E6%A0%B8%E5%BF%83%E4%B8%A4%E6%AD%A5%EF%BC%89"><span class="nav-text">三、算法逻辑：复制 + 装箱（核心两步）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E5%8C%96%EF%BC%88%E4%BB%85-prefill%EF%BC%89"><span class="nav-text">层次化（仅 prefill）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E5%A4%96%E5%85%A5%E5%8F%A3-rebalance-experts"><span class="nav-text">对外入口 rebalance_experts</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EPLB%EF%BC%9A%E4%B8%93%E5%AE%B6%E5%B9%B6%E8%A1%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">EPLB：专家并行负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="nav-text">一、背景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%B8%93%E5%AE%B6%E5%B9%B6%E8%A1%8C%EF%BC%88Expert-Parallelism-EP%EF%BC%89"><span class="nav-text">1.1 专家并行（Expert Parallelism, EP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-MoE-%E7%9A%84%E8%B4%9F%E8%BD%BD%E4%B8%8D%E5%9D%87%E8%A1%A1%E7%8E%B0%E8%B1%A1"><span class="nav-text">1.2 MoE 的负载不均衡现象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81EPLB-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">二、EPLB 的核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E5%86%97%E4%BD%99%E4%B8%93%E5%AE%B6%EF%BC%88Redundant-Experts%EF%BC%89"><span class="nav-text">2.1 冗余专家（Redundant Experts）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%90%AF%E5%8F%91%E5%BC%8F%E6%89%93%E5%8C%85%EF%BC%88Heuristic-Packing%EF%BC%89"><span class="nav-text">2.2 启发式打包（Heuristic Packing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-group-limited-routing-%E9%99%8D%E4%BD%8E%E8%B7%A8%E6%9C%BA%E9%80%9A%E4%BF%A1"><span class="nav-text">2.3 group-limited routing 降低跨机通信</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E9%80%BB%E8%BE%91%EF%BC%9A%E5%A4%8D%E5%88%B6-%E8%A3%85%E7%AE%B1%EF%BC%88%E6%A0%B8%E5%BF%83%E4%B8%A4%E6%AD%A5%EF%BC%89"><span class="nav-text">三、算法逻辑：复制 + 装箱（核心两步）</span></a></li></ol></li></ol>
     </div>
 </div>
 
@@ -593,7 +609,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">EPLB：专家并行负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="nav-text">一、背景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%B8%93%E5%AE%B6%E5%B9%B6%E8%A1%8C%EF%BC%88Expert-Parallelism-EP%EF%BC%89"><span class="nav-text">1.1 专家并行（Expert Parallelism, EP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-MoE-%E7%9A%84%E8%B4%9F%E8%BD%BD%E4%B8%8D%E5%9D%87%E8%A1%A1%E7%8E%B0%E8%B1%A1"><span class="nav-text">1.2 MoE 的负载不均衡现象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81EPLB-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">二、EPLB 的核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E5%86%97%E4%BD%99%E4%B8%93%E5%AE%B6%EF%BC%88Redundant-Experts%EF%BC%89"><span class="nav-text">2.1 冗余专家（Redundant Experts）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%90%AF%E5%8F%91%E5%BC%8F%E6%89%93%E5%8C%85%EF%BC%88Heuristic-Packing%EF%BC%89"><span class="nav-text">2.2 启发式打包（Heuristic Packing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-group-limited-routing-%E9%99%8D%E4%BD%8E%E8%B7%A8%E6%9C%BA%E9%80%9A%E4%BF%A1"><span class="nav-text">2.3 group-limited routing 降低跨机通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E9%80%BB%E8%BE%91%EF%BC%9A%E5%A4%8D%E5%88%B6-%E8%A3%85%E7%AE%B1%EF%BC%88%E6%A0%B8%E5%BF%83%E4%B8%A4%E6%AD%A5%EF%BC%89"><span class="nav-text">三、算法逻辑：复制 + 装箱（核心两步）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E5%8C%96%EF%BC%88%E4%BB%85-prefill%EF%BC%89"><span class="nav-text">层次化（仅 prefill）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E5%A4%96%E5%85%A5%E5%8F%A3-rebalance-experts"><span class="nav-text">对外入口 rebalance_experts</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EPLB%EF%BC%9A%E4%B8%93%E5%AE%B6%E5%B9%B6%E8%A1%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">EPLB：专家并行负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="nav-text">一、背景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%B8%93%E5%AE%B6%E5%B9%B6%E8%A1%8C%EF%BC%88Expert-Parallelism-EP%EF%BC%89"><span class="nav-text">1.1 专家并行（Expert Parallelism, EP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-MoE-%E7%9A%84%E8%B4%9F%E8%BD%BD%E4%B8%8D%E5%9D%87%E8%A1%A1%E7%8E%B0%E8%B1%A1"><span class="nav-text">1.2 MoE 的负载不均衡现象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81EPLB-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">二、EPLB 的核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E5%86%97%E4%BD%99%E4%B8%93%E5%AE%B6%EF%BC%88Redundant-Experts%EF%BC%89"><span class="nav-text">2.1 冗余专家（Redundant Experts）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%90%AF%E5%8F%91%E5%BC%8F%E6%89%93%E5%8C%85%EF%BC%88Heuristic-Packing%EF%BC%89"><span class="nav-text">2.2 启发式打包（Heuristic Packing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-group-limited-routing-%E9%99%8D%E4%BD%8E%E8%B7%A8%E6%9C%BA%E9%80%9A%E4%BF%A1"><span class="nav-text">2.3 group-limited routing 降低跨机通信</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E9%80%BB%E8%BE%91%EF%BC%9A%E5%A4%8D%E5%88%B6-%E8%A3%85%E7%AE%B1%EF%BC%88%E6%A0%B8%E5%BF%83%E4%B8%A4%E6%AD%A5%EF%BC%89"><span class="nav-text">三、算法逻辑：复制 + 装箱（核心两步）</span></a></li></ol></li></ol>
     </div>
 </div>
 
