@@ -9,7 +9,7 @@
     
     <title>
         
-            cuda知识 |
+            PagedAttention &amp; RadixAttention |
         
         introspection
     </title>
@@ -219,7 +219,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        cuda知识
+                        PagedAttention &amp; RadixAttention
                     </div>
                 
 
@@ -245,13 +245,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2026-07-05</span>
+                <span class="datetime">2026-07-06</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Jul 05 2026 16:21:23 GMT+0800">2026-07-05</span>
+                    <span class="datetime" data-updated="Mon Jul 06 2026 16:20:07 GMT+0800">2026-07-06</span>
                 </span>
             
         
@@ -262,10 +262,10 @@
             <span class="post-tag meta-info-item border-box">
                 <ul class="post-tag-ul">
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/cuda/">cuda</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/KV-cache/">KV cache</a></li>
                         
                     
                 </ul>
@@ -290,177 +290,88 @@
                     
 
                     
-                         <h3 id="一-GPU-架构">一. GPU 架构</h3>
-<h4 id="1-1-SM（Streaming-Multiprocessor）">1.1 SM（Streaming Multiprocessor）</h4>
-<p>GPU 的核心计算单元，一个 GPU 含有多个 SM。每个 SM 包含：</p>
-<ul>
-<li><strong>共享内存（Shared Memory）</strong>：SM 内线程块可共享的高速内存</li>
-<li><strong>寄存器（Registers）</strong>：每个线程的私有存储</li>
-<li><strong>调度器（Warp Scheduler）</strong>：管理线程束的执行</li>
-</ul>
-<h4 id="1-2-线程层级">1.2 线程层级</h4>
-<p>CUDA 将并行计算组织为三级<strong>逻辑</strong>结构：Thread、Block、Grid</p>
-<p>Block 内线程可通过 shared memory 通信，每个Block最多包含1024个Thread</p>
-<p><strong>层级与硬件的映射关系</strong></p>
-<p>线程层级是逻辑抽象，运行时由硬件调度：</p>
-<ul>
-<li>
-<p><strong>Block → SM</strong>：一个 block 被整体分配到<strong>某一个 SM</strong> 上执行，且<strong>不会跨 SM</strong>。这是 block 内线程能共享 shared memory的物理基础——它们都在同一个 SM 上。</p>
-</li>
-<li>
-<p><strong>一个 SM 可同时驻留多个 block</strong>（受资源限制），block 之间无执行顺序保证，也无法直接同步。</p>
-</li>
-<li>
-<p><strong>Grid → 整个 GPU</strong>：block 被调度器分发到各个 SM。block 数量通常远大于 SM 数量，SM 执行完一个 block 后再接下一个。</p>
-</li>
-</ul>
-<h4 id="1-3-Warp（线程束）">1.3 Warp（线程束）</h4>
-<p>GPU 实际调度的基本单位，由 <strong>32 个线程</strong>组成。block 进入 SM 后即被拆成若干 warp。同一 warp 的所有线程以 <strong>SIMT</strong> 方式执行——同一时刻执行相同指令，各自操作不同数据。</p>
-<p><strong>线程数对齐</strong>：block 线程数应为 32 的整数倍，否则最后一个 warp 有空闲线程，浪费资源。</p>
-<p><strong>线程束分歧（Warp Divergence）</strong></p>
-<p>同一 warp 内线程因条件分支走向不同路径时，硬件串行执行各分支，效率降低。</p>
-<h4 id="1-4-Block-调度">1.4 Block 调度</h4>
-<p><strong>资源限制</strong></p>
-<p>一个 SM 上能同时驻留多少个 block，取决于每个 block 消耗的资源与 SM 的总资源：</p>
-<ul>
-<li><strong>寄存器</strong>：SM 寄存器总数固定，<code>每线程寄存器数 × block 线程数</code> 越大，能驻留的 block 越少</li>
-<li><strong>Shared Memory</strong>：SM 的 shared memory 总量固定，每个 block 申请越多，能驻留的 block 越少</li>
-<li><strong>Block / Warp 数量上限</strong>：SM 对常驻 block 数和 warp 数有硬件上限</li>
-</ul>
-<h3 id="二-GPU-内存层级">二. GPU 内存层级</h3>
-<p>GPU 内存按<strong>容量、延迟、作用域</strong>分层，理解层级是优化的前提：</p>
-<p>按<strong>从快到慢</strong>排列：</p>
+                         <h3 id="一-动机">一. 动机</h3>
+<p>朴素实现把每条序列的 KV 存成<strong>一整块物理连续显存</strong>：</p>
+<ol>
+<li><strong>必须按 max_length 预留</strong>：不知道要生成多长，只能按最大长度占满 。实际用不到的部分全浪费，内部碎片多。</li>
+<li><strong>无法复用</strong>：两条请求前缀即使完全相同，各自是独立连续缓冲区，KV 无法复用。</li>
+</ol>
+<p><strong>「之前必须物理连续」——</strong> 早期把 KV 开成 [batch, heads, max_seq_len, head_dim] 的大张量，kernel 用 cache_base + t*stride 这种<strong>线性映射</strong>直接按位置 t 取地址，所以同序列必须连续。PagedAttention 就是把这个线性映射换成一次查表（block table）的间接映射。</p>
+<h3 id="二-PagedAttention">二. PagedAttention</h3>
+<h4 id="2-1-类比操作系统分页">2.1 类比操作系统分页</h4>
 <table>
 <thead>
 <tr>
-<th>内存类型</th>
-<th>作用域</th>
-<th>速度</th>
-<th>说明</th>
+<th>操作系统</th>
+<th>PagedAttention</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>寄存器 Register</strong></td>
-<td>单线程</td>
-<td>最快</td>
-<td>线程私有，数量有限，超出则溢出到 local memory</td>
+<td>虚拟地址空间（连续）</td>
+<td>一条序列的 KV（逻辑连续）</td>
 </tr>
 <tr>
-<td><strong>Shared Memory</strong></td>
-<td>Block</td>
-<td>很快</td>
-<td>片上，block 内共享，与 L1 cache 共用同一块物理空间</td>
+<td>物理页 page</td>
+<td>KV block（固定 block_size 个 token，如 16）</td>
 </tr>
 <tr>
-<td><strong>L1 / L2 Cache</strong></td>
-<td>SM / 全局</td>
-<td>快</td>
-<td>硬件自动缓存 global memory 访问，程序无法直接控制</td>
+<td>页表 page table</td>
+<td><strong>block table</strong>（每条请求一行）</td>
 </tr>
 <tr>
-<td><strong>Local Memory</strong></td>
-<td>单线程</td>
-<td>慢</td>
-<td>名为 local，实际在 global memory（DRAM）上，寄存器溢出/大数组时使用</td>
-</tr>
-<tr>
-<td><strong>Global Memory</strong></td>
-<td>全 Grid + Host</td>
-<td>最慢</td>
-<td>显存（DRAM），容量最大，是主要瓶颈，访问需注意合并</td>
+<td>虚拟页号 → 物理页帧</td>
+<td>逻辑块号 → 物理块号</td>
 </tr>
 </tbody>
 </table>
-<p><strong>关键点</strong></p>
+<h4 id="2-2-vLLM-里的两个结构：block-table-与-slot-mapping">2.2 vLLM 里的两个结构：block table 与 slot mapping</h4>
+<p>源码 vllm/v1/worker/block_table.py</p>
+<p><strong>block_table</strong> = <strong>页表本体</strong>，形状 [max_num_reqs, max_num_blocks_per_req]。第 r 行第 i 列存的是「请求 r 的逻辑块 i 对应哪个物理块」。它是每请求持有、append-only、长期存在的——序列每长一个 block 就往行尾追加一个物理块号</p>
+<p><strong>slot_mapping</strong>= <strong>本次 batch 里每个新 token 要写入的物理显存槽位</strong>，是一个一维数组 [max_num_batched_tokens]。它是每个 batch 现算现用的临时产物。</p>
+<p><strong>为什么需要 slot mapping？</strong> 读 KV 和写 KV <strong>都</strong>要把「逻辑位置」翻译成「物理地址」（都得查 block_table），差别在于<strong>这层翻译是循环里现算，还是预先算成一张表</strong>。而这取决于两边访问的<strong>规模</strong>：</p>
 <ul>
-<li>
-<p><strong>越靠近计算单元越快、越小</strong>：register &gt; shared &gt; L1/L2 &gt; global，延迟可差几十到几百倍。</p>
-</li>
-<li>
-<p><strong>Shared memory 与 L1 共享物理空间</strong>，部分架构可配置二者比例（<code>cudaFuncSetAttribute</code>）。</p>
-</li>
+<li><strong>读（= attention 计算）</strong>：query 要和<strong>全部历史 K/V</strong> 做注意力，kernel 本来就得一块块遍历，遍历时现查即可，预计算反而是一张又大又没必要的表。</li>
+<li><strong>写（= 存新算出的 K/V）</strong>：一步只新增很少的 token（decode 时每条序列就 1 个），还被跨请求打平成一个一维张量。预先算出「第 j 个 token → 物理 slot」只是一张很短的数组，成本极低。</li>
 </ul>
-<h3 id="三-CUDA-Stream">三. CUDA Stream</h3>
-<p>CUDA Stream 是 GPU 上<strong>按顺序执行的操作队列</strong>。同一 stream 内操作严格串行，<strong>不同 stream 间可并发执行</strong>。不指定 stream 时，所有操作进入 default stream。</p>
-<p><strong>为什么使用多个 Stream</strong></p>
+<p><strong>具体例子</strong>（block_size=4，看一条请求 A）</p>
+<p>核心逻辑：第一级：逻辑块 → 物理块（查页表），第二级：物理块基址 + 块内偏移</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">block_table[A] = [7, 1, 3]      # 逻辑块 0/1/2 → 物理块 7/1/3</span><br><span class="line">A 已有 10 token，本次新增位置 10、11：</span><br><span class="line">  位置 10 → 逻辑块 10//4=2 → 物理块 3，偏移 10%4=2 → slot = 3*4+2 = 14</span><br><span class="line">  位置 11 → 逻辑块 11//4=2 → 物理块 3，偏移 11%4=3 → slot = 3*4+3 = 15</span><br><span class="line"></span><br><span class="line">batch 里其它请求的新 token 同法算出，一起打平：</span><br><span class="line">  slot_mapping = [14, 15, ...]，kernel 逐个执行 kv_cache[slot_mapping[j]] = kv[j]</span><br></pre></td></tr></table></figure>
+<img     src="https://cdn.jsdelivr.net/gh/ydshi0/picture/blog/20260706160611188.png"   style="zoom:50%;" >
+<h4 id="2-3-好处">2.3 好处</h4>
 <ul>
-<li><strong>计算与传输重叠</strong>：一个 stream 跑 kernel，另一个同时做 Host-Device 内存拷贝</li>
-<li><strong>多 kernel 并发</strong>：单个 kernel 占不满 SM 时，多 stream 的 kernel 可同时执行</li>
-<li><strong>流水线化</strong>：大任务拆分到不同 stream，形成流水线</li>
+<li><strong>不需要 max_length</strong>：按块（16 token）粒度用多少给多少，浪费 &lt; 一个 block。</li>
+<li><strong>可复用</strong>：不同请求的 block table 行里可以填同一个物理块号——这是复用的物理基础。</li>
+<li><strong>动态无搬移</strong>：抢占、swap、beam search 分叉都只改 block table 指针，不搬 KV 数据。</li>
 </ul>
 <hr>
-<h3 id="四-Tensor-Core">四. Tensor Core</h3>
-<p><strong>加速原理</strong></p>
-<p>Tensor Core 将矩阵乘加变成一条<strong>硬件原子指令</strong>，一个周期内执行多次 FMA，吞吐远超标量 CUDA Core。使用方式包括 WMMA API、cuBLAS、混合精度训练等。实际瓶颈通常在 memory bandwidth 而非 compute。</p>
-<p><strong>混合精度（Mixed Precision）</strong></p>
-<p>混合精度不是指代码中既有 FP16 又有 FP32，而是硬件算子层面：</p>
+<h3 id="三-vLLM-的块管理结构">三. vLLM 的块管理结构</h3>
 <ul>
-<li><strong>输入/输出</strong>用 FP16，减少显存占用和带宽压力</li>
-<li><strong>中间累加</strong>用 FP32，保证精度不过度损失</li>
+<li>
+<p><strong>物理块池 <code>BlockPool</code></strong>（<code>block_pool.py</code>）管理所有 <code>KVCacheBlock</code>（<code>kv_cache_utils.py</code>）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">KVCacheBlock</span>:</span><br><span class="line">    block_id: <span class="built_in">int</span>    <span class="comment"># 物理块号</span></span><br><span class="line">    ref_cnt: <span class="built_in">int</span>     <span class="comment"># 引用计数：几条序列在共享它（复用关键）</span></span><br><span class="line">    _block_hash      <span class="comment"># 块满并缓存后才有</span></span><br><span class="line">    prev/next_free_block  <span class="comment"># 空闲链表指针</span></span><br></pre></td></tr></table></figure>
+<p>空闲块（即 ref_cnt==0，当前没请求在用）用 FreeKVCacheBlockQueue串成<strong>双向链表</strong>、按 <strong>LRU</strong> 排序。</p>
+</li>
+<li>
+<p><strong>复用索引 <code>BlockHashToBlockMap</code></strong>（{block_hash: KVCacheBlock} 字典，给定内容哈希 O(1) 找到「是否已有算好的物理块」。</p>
+</li>
 </ul>
-<h3 id="五-GEMM-常见优化">五. GEMM 常见优化</h3>
-<p>矩阵乘法 <code>C = A × B</code> 是深度学习和 HPC 的核心运算。</p>
-<h4 id="5-1-访存合并（Memory-Coalescing）">5.1 访存合并（Memory Coalescing）</h4>
-<p>一个 warp 中所有线程同时访存时，若访问<strong>连续的全局内存地址</strong>，硬件会合并成一次 DRAM 访问，大幅提高带宽利用率。</p>
-<p>GEMM 中用 <code>threadIdx</code> 对应矩阵最内层连续维度（列索引），确保同一 warp 读取连续地址。</p>
-<h4 id="5-2-Shared-Memory">5.2 Shared Memory</h4>
-<p>一个 block（32×32 线程）计算 C 的 32×32 子块时，同一行 32 个线程都需要 A 的同一行，同一列 32 个线程都需要 B 的同一列。没有 shared memory 时，数据被重复读 32 次。</p>
-<p><strong>Tiling 策略</strong></p>
-<p>Shared memory 是 block 私有的片上缓存，延迟极低但容量小，需分块加载：</p>
-<ol>
-<li>将 A、B 的一个小 tile 从 global memory 加载到 shared memory</li>
-<li>线程从 shared memory 读取，完成部分点积</li>
-<li>同步后加载下一个 tile，重复直到完成</li>
-</ol>
-<p>每个数据只从 global memory 读一次，block 内所有线程共享。</p>
-<h4 id="5-3-Bank-Conflict">5.3 Bank Conflict</h4>
-<p><strong>什么是 Bank</strong></p>
-<p>Shared memory 划分为 <strong>32 个 bank</strong>，每个 bank 宽 4 字节，地址循环分配。一个 warp 的 32 个线程可同时访问 32 个不同 bank，一周期完成。</p>
-<p><strong>冲突场景</strong></p>
-<p>同一 warp 中多个线程访问<strong>同一 bank 的不同地址</strong>时产生 bank conflict，硬件串行化，延迟翻倍。</p>
-<table>
-<thead>
-<tr>
-<th>场景</th>
-<th>访问模式</th>
-<th>结果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>无冲突</td>
-<td>线程 i 访问 <code>shared[i]</code></td>
-<td>完美并行</td>
-</tr>
-<tr>
-<td>2-way conflict</td>
-<td>线程 i 访问 <code>shared[2*i]</code></td>
-<td>线程 0 和 16 撞 bank 0，需 2 周期</td>
-</tr>
-<tr>
-<td>Broadcast</td>
-<td>多线程访问同一 bank 的<strong>同一地址</strong></td>
-<td>硬件广播，无惩罚</td>
-</tr>
-</tbody>
-</table>
-<p>可通过 <strong>NVIDIA Nsight Compute (NCU)</strong> 检测。</p>
-<p><strong>解决方法一：Padding（传统）</strong></p>
-<p>声明时多加一列，打破对齐模式：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__shared__ <span class="type">float</span> tile[<span class="number">32</span>][<span class="number">32</span>];      <span class="comment">// 有 bank conflict</span></span><br><span class="line">__shared__ <span class="type">float</span> tile[<span class="number">32</span>][<span class="number">32</span> + <span class="number">1</span>];  <span class="comment">// 消除</span></span><br></pre></td></tr></table></figure>
-<p>每行 33 个 float，地址 <code>row * 33 + col</code>，33 mod 32 = 1，每行偏移一个 bank，32 行覆盖 32 个不同 bank。</p>
-<p>缺点：浪费空间，tile 尺寸变化时需重新调整。</p>
-<p><strong>解决方法二：Swizzle（现代）</strong></p>
-<p>CUTLASS、cuBLAS 等主流库采用的方式，对地址做<strong>位运算变换</strong>，零空间浪费地消除 bank conflict。</p>
-<p>核心思想：将列地址的 bank 选择位与行索引做 <strong>XOR</strong>，使不同行的相同列偏移映射到不同 bank：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> swizzled_col = col ^ (row % num_banks_pattern);</span><br><span class="line">shared_mem[row * cols + swizzled_col] = data;</span><br></pre></td></tr></table></figure>
-<p>第 0 行 bank 位不变，第 1 行 XOR 1，第 2 行 XOR 2……不同行同列被同时读取时，各线程命中不同 bank。</p>
-<p><strong>Swizzle 优势</strong>：</p>
+<h3 id="四-RadixAttention-Prefix-Caching">四. RadixAttention / Prefix Caching</h3>
+<p>RadixAttention 是 SGLang 的叫法，vLLM 对应 Automatic Prefix Caching</p>
+<blockquote>
+<p><strong>radix tree（基数树）</strong> = 压缩版的前缀树（trie）：普通 trie 一个节点存一个字符，radix tree 把「只有单一孩子的一串节点」合并成一条边，从根到某节点的路径就代表一段公共前缀。</p>
+</blockquote>
+<p>思想一致：共享前缀的请求共享物理块。vLLM 不建前缀树，而用「带父哈希的块哈希链 」等价实现。</p>
 <ul>
-<li>零空间浪费，shared memory 利用率 100%</li>
-<li>数据紧凑，不影响向量化加载（<code>LDS.128</code>）</li>
-<li>通用性强，无需针对 tile 大小手动调整</li>
+<li>
+<p><strong>哈希链即树路径</strong>：块哈希 = hash(块内容 + 父块哈希)。前缀相同则哈希链前若干项逐个相等——对应radix tree 从根到某节点的一条路径。</p>
+</li>
+<li>
+<p><strong>匹配最长公共前缀</strong>：新请求逐块比对哈希，命中就继续、不匹配即停；命中的块直接被新请求的 block table 引用、ref_cnt++。</p>
+</li>
+<li>
+<p><strong>缓存与淘汰</strong>：块写满时登记进哈希表；ref_cnt&gt;0 不可淘汰，降到 0 回 LRU 队列。当需要新块而无空块时，从队头取最久未用的块淘汰、覆盖其内容。若在用的块也腾不出（全 ref_cnt&gt;0），则转为<strong>抢占</strong>：丢弃某条请求和它的KV。</p>
+</li>
 </ul>
 
                     
@@ -474,11 +385,11 @@
                             <ul class="post-tags-box border-box">
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/cuda/">cuda</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/KV-cache/">KV cache</a>
                                     </li>
                                 
                             </ul>
@@ -494,31 +405,15 @@
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/2026/07/06/Work/PagedAttention&%20RadixAttention/"
-                                   title="PagedAttention &amp; RadixAttention"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">PagedAttention &amp; RadixAttention</span>
-                                        <span class="post-nav-item">Prev posts</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/2026/07/04/Work/%E7%AE%97%E5%AD%90%E5%AD%A6%E4%B9%A0/"
-                                   title="算子 FlashAttention &amp; Fused MoE"
+                                   href="/2026/07/05/Work/cuda%E7%9F%A5%E8%AF%86/"
+                                   title="cuda知识"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">算子 FlashAttention &amp; Fused MoE</span>
+                                        <span class="post-nav-title-item text-ellipsis">cuda知识</span>
                                         <span class="post-nav-item">Next posts</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -546,7 +441,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80-GPU-%E6%9E%B6%E6%9E%84"><span class="nav-text">一. GPU 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-SM%EF%BC%88Streaming-Multiprocessor%EF%BC%89"><span class="nav-text">1.1 SM（Streaming Multiprocessor）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E7%BA%BF%E7%A8%8B%E5%B1%82%E7%BA%A7"><span class="nav-text">1.2 线程层级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-Warp%EF%BC%88%E7%BA%BF%E7%A8%8B%E6%9D%9F%EF%BC%89"><span class="nav-text">1.3 Warp（线程束）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-Block-%E8%B0%83%E5%BA%A6"><span class="nav-text">1.4 Block 调度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C-GPU-%E5%86%85%E5%AD%98%E5%B1%82%E7%BA%A7"><span class="nav-text">二. GPU 内存层级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89-CUDA-Stream"><span class="nav-text">三. CUDA Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B-Tensor-Core"><span class="nav-text">四. Tensor Core</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94-GEMM-%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96"><span class="nav-text">五. GEMM 常见优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-%E8%AE%BF%E5%AD%98%E5%90%88%E5%B9%B6%EF%BC%88Memory-Coalescing%EF%BC%89"><span class="nav-text">5.1 访存合并（Memory Coalescing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-Shared-Memory"><span class="nav-text">5.2 Shared Memory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-Bank-Conflict"><span class="nav-text">5.3 Bank Conflict</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80-%E5%8A%A8%E6%9C%BA"><span class="nav-text">一. 动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C-PagedAttention"><span class="nav-text">二. PagedAttention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E7%B1%BB%E6%AF%94%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E9%A1%B5"><span class="nav-text">2.1 类比操作系统分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-vLLM-%E9%87%8C%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%BB%93%E6%9E%84%EF%BC%9Ablock-table-%E4%B8%8E-slot-mapping"><span class="nav-text">2.2 vLLM 里的两个结构：block table 与 slot mapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E5%A5%BD%E5%A4%84"><span class="nav-text">2.3 好处</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89-vLLM-%E7%9A%84%E5%9D%97%E7%AE%A1%E7%90%86%E7%BB%93%E6%9E%84"><span class="nav-text">三. vLLM 的块管理结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B-RadixAttention-Prefix-Caching"><span class="nav-text">四. RadixAttention &#x2F; Prefix Caching</span></a></li></ol>
     </div>
 </div>
 
@@ -706,7 +601,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80-GPU-%E6%9E%B6%E6%9E%84"><span class="nav-text">一. GPU 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-SM%EF%BC%88Streaming-Multiprocessor%EF%BC%89"><span class="nav-text">1.1 SM（Streaming Multiprocessor）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E7%BA%BF%E7%A8%8B%E5%B1%82%E7%BA%A7"><span class="nav-text">1.2 线程层级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-Warp%EF%BC%88%E7%BA%BF%E7%A8%8B%E6%9D%9F%EF%BC%89"><span class="nav-text">1.3 Warp（线程束）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-Block-%E8%B0%83%E5%BA%A6"><span class="nav-text">1.4 Block 调度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C-GPU-%E5%86%85%E5%AD%98%E5%B1%82%E7%BA%A7"><span class="nav-text">二. GPU 内存层级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89-CUDA-Stream"><span class="nav-text">三. CUDA Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B-Tensor-Core"><span class="nav-text">四. Tensor Core</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94-GEMM-%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96"><span class="nav-text">五. GEMM 常见优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-%E8%AE%BF%E5%AD%98%E5%90%88%E5%B9%B6%EF%BC%88Memory-Coalescing%EF%BC%89"><span class="nav-text">5.1 访存合并（Memory Coalescing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-Shared-Memory"><span class="nav-text">5.2 Shared Memory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-Bank-Conflict"><span class="nav-text">5.3 Bank Conflict</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80-%E5%8A%A8%E6%9C%BA"><span class="nav-text">一. 动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C-PagedAttention"><span class="nav-text">二. PagedAttention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E7%B1%BB%E6%AF%94%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E9%A1%B5"><span class="nav-text">2.1 类比操作系统分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-vLLM-%E9%87%8C%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%BB%93%E6%9E%84%EF%BC%9Ablock-table-%E4%B8%8E-slot-mapping"><span class="nav-text">2.2 vLLM 里的两个结构：block table 与 slot mapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E5%A5%BD%E5%A4%84"><span class="nav-text">2.3 好处</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89-vLLM-%E7%9A%84%E5%9D%97%E7%AE%A1%E7%90%86%E7%BB%93%E6%9E%84"><span class="nav-text">三. vLLM 的块管理结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B-RadixAttention-Prefix-Caching"><span class="nav-text">四. RadixAttention &#x2F; Prefix Caching</span></a></li></ol>
     </div>
 </div>
 
