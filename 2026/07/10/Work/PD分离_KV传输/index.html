@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="eric">
+    
+    <title>
+        
+            PD 分离的 KV 传输 |
+        
+        introspection
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+        
+            
+                
+<link rel="stylesheet" href="/css/custom.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null},"math":{"enable":true,"specific":false,"engine":"mathjax"}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"icp":{"enable":false,"record_code":null,"url":null},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               introspection
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                TAGS
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                            TAGS
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        PD 分离的 KV 传输
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">eric</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-07-10</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Fri Jul 10 2026 16:49:47 GMT+0800">2026-07-10</span>
+                </span>
+            
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/KV-%E4%BC%A0%E8%BE%93/">KV 传输</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <blockquote>
+<p>本文重点：<strong>不同并行配置下，KV 如何拆成 (P rank, D rank) 点对点传输。</strong></p>
+</blockquote>
+<h3 id="一、核心模型：rank-传输边">一、核心模型：rank 传输边</h3>
+<p>本文讨论的主流路径中，KV cache 在 (P rank, D rank)之间点对点传输，不经过中心节点</p>
+<p>除点对点外，也存在<strong>中心化 / 池化</strong>的 KV 传输方案：P 把 KV 写入一个共享 KV store，D 再从中读取，两侧不直接连接。典型如 Mooncake Store、LMCache 的远端后端（Redis / 对象存储 / 分布式 KV 池）。它的优点是天然支持跨请求前缀复用、P/D 解耦和弹性扩缩，代价是多一跳存储、时延更高。</p>
+<p>一次传输分为两步：</p>
+<ol>
+<li><strong>建边</strong>：选择 P/D 实例，根据 DP/TP/CP/PP 布局计算 rank 映射和 KV 切片。</li>
+<li><strong>执行</strong>：每对 (P rank, D rank) 直接搬运自己的 KV，并汇总完成状态。</li>
+</ol>
+<p><strong>传输粒度</strong>：不是「一个 block 发一次」，而是<strong>一条请求的整份 KV 在一次调用里批量发出</strong>。注意「批量」指<strong>一次 API 调用提交一串 descriptor</strong>，不是把数据先拼成连续内存——KV 仍留在原来分散的 paged 地址上，靠 RDMA 的 scatter-gather 逐段搬。</p>
+<blockquote>
+<p><strong>RDMA scatter-gather 是什么？</strong> RDMA scatter-gather 指网卡能接收一份<strong>内存段清单（SGL）</strong>，在一次操作里搬运多个<strong>互不相邻</strong>的段：发送端从多个分散源地址「gather」，接收端写入多个分散目的地址「scatter」。分散的 block 地址不必先拷成连续内存就能一次发。</p>
+</blockquote>
+<p>常见传输后端：</p>
+<ul>
+<li><strong>NIXL</strong>：NVIDIA 的传输抽象层，通过统一 API 屏蔽多种底层插件，按运行时配置选择实际传输路径。</li>
+<li><strong>Mooncake Transfer Engine</strong>：面向 PD 分离的高性能传输引擎，以 RDMA 为主在多机多卡间点对点搬运 KV，并可对接分级存储做 KV 缓存池。</li>
+<li><strong>LMCache</strong>：KV 缓存复用层，负责 KV 的存储、卸载（CPU/磁盘）与跨请求前缀复用，通常搭配上面的传输后端而非自己承担点对点搬运。</li>
+</ul>
+<h4 id="二、KV-在显存里怎么存：哪些维度连续">二、KV 在显存里怎么存：哪些维度连续</h4>
+<p>以 SGLang MHA 为例，<strong>每层的 K、V 各是一块独立张量</strong>，共 2 × layer_num块：</p>
+<p>单块张量内是行主序，一个 <strong>token slot</strong> 由 <code>head_num × head_dim × dtype_bytes</code> 三维决定；<strong>一个 block（vLLM 叫 block、SGLang 叫 page）= 连续 <code>page_size</code> 个 token slot</strong>——「block size = 16」指的就是一块放 16 个 token：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ token slot , head , head_dim ]      slot 外(慢) → head_dim 内(快)</span><br></pre></td></tr></table></figure>
+<p><strong>关键：layer 和 K/V 都是各自独立复制的</strong>——第 L 层和 L+1 层、K 和 V，地址互不相邻。所以<strong>一个模型存 16 个 token 的完整 KV，需要 <code>layer_num × 2</code>（K、V）个 block</strong>。</p>
+<p>于是单条边的 descriptor 数 = <strong>连续段数 <strong>。而</strong>取 head 子区间</strong>（异构 TP）还会打破页内连续性：head 不是最内维，只要某几个 head，每个 token 的 head slice 之间就隔着完整的 head stride，只能逐 token 下 descriptor (详见第六节）。</p>
+<h3 id="三、地址和-block-映射如何建立">三、地址和 block 映射如何建立</h3>
+<h4 id="3-1-SGLang：P-WRITE">3.1 SGLang：P WRITE</h4>
+<p>SGLang Mooncake/NIXL 的常见流程是：</p>
+<ol>
+<li>P ranks 通过 <code>register_to_bootstrap()</code> 注册各自的 DP/TP/CP/PP rank 和通信地址。</li>
+<li>D 查询 P 的并行布局，在本地通过 <code>_resolve_rank_mapping()</code> 算出目标 P ranks。</li>
+<li>D 用 <code>_register_kv_args()</code> 向相关 P ranks 注册 KV pool 基址等连接级信息。</li>
+<li>D 用 <code>send_metadata()</code> 发送本请求的 <code>kv_indices</code> 和完成计数。</li>
+<li>P 完成 prefill 后，根据两侧 block IDs 和内存布局向 D 发起 WRITE。</li>
+</ol>
+<p>目标地址不是单个指针，而是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D layer base + D block ID * block length + head/token offset</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-vLLM：D-READ">3.2 vLLM：D READ</h4>
+<p>vLLM NixlConnector 默认由 Proxy 把 P 的 engine、地址和 block IDs 转交给 D，P/D workers 再交换 <code>NixlAgentMetadata</code> 注册内存。</p>
+<p>D 分配本地 blocks 后，由 <code>NixlConnectorWorker._read_blocks()</code> 发起 READ。</p>
+<h3 id="四、并行配置下如何选-P-rank-D-rank">四、并行配置下如何选 <code>(P rank, D rank)</code></h3>
+<p>一个 rank 可以由一组坐标唯一确定：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(service instance, attention dp rank, cp rank, attention tp rank, pp rank)</span><br></pre></td></tr></table></figure>
+<p><strong>选边就是逐维度确定这组坐标，并算出每条边搬运哪一段 KV。</strong> 各维度的作用可以分工来看：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>决定什么</th>
+<th>对边的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务副本 + attention DP</td>
+<td>请求落到哪个 engine、哪个 DP worker</td>
+<td>先把范围缩小到一个具体的 rank 网格</td>
+</tr>
+<tr>
+<td>attention TP</td>
+<td>KV head 怎么切分</td>
+<td>决定<strong>边的条数</strong>和每条边的 <strong>head 切片</strong></td>
+</tr>
+<tr>
+<td>CP</td>
+<td>谁来发送完整 KV</td>
+<td>默认只有 CP rank 0 参与；可选让各 CP rank 分摊</td>
+</tr>
+<tr>
+<td>PP</td>
+<td>KV 按 layer 切分</td>
+<td>决定每条边搬运<strong>哪些 layer</strong></td>
+</tr>
+</tbody>
+</table>
+<p>下面按这个顺序展开。约定：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P = prefill attn_tp_size</span><br><span class="line">D = decode  attn_tp_size</span><br></pre></td></tr></table></figure>
+<p>异构 attention TP 映射要求 P、D 之间存在实现支持的整除关系（<code>P | D</code> 或 <code>D | P</code>）。</p>
+<p>两个贯穿全篇的计数器：</p>
+<ul>
+<li><code>required_dst_info_num</code>：一个 P rank 要等多少个 D rank 注册后才能开始发送。</li>
+<li><code>required_prefill_response_num</code>：一个 D rank 要等多少个 P rank 完成后，本地 KV 才算齐。</li>
+</ul>
+<h4 id="4-1-服务副本与-attention-DP">4.1 服务副本与 attention DP</h4>
+<p>选边前要先经过两层定位：</p>
+<ul>
+<li><strong>服务副本</strong>（部署层）：Router 在多个副本间做负载均衡，选副本确定目标 engine。</li>
+<li><strong>attention DP</strong>（engine 内）：多个 DP worker 处理<strong>不同的请求</strong>，选完副本后还要确定请求落到哪个 DP rank。</li>
+</ul>
+<p>关键点：<strong>attention DP 分的是请求，不是单条请求的 KV。</strong> 每条请求在 P、D 两侧各自被路由到<strong>一个</strong> DP worker，之后 TP/CP/PP 的建边都发生在这一对选定的 worker 内部。所以 DP 影响的是并发请求数（吞吐），而不是一条边怎么切——即便两侧 <code>attn_dp_size</code> 不同也没关系，各自独立选一个 worker 即可，不会把同一条请求的 KV 拆到多个 DP worker 上传输。</p>
+<h4 id="4-2-attention-TP">4.2 attention TP</h4>
+<p>SGLang 的 rank 映射只比较两侧的 <code>attn_tp_size</code>，即一个 attention DP/CP group 内实际参与 attention head 和 KV head 切分的 rank 数。本文提到的 TP 均指 attention TP。按 P、D 的整除关系分三种情况：</p>
+<p><strong>① P = D：一对一</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P0 -&gt; D0</span><br><span class="line">P1 -&gt; D1</span><br></pre></td></tr></table></figure>
+<p>两侧 head 切分方式相同，每个 D rank 直接接收对应 P rank 的整份本地 KV shard，无需再切 head。</p>
+<p><strong>② D &gt; P：一个 P 对多个 D</strong>（例如 <code>P=1, D=2</code>）</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P0 -&gt; D0   前半部分 heads</span><br><span class="line">P0 -&gt; D1   后半部分 heads</span><br></pre></td></tr></table></figure>
+<p>P0 持有全部 heads，要拆给两个 D。SGLang push 时 P0 向两个 D 写不同切片；vLLM pull 时两个 D 各自从 P0 读不同切片。P0 需先收齐两个 D 的目标 block 信息（<code>required_dst_info_num = 2</code>）。</p>
+<p><strong>③ P &gt; D：多个 P 对一个 D</strong>（例如 <code>P=2, D=1</code>）</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P0 --head slice 0--&gt; D0</span><br><span class="line">P1 --head slice 1--&gt; D0</span><br></pre></td></tr></table></figure>
+<p>D0 需要完整 KV，而每个 P 只持有一部分 heads，所以要等两条边都完成（<code>required_prefill_response_num = 2</code>）。</p>
+<p><strong>head 偏移</strong>：<code>P &gt; D</code> 时，每个 P rank 把自己的本地 heads 写入 D rank 中不同的连续位置；<code>D &gt; P</code> 时，多个 D ranks 分别从同一个 P rank 中取不同的 head 子区间。这个偏移就是第六节地址公式里的 <code>head offset</code>。</p>
+<h4 id="4-3-CP：默认只由一个-rank-发送">4.3 CP：默认只由一个 rank 发送</h4>
+<p>CP 切分上下文计算，但不代表每个 CP rank 的 KV pool 只保存一段序列。当前 Dense MHA 路径会 all-gather K/V，把完整 KV 写入每个 CP rank，因此默认由 <strong>CP rank 0</strong> 发送就能拿到完整数据——选边时其余 CP rank 可以忽略。</p>
+<p>打开 <code>SGLANG_DISAGGREGATION_ALL_CP_RANKS_TRANSFER</code> 后，各 CP ranks 通过 <code>filter_kv_indices_for_cp_rank()</code> 分担不同 pages，D 需等所有参与者完成。它主要用于把传输带宽摊到多个 rank 上。</p>
+<h4 id="4-4-PP：按-layer-切分">4.4 PP：按 layer 切分</h4>
+<p>PP 按 layer 切分 KV，因此它决定每条边搬运<strong>哪些 layer</strong>：</p>
+<ul>
+<li>P、D 的 PP size 相等时，对应 stages 一对一传输，各自搬自己那段 layers。</li>
+<li><code>D PP=1, P PP&gt;1</code> 时，单个 D 要从所有 P stages 接收不同 layers，<code>required_prefill_response_num</code> 相应乘上 P 的 PP size。</li>
+</ul>
+<p>注意 PP 与 attention TP 是<strong>正交</strong>的：先按 PP 定「哪些 layer」，再按 TP 定「哪些 head」，两者叠加后才是一条边真正搬运的 KV 切片。</p>
+<h3 id="五、具体例子">五、具体例子</h3>
+<p>把上面几个维度叠在一起，看一条请求怎么落到具体的边。假设：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P 实例：attn_tp_size = 2                      → 2 个 rank</span><br><span class="line">D 实例：attn_tp_size = 1，attn_dp_size = 4    → 4 个 DP worker，各 1 个 rank</span><br></pre></td></tr></table></figure>
+<p>P 侧两个 rank：<code>P0</code>（head slice 0）、<code>P1</code>（head slice 1）。</p>
+<p>D 侧有 4 个 attention DP worker，每个 worker 内部 <code>attn_tp_size=1</code>，即单个 rank。逐维度解析：</p>
+<ul>
+<li><strong>DP / 副本</strong>：请求先路由到某个 P 副本、某个 D 副本。D 侧 4 个 DP worker 处理不同请求，本请求只落到其中<strong>一个</strong>，记为 <code>D0</code>。另外 3 个 worker 服务别的并发请求，与本条边无关。</li>
+<li><strong>attention TP</strong>：<code>P=2 &gt; D=1</code>，属于「多 P 对一 D」，<code>D0</code> 要凑齐两个 head 切片（<code>P0</code> → slice 0，<code>P1</code> → slice 1）。</li>
+<li><strong>PP / CP</strong>：<code>pp_size=1</code>、CP 未开启，都不切分，忽略。</li>
+</ul>
+<p>于是本请求只建 <strong>2 条边</strong>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P0 → D0   head slice 0 , 全部 layers</span><br><span class="line">P1 → D0   head slice 1 , 全部 layers</span><br></pre></td></tr></table></figure>
+<p>其中 head slice 决定地址公式里的 <code>head offset</code>。<code>D0</code> 的 <code>required_prefill_response_num = 2</code>，两条边都完成后它才拼出完整 KV，可以开始 decode。</p>
+<h3 id="六、传输前的-rank-内合并：staging">六、传输前的 rank 内合并：staging</h3>
+<p>正常情况下，每条都是整页大块，RDMA scatter-gather 应付得很轻松。只有当异构 attention TP 需要按 head 切片、descriptor 碎成小块时，清单才会长到拖垮传输。</p>
+<h4 id="6-1-零散的来源">6.1 零散的来源</h4>
+<p>异构 attention TP（P≠D）下，一条边只需要页内的一个 <strong>head 子区间</strong>：取某几个 head 时，每个 token 的 head slice 之间都隔着完整的 head stride，无法整页连续拷贝。于是只能<strong>对页内每个 token 各下一条 descriptor</strong>，descriptor 数增加。descriptor 越多，传输前的地址构造、注册和下发开销越大；prompt 越长、token 越多，这部分开销越大，直接抬高 TTFT。</p>
+<h4 id="6-2-staging">6.2 staging</h4>
+<p>staging 的思路是<strong>先在本地把零散数据攒成一大块连续内存，再走少量大块传输</strong>，用一次显存内的重排换掉成千上万次网络小传输。</p>
+<p>三步：</p>
+<ol>
+<li><strong>gather（P 侧）</strong>：P 用一个 GPU kernel 把散落在各 page 里的 head slices 拷进一块连续的 staging buffer，让它们在显存里首尾相接。</li>
+<li><strong>bulk 传输</strong>：P/D 之间只对这块连续 buffer 做少量大块 READ/WRITE，带宽打满、descriptor 极少。</li>
+<li><strong>scatter（D 侧）</strong>：D 收到连续 buffer 后，再用 kernel 把数据散回自己 paged KV 的各个 block 里。</li>
+</ol>
+<p>这里的 gather/scatter 是<strong>单个 rank 在自己显存内部的数据重排</strong>（一次本地 kernel 拷贝），不是 all-gather 那种跨 rank 的 collective 通信。</p>
+<p>对应 SGLang 源码 common/staging_buffer.py：staging buffer 与重排 kernel。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/KV-%E4%BC%A0%E8%BE%93/">KV 传输</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/07/09/Work/vllm%E8%B0%83%E5%BA%A6/"
+                                   title="vLLM V1调度"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">vLLM V1调度</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9E%8B%EF%BC%9Arank-%E4%BC%A0%E8%BE%93%E8%BE%B9"><span class="nav-text">一、核心模型：rank 传输边</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81KV-%E5%9C%A8%E6%98%BE%E5%AD%98%E9%87%8C%E6%80%8E%E4%B9%88%E5%AD%98%EF%BC%9A%E5%93%AA%E4%BA%9B%E7%BB%B4%E5%BA%A6%E8%BF%9E%E7%BB%AD"><span class="nav-text">二、KV 在显存里怎么存：哪些维度连续</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9C%B0%E5%9D%80%E5%92%8C-block-%E6%98%A0%E5%B0%84%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B"><span class="nav-text">三、地址和 block 映射如何建立</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-SGLang%EF%BC%9AP-WRITE"><span class="nav-text">3.1 SGLang：P WRITE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-vLLM%EF%BC%9AD-READ"><span class="nav-text">3.2 vLLM：D READ</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%B9%B6%E8%A1%8C%E9%85%8D%E7%BD%AE%E4%B8%8B%E5%A6%82%E4%BD%95%E9%80%89-P-rank-D-rank"><span class="nav-text">四、并行配置下如何选 (P rank, D rank)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E6%9C%8D%E5%8A%A1%E5%89%AF%E6%9C%AC%E4%B8%8E-attention-DP"><span class="nav-text">4.1 服务副本与 attention DP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-attention-TP"><span class="nav-text">4.2 attention TP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-CP%EF%BC%9A%E9%BB%98%E8%AE%A4%E5%8F%AA%E7%94%B1%E4%B8%80%E4%B8%AA-rank-%E5%8F%91%E9%80%81"><span class="nav-text">4.3 CP：默认只由一个 rank 发送</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-PP%EF%BC%9A%E6%8C%89-layer-%E5%88%87%E5%88%86"><span class="nav-text">4.4 PP：按 layer 切分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%85%B7%E4%BD%93%E4%BE%8B%E5%AD%90"><span class="nav-text">五、具体例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%BC%A0%E8%BE%93%E5%89%8D%E7%9A%84-rank-%E5%86%85%E5%90%88%E5%B9%B6%EF%BC%9Astaging"><span class="nav-text">六、传输前的 rank 内合并：staging</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-%E9%9B%B6%E6%95%A3%E7%9A%84%E6%9D%A5%E6%BA%90"><span class="nav-text">6.1 零散的来源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-staging"><span class="nav-text">6.2 staging</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9E%8B%EF%BC%9Arank-%E4%BC%A0%E8%BE%93%E8%BE%B9"><span class="nav-text">一、核心模型：rank 传输边</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81KV-%E5%9C%A8%E6%98%BE%E5%AD%98%E9%87%8C%E6%80%8E%E4%B9%88%E5%AD%98%EF%BC%9A%E5%93%AA%E4%BA%9B%E7%BB%B4%E5%BA%A6%E8%BF%9E%E7%BB%AD"><span class="nav-text">二、KV 在显存里怎么存：哪些维度连续</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9C%B0%E5%9D%80%E5%92%8C-block-%E6%98%A0%E5%B0%84%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B"><span class="nav-text">三、地址和 block 映射如何建立</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-SGLang%EF%BC%9AP-WRITE"><span class="nav-text">3.1 SGLang：P WRITE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-vLLM%EF%BC%9AD-READ"><span class="nav-text">3.2 vLLM：D READ</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%B9%B6%E8%A1%8C%E9%85%8D%E7%BD%AE%E4%B8%8B%E5%A6%82%E4%BD%95%E9%80%89-P-rank-D-rank"><span class="nav-text">四、并行配置下如何选 (P rank, D rank)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E6%9C%8D%E5%8A%A1%E5%89%AF%E6%9C%AC%E4%B8%8E-attention-DP"><span class="nav-text">4.1 服务副本与 attention DP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-attention-TP"><span class="nav-text">4.2 attention TP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-CP%EF%BC%9A%E9%BB%98%E8%AE%A4%E5%8F%AA%E7%94%B1%E4%B8%80%E4%B8%AA-rank-%E5%8F%91%E9%80%81"><span class="nav-text">4.3 CP：默认只由一个 rank 发送</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-PP%EF%BC%9A%E6%8C%89-layer-%E5%88%87%E5%88%86"><span class="nav-text">4.4 PP：按 layer 切分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%85%B7%E4%BD%93%E4%BE%8B%E5%AD%90"><span class="nav-text">五、具体例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%BC%A0%E8%BE%93%E5%89%8D%E7%9A%84-rank-%E5%86%85%E5%90%88%E5%B9%B6%EF%BC%9Astaging"><span class="nav-text">六、传输前的 rank 内合并：staging</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-%E9%9B%B6%E6%95%A3%E7%9A%84%E6%9D%A5%E6%BA%90"><span class="nav-text">6.1 零散的来源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-staging"><span class="nav-text">6.2 staging</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+
+</body>
+</html>
