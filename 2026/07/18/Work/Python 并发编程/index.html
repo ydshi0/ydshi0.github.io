@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="eric">
+    
+    <title>
+        
+            Python 并发编程 |
+        
+        introspection
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+        
+            
+                
+<link rel="stylesheet" href="/css/custom.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null},"math":{"enable":true,"specific":false,"engine":"mathjax"}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"icp":{"enable":false,"record_code":null,"url":null},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               introspection
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                TAGS
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                            TAGS
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python 并发编程
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">eric</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-07-18</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Sat Jul 18 2026 21:09:16 GMT+0800">2026-07-18</span>
+                </span>
+            
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p><strong>核心组件</strong></p>
+<p>Python 主要通过协程、线程和进程实现并发。选择方案时，先判断任务主要在等待 I/O，还是消耗 CPU。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>常用方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网络、RPC、文件等 I/O</td>
+<td><code>asyncio</code>、线程池</td>
+</tr>
+<tr>
+<td>会释放 GIL 的 C/C++ 扩展</td>
+<td>线程池</td>
+</tr>
+<tr>
+<td>纯 Python CPU 密集计算</td>
+<td>多进程</td>
+</tr>
+<tr>
+<td>线程间传递任务</td>
+<td><code>queue.Queue</code></td>
+</tr>
+</tbody>
+</table>
+<p>下文默认讨论启用 GIL 的常规 CPython。</p>
+<h3 id="1-并发基础与-GIL">1. 并发基础与 GIL</h3>
+<ul>
+<li><strong>并发</strong>：多个任务在同一时间段内交替推进。</li>
+<li><strong>并行</strong>：多个任务在同一时刻真正同时执行。</li>
+<li><strong>同步</strong>：调用方等待操作完成后继续。</li>
+<li><strong>异步</strong>：操作发起后，调用方可以先处理其他任务。</li>
+<li><strong>阻塞</strong>：执行线程因为等待而无法处理其他任务。</li>
+</ul>
+<p>进程拥有独立地址空间；同一进程内的线程共享内存；协程通常由单个线程中的事件循环调度。</p>
+<p>常规 CPython 使用全局解释器锁 GIL，同一时刻通常只有一个线程执行 Python 字节码，因此多线程难以加速纯 Python CPU 密集计算。阻塞 I/O 和部分 C/C++ 扩展会在执行期间释放 GIL，所以多线程仍适合 I/O 或底层计算任务。无论是否启用 GIL，共享可变状态都需要明确的同步协议。</p>
+<p><strong>死锁</strong></p>
+<p>死锁是多个线程相互等待对方持有的资源，导致所有线程都无法继续。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">线程 A：持有 Lock 1，等待 Lock 2</span><br><span class="line">线程 B：持有 Lock 2，等待 Lock 1</span><br></pre></td></tr></table></figure>
+<p>避免死锁的常见方法是统一多把锁的获取顺序，并避免在线程持锁时执行耗时或可能阻塞的操作。</p>
+<h3 id="2-竞态与线程同步">2. 竞态与线程同步</h3>
+<p>同一进程内的线程共享 Python 对象、模块状态和文件描述符，但各自拥有独立的调用栈和执行位置。</p>
+<p><code>start()</code> 启动线程，<code>join()</code> 等待线程结束。</p>
+<p><strong>什么是竞态条件</strong></p>
+<p>多个线程并发访问共享可变状态时，如果程序结果取决于不可预测的执行顺序，就出现了<strong>竞态条件（race condition）</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> inventory &gt; <span class="number">0</span>:</span><br><span class="line">    inventory -= <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>两个线程可能同时通过检查，随后都扣减库存。“检查 + 扣减”必须作为一个整体执行，这段不能被其他线程穿插的代码称为<strong>临界区</strong>。GIL 只约束 Python 字节码的执行，不能保证多步业务操作的原子性。</p>
+<p><strong>Lock：保证临界区不被穿插</strong></p>
+<p>解决竞态的关键是找出必须整体执行的操作，并让所有相关线程使用同一把 Lock。例如，转账的扣款和入账必须位于同一临界区：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> account_lock:</span><br><span class="line">    source.balance -= amount</span><br><span class="line">    target.balance += amount</span><br></pre></td></tr></table></figure>
+<p>这样，其他遵循相同加锁协议的线程只能看到转账前或转账后的状态。临界区应尽量短，不要在锁内执行 RPC、磁盘 I/O 或 <code>Future.result()</code>；使用多把锁时应保持一致的获取顺序，避免死锁。</p>
+<p><strong>Condition：等待共享状态变化</strong></p>
+<p>Lock 只能控制谁可以进入临界区。如果线程必须等到某个状态成立，反复加锁检查会形成忙等。Condition 把一把 Lock 和一组等待者组合起来，使线程可以释放锁并休眠。下面的消费者等待 <code>items</code> 非空，生产者写入数据后通知消费者重新检查：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Condition</span><br><span class="line"></span><br><span class="line">items = []</span><br><span class="line">condition = Condition()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">produce</span>(<span class="params">item</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">with</span> condition:</span><br><span class="line">        items.append(item)</span><br><span class="line">        condition.notify()  <span class="comment"># 状态已变化，唤醒一个等待者</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">consume</span>():</span><br><span class="line">    <span class="keyword">with</span> condition:</span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">len</span>(items) == <span class="number">0</span>:</span><br><span class="line">            condition.wait()</span><br><span class="line">        item = items.pop(<span class="number">0</span>)  <span class="comment"># 取出并删除第一个元素</span></span><br><span class="line">        <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure>
+<p>执行过程如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">消费者发现 items 为空</span><br><span class="line">-&gt; 消费者调用 wait()：释放 Lock，并阻塞在这次调用上</span><br><span class="line">-&gt; 生产者获得 Lock，写入数据并调用 notify()</span><br><span class="line">-&gt; 消费者被唤醒，但此时生产者仍持有 Lock</span><br><span class="line">-&gt; 生产者退出 with，消费者重新获得 Lock</span><br><span class="line">-&gt; wait() 返回，消费者回到 while 再次检查 items</span><br></pre></td></tr></table></figure>
+<p>因此，<code>wait()</code> 会暂停当前线程；线程被通知并重新获得 Lock 后，<code>wait()</code> 才会返回，代码再从调用处继续执行。<code>notify()</code> 只通知等待线程“共享状态可能变了”，不会立即释放 Lock 或直接交出执行权。这里必须使用 <code>while</code> 而不是 <code>if</code> 再次检查 <code>items</code>，因为数据可能已被其他消费者取走，线程也可能在条件并未满足时被唤醒。</p>
+<h3 id="3-ThreadPoolExecutor">3. ThreadPoolExecutor</h3>
+<p><code>ThreadPoolExecutor</code> 在同一进程内维护有限数量的 worker thread，避免为每个任务重复创建和销毁线程。</p>
+<p>创建线程池后，可以通过 <code>submit()</code> 提交单个任务：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">work</span>(<span class="params">value: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="keyword">return</span> value * value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">4</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    future = executor.submit(work, <span class="number">10</span>)</span><br><span class="line">    result = future.result()</span><br></pre></td></tr></table></figure>
+<p><code>submit(fn, *args)</code> 把任务交给线程池，并立即返回表示执行结果的 Future；<code>future.result()</code> 在结果尚未就绪时会阻塞当前调用线程。下一节会详细介绍 Future。</p>
+<p>批量处理时可以使用 <code>map(fn, iterable)</code>。任务可以并发执行，但结果会按输入顺序产出。</p>
+<p><strong>任务如何在线程池中流转</strong></p>
+<p>以 CPython 的实现为例，线程池的核心数据流是（<code>WorkItem</code> 属于实现细节）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">submit(fn, args)</span><br><span class="line">-&gt; 创建 Future 和 WorkItem</span><br><span class="line">-&gt; WorkItem 放入任务队列</span><br><span class="line">-&gt; 空闲 worker 取出 WorkItem</span><br><span class="line">-&gt; worker 执行 fn(*args)</span><br><span class="line">-&gt; Future 保存返回值或异常并唤醒等待者</span><br></pre></td></tr></table></figure>
+<p>任务通过 Queue 从提交线程流向 worker，结果通过 Future 从 worker 返回调用方。<code>max_workers=N</code> 只表示最多存在 N 个 worker，不代表 N 个纯 Python 任务能同时执行：</p>
+<ul>
+<li>纯 Python CPU 任务仍受传统 GIL 限制。</li>
+<li>阻塞 I/O 或释放 GIL 的底层调用可以在多个线程间重叠。</li>
+</ul>
+<h3 id="4-Future：跨线程结果同步">4. Future：跨线程结果同步</h3>
+<p>本节的 Future 指 <code>concurrent.futures.Future</code>。它由 <code>submit()</code> 返回，是线程池任务的结果句柄，封装了执行状态、返回值、异常、取消和完成通知。Future 只能完成一次，也不负责保护任务内部访问的其他共享数据。</p>
+<p><strong>状态与结果</strong></p>
+<p>Future 的核心状态如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PENDING -&gt; RUNNING -&gt; FINISHED(result)</span><br><span class="line">                   -&gt; FINISHED(exception)</span><br><span class="line">PENDING -&gt; CANCELLED</span><br></pre></td></tr></table></figure>
+<p>调用 <code>result()</code> 时，Future 未完成会让当前线程通过 Condition 休眠，而不是忙等；任务成功则返回结果，任务失败则在调用 <code>result()</code> 的线程中重新抛出异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">future = executor.submit(parse_request, request)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = future.result(timeout=<span class="number">2</span>)</span><br><span class="line"><span class="keyword">except</span> TimeoutError:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;等待超时，但后台任务可能仍在运行&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> exc:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;worker 执行失败: <span class="subst">&#123;exc&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;执行结果: <span class="subst">&#123;value&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p><code>result(timeout)</code> 超时只表示当前线程不再等待，不会停止后台任务。</p>
+<p><strong>取消</strong></p>
+<p><code>cancel()</code> 只能取消尚未开始的任务：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cancel 先把 PENDING -&gt; CANCELLED：worker 不再执行任务</span><br><span class="line">worker 先把 PENDING -&gt; RUNNING：cancel 失败</span><br></pre></td></tr></table></figure>
+<h3 id="5-asyncio：单线程上的协作式并发">5. asyncio：单线程上的协作式并发</h3>
+<p>asyncio 通常只使用一个事件循环线程。多个任务并不是同时执行 Python 代码，而是在某个任务等待 I/O 时，让事件循环运行其他任务。</p>
+<p><strong>一个完整例子</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">fetch</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;start <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)  <span class="comment"># 暂停当前 Task，不阻塞事件循环线程</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;done <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>() -&gt; <span class="literal">None</span>:</span><br><span class="line">    task_a = asyncio.create_task(fetch(<span class="string">&quot;a&quot;</span>))</span><br><span class="line">    task_b = asyncio.create_task(fetch(<span class="string">&quot;b&quot;</span>))</span><br><span class="line"></span><br><span class="line">    result_a = <span class="keyword">await</span> task_a</span><br><span class="line">    result_b = <span class="keyword">await</span> task_b</span><br><span class="line">    <span class="built_in">print</span>(result_a, result_b)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<p>这段代码的执行过程是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">asyncio.run(main()) 创建事件循环，并把 main 包装成 Task</span><br><span class="line">-&gt; main 创建 task_a 和 task_b，把它们加入待运行队列</span><br><span class="line">-&gt; main 执行 await task_a：main 暂停，把控制权交回事件循环</span><br><span class="line">-&gt; 事件循环从待运行队列取出 task_a</span><br><span class="line">-&gt; task_a 执行 await asyncio.sleep(1)：task_a 暂停，把控制权交回事件循环</span><br><span class="line">-&gt; 事件循环继续从待运行队列取出 task_b</span><br><span class="line">-&gt; task_b 执行 await asyncio.sleep(1)：task_b 也暂停</span><br><span class="line">-&gt; 定时器到期后，task_a 和 task_b 恢复并完成</span><br><span class="line">-&gt; main 取得两个结果并结束</span><br></pre></td></tr></table></figure>
+<p>暂停 task_a 不等于暂停事件循环线程。task_a 执行 <code>await asyncio.sleep(1)</code> 后，只保存自己的执行位置并退出本轮运行；事件循环仍在工作，可以选择另一个处于 READY 状态的 Task。当 task_b 也等待定时器后，暂时没有 READY Task，事件循环才会等待最近的定时器或 I/O 事件。事件就绪后，相应 Task 会重新变成 READY。</p>
+<p>虽然代码先 <code>await task_a</code>，两个任务仍然并发等待，因为它们已经在此之前都通过 <code>create_task()</code> 提交给事件循环。</p>
+<p><strong>串行、并发与阻塞边界</strong></p>
+<p>直接连续 <code>await</code> 两个协程是串行执行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">result_a = <span class="keyword">await</span> fetch(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">result_b = <span class="keyword">await</span> fetch(<span class="string">&quot;b&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>要形成并发，必须先创建多个 Task，如本节开头的完整例子。<code>await</code> 也不一定切换任务：只有等待对象尚未完成时，当前 Task 才会暂停。</p>
+<p>事件循环不会抢占正在运行的 Python 代码。纯 Python 长计算、<code>time.sleep()</code> 和同步 RPC 都不会把控制权交还事件循环，因此会阻塞所有 Task。asyncio 提升的是 I/O 等待型任务的并发度，不是单个任务的计算速度。</p>
+<h3 id="6-Queue：在线程间交接任务">6. Queue：在线程间交接任务</h3>
+<p><code>queue.Queue</code> 是线程安全的任务队列。生产者通过 <code>put()</code> 放入任务，消费者通过 <code>get()</code> 取走任务；队列为空时，<code>get()</code> 会让消费者休眠，直到有新任务到来。</p>
+<p><strong>一个消费者如何工作</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> queue <span class="keyword">import</span> Queue</span><br><span class="line"></span><br><span class="line">STOP = <span class="built_in">object</span>()</span><br><span class="line">tasks = Queue(maxsize=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">consumer</span>() -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        item = tasks.get()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> item <span class="keyword">is</span> STOP:</span><br><span class="line">                <span class="keyword">return</span>  <span class="comment"># 退出 consumer()；以它为 target 的线程随之结束</span></span><br><span class="line">            process(item)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            tasks.task_done()</span><br></pre></td></tr></table></figure>
+<p><code>get()</code> 表示任务被取走，不表示任务已经处理完成；因此无论成功、失败还是收到 <code>STOP</code>，都要在 <code>finally</code> 中调用 <code>task_done()</code>。调用方可以使用 <code>tasks.join()</code> 等待所有已放入任务都调用完 <code>task_done()</code>。</p>
+<p><code>STOP</code> 是一条控制消息。消费者收到它后退出自己的消费循环和线程，不是退出整个 Python 进程。有多少个消费者线程，通常就放入多少个 <code>STOP</code>，让每个线程都有机会收到停止消息。</p>
+<p><strong>限制排队数量</strong></p>
+<p>无界队列在生产速度长期高于消费速度时，会不断积压任务，增加内存占用和排队延迟。<code>Queue(maxsize=100)</code> 将等待处理的任务限制在 100 个：队列满时，默认的 <code>put()</code> 会阻塞生产者；使用 <code>put(..., block=False)</code> 则会抛出 <code>queue.Full</code>。</p>
+<h3 id="7-multiprocessing-与进程间通信">7. multiprocessing 与进程间通信</h3>
+<p>多进程适合纯 Python CPU 密集任务。每个进程拥有独立的虚拟地址空间和解释器，因此可以利用多个 CPU 核；代价是父子进程中的普通 Python 对象彼此独立，必须显式通信。</p>
+<p><strong>用 Queue 传递任务和结果</strong></p>
+<p><code>multiprocessing.Queue</code> 是最常用的 IPC 方式。发送对象时，Python 会将对象序列化为字节，通过操作系统的 pipe 传输，再在接收进程中反序列化为新对象：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">发送进程的 Python 对象</span><br><span class="line">-&gt; pickle 序列化</span><br><span class="line">-&gt; pipe 等内核 IPC</span><br><span class="line">-&gt; unpickle 重建为接收进程的新对象</span><br></pre></td></tr></table></figure>
+<p>下面是一个父进程提交任务、子进程返回结果、最后退出并被回收的最小示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Queue</span><br><span class="line"></span><br><span class="line">STOP = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worker</span>(<span class="params">tasks: Queue, results: Queue</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        value = tasks.get()</span><br><span class="line">        <span class="keyword">if</span> value <span class="keyword">is</span> STOP:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        results.put(value * value)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    tasks = Queue()</span><br><span class="line">    results = Queue()</span><br><span class="line">    process = Process(target=worker, args=(tasks, results))</span><br><span class="line">    process.start()</span><br><span class="line"></span><br><span class="line">    tasks.put(<span class="number">7</span>)</span><br><span class="line">    tasks.put(STOP)</span><br><span class="line">    <span class="built_in">print</span>(results.get())  <span class="comment"># 49</span></span><br><span class="line"></span><br><span class="line">    process.join()</span><br></pre></td></tr></table></figure>
+<p><code>if __name__ == &quot;__main__&quot;</code> 保证只有父进程负责创建 worker 和协调任务。通过 Queue 传递的函数参数和消息通常必须能够 pickle。</p>
+<p><strong>选择通信方式</strong></p>
+<table>
+<thead>
+<tr>
+<th>本地 IPC 方式</th>
+<th>适用场景</th>
+<th>代价或约束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Queue</code> / <code>Pipe</code></td>
+<td>常规任务、结果和控制消息</td>
+<td>对象需要序列化和复制</td>
+</tr>
+<tr>
+<td><code>shared_memory</code></td>
+<td>大型二进制数组，想减少复制</td>
+<td>仍需自行处理同步和清理</td>
+</tr>
+</tbody>
+</table>
+<p>共享内存只解决“数据放在哪里”，不解决谁能读写、何时完成和异常后的清理；仍需配合 Lock、Semaphore 等同步协议。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/07/10/Work/PD%E5%88%86%E7%A6%BB_KV%E4%BC%A0%E8%BE%93/"
+                                   title="PD 分离的 KV 传输"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PD 分离的 KV 传输</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E4%B8%8E-GIL"><span class="nav-text">1. 并发基础与 GIL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AB%9E%E6%80%81%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-text">2. 竞态与线程同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ThreadPoolExecutor"><span class="nav-text">3. ThreadPoolExecutor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Future%EF%BC%9A%E8%B7%A8%E7%BA%BF%E7%A8%8B%E7%BB%93%E6%9E%9C%E5%90%8C%E6%AD%A5"><span class="nav-text">4. Future：跨线程结果同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-asyncio%EF%BC%9A%E5%8D%95%E7%BA%BF%E7%A8%8B%E4%B8%8A%E7%9A%84%E5%8D%8F%E4%BD%9C%E5%BC%8F%E5%B9%B6%E5%8F%91"><span class="nav-text">5. asyncio：单线程上的协作式并发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Queue%EF%BC%9A%E5%9C%A8%E7%BA%BF%E7%A8%8B%E9%97%B4%E4%BA%A4%E6%8E%A5%E4%BB%BB%E5%8A%A1"><span class="nav-text">6. Queue：在线程间交接任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-multiprocessing-%E4%B8%8E%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-text">7. multiprocessing 与进程间通信</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E4%B8%8E-GIL"><span class="nav-text">1. 并发基础与 GIL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AB%9E%E6%80%81%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-text">2. 竞态与线程同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ThreadPoolExecutor"><span class="nav-text">3. ThreadPoolExecutor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Future%EF%BC%9A%E8%B7%A8%E7%BA%BF%E7%A8%8B%E7%BB%93%E6%9E%9C%E5%90%8C%E6%AD%A5"><span class="nav-text">4. Future：跨线程结果同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-asyncio%EF%BC%9A%E5%8D%95%E7%BA%BF%E7%A8%8B%E4%B8%8A%E7%9A%84%E5%8D%8F%E4%BD%9C%E5%BC%8F%E5%B9%B6%E5%8F%91"><span class="nav-text">5. asyncio：单线程上的协作式并发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Queue%EF%BC%9A%E5%9C%A8%E7%BA%BF%E7%A8%8B%E9%97%B4%E4%BA%A4%E6%8E%A5%E4%BB%BB%E5%8A%A1"><span class="nav-text">6. Queue：在线程间交接任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-multiprocessing-%E4%B8%8E%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-text">7. multiprocessing 与进程间通信</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+
+</body>
+</html>

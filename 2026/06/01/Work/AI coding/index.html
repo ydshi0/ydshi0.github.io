@@ -251,7 +251,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Mon Jul 06 2026 16:00:31 GMT+0800">2026-07-06</span>
+                    <span class="datetime" data-updated="Sat Jul 18 2026 21:07:27 GMT+0800">2026-07-18</span>
                 </span>
             
         
@@ -290,18 +290,25 @@
                     
 
                     
-                         <hr>
-<h3 id="前言">前言</h3>
-<p>一定要尽可能用上最新的模型，多和AI聊天</p>
+                         <h3 id="前言">前言</h3>
+<p>尽量用新模型</p>
+<p>agent比网页端效果好很多</p>
+<p>和AI讨论清楚方案后再执行，效果会更好，可以把方案写在md文档中</p>
+<p>VScode还是非常好用</p>
+<h3 id="Codex">Codex</h3>
+<p>VScode插件很好用，只有插件才能用rewind功能</p>
+<p>VScode 插件bug<br>
+日志logs_2.sqlite 膨胀，并被插件 Codex 与多个 CLI 进程共同占用。需要停止冲突进程并清理日志库。</p>
+<p>对话迁移主要就是jsonl历史文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/permissions       //切换权限</span><br><span class="line">~/.codex/archived_sessions       //归档对话</span><br><span class="line">~/.codex/sessions</span><br></pre></td></tr></table></figure>
 <h3 id="Claude-code">Claude code</h3>
-<p>CC比网页端效果好很多</p>
-<p>让CC先说方案，讨论清楚方案后再执行，效果会更好，可以把方案写在md文档中</p>
-<p>~/.claude/settings.json    参数配置文件，包括API key等</p>
-<p>~/.claude/projects  上下文历史，需要手动删除</p>
 <p>使用auto mode，不需要一直确认yes</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">claude --model claude-opus-4-7   //切换模型，如果切换不了考虑更新CC版本</span><br><span class="line">/resume 切换上下文历史</span><br><span class="line">/rewind 回退对话</span><br><span class="line">claude --permission-mode  bypassPermissions  // 最高权限</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>vscode CC插件效果很好，可以给会话重命名</p>
-<p>vscode使用分屏，把claude单独放在右侧，方便查找</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">claude --model claude-opus-4-7   //切换模型，如果切换不了考虑更新CC版本</span><br><span class="line">/resume       切换上下文历史</span><br><span class="line">/rewind       回退对话</span><br><span class="line">~/.claude/settings.json    参数配置文件，包括API key等</span><br><span class="line">~/.claude/projects         上下文历史，需要手动删除</span><br></pre></td></tr></table></figure>
+<h3 id="VScode">VScode</h3>
+<p>vscode直接打开/home完整目录，平时不打开侧边文件栏，用ctrl + P搜索文件</p>
+<p>vscode使用分屏，把AI插件单独放在右侧，</p>
+<p>code XXX直接打开文件</p>
+<p>**一定要直接连接到容器，方便很多！**需要在容器中开启sshd，不要用Dev Containers 插件。</p>
 
                     
                 </div>
@@ -386,7 +393,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Claude-code"><span class="nav-text">Claude code</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Codex"><span class="nav-text">Codex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Claude-code"><span class="nav-text">Claude code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VScode"><span class="nav-text">VScode</span></a></li></ol>
     </div>
 </div>
 
@@ -546,7 +553,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Claude-code"><span class="nav-text">Claude code</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Codex"><span class="nav-text">Codex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Claude-code"><span class="nav-text">Claude code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VScode"><span class="nav-text">VScode</span></a></li></ol>
     </div>
 </div>
 
