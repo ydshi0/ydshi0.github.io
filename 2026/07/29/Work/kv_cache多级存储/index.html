@@ -40,10 +40,23 @@
             
         
     
+    <script>
+        (function () {
+            let theme = localStorage.getItem('KEEP-THEME-STATUS');
+            let classname = "";
+            if (!theme || (JSON.parse(theme).isAutoTheme)){
+                classname = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? "dark-mode" : "light-mode";
+            }
+            else{
+                classname = JSON.parse(theme).isDark ? "dark-mode" : "light-mode";
+            }
+            document.documentElement.classList.add(classname);
+        })();
+    </script>
     <script class="keep-theme-configurations">
     const KEEP = window.KEEP || {}
-    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"}
-    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null},"math":{"enable":true,"specific":false,"engine":"mathjax"}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"icp":{"enable":false,"record_code":null,"url":null},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr","custom":{"enable":false,"url":null}},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"record":{"enable":false,"list":[{"code":null,"link":null}]},"site_deploy":{"enable":false,"provider":"github","url":null}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","search_db_path":"keep-search.json","source_data":{},"version":"4.3.0"}
     KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
     KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
     KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
@@ -503,9 +516,9 @@ S_{KV} = 2 \times L \times T \times H_{kv} \times D_h \times B<br>
 </ul>
 <p>这里的 <strong><code>direct</code> 仅指 CPU↔GPU 的 memcpy 路径</strong>，不表示 L3 绕过 L2 直达 GPU。</p>
 <p><code>page_first_direct</code> 也不是无条件更快：它优化的是<strong>每个 copy 的连续性</strong>，不是把整个 prefix 变成一次大 copy。对于跨 
-    <span id="mjx-12cb317">
+    <span id="mjx-056d79f">
       <style>
-      #mjx-12cb317{
+      #mjx-056d79f{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -664,9 +677,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></mjx-assistive-mml></mjx-container>
     </span>
    个 pages、包含 
-    <span id="mjx-88ba4c1">
+    <span id="mjx-20229c6">
       <style>
-      #mjx-88ba4c1{
+      #mjx-20229c6{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -825,9 +838,9 @@ g[data-mml-node="xypic"] path {
       <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 681 683" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi></math></mjx-assistive-mml></mjx-container>
     </span>
    层的 MHA KV，完整搬运仍对应约 
-    <span id="mjx-4b65272">
+    <span id="mjx-e53cfef">
       <style>
-      #mjx-4b65272{
+      #mjx-e53cfef{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
