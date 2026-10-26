@@ -9,7 +9,7 @@
     
     <title>
         
-            GPT充值记录 |
+            GPT使用 |
         
         introspection
     </title>
@@ -232,7 +232,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        GPT充值记录
+                        GPT使用
                     </div>
                 
 
@@ -264,7 +264,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Sun Oct 25 2026 14:27:01 GMT+0800">2026-10-25</span>
+                    <span class="datetime" data-updated="Mon Oct 26 2026 19:41:54 GMT+0800">2026-10-26</span>
                 </span>
             
         
@@ -276,9 +276,6 @@
                 <ul class="post-tag-ul">
                     
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Life/">Life</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/AI/">AI</a></li>
                         
                     
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ChatGPT/">ChatGPT</a></li>
@@ -306,7 +303,24 @@
                     
 
                     
-                         <p>记录一下用安卓手机和招商银行万事达卡订阅 ChatGPT 的流程，方便以后查阅。</p>
+                         <h3 id="本地-Codex-连接远程容器">本地 Codex 连接远程容器</h3>
+<h4 id="1-建立代理链路">1. 建立代理链路</h4>
+<p>本地启动 Clash Verge，打开 TUN 模式，再建立 SSH 反向隧道。以下以本地代理端口 <code>7897</code> 为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh -NT \</span><br><span class="line">  -o ExitOnForwardFailure=<span class="built_in">yes</span> \</span><br><span class="line">  -o ServerAliveInterval=30 \</span><br><span class="line">  -o ServerAliveCountMax=3 \</span><br><span class="line">  -R 127.0.0.1:17897:127.0.0.1:7897 \</span><br><span class="line">  A1</span><br></pre></td></tr></table></figure>
+<p>使用期间保持 SSH 进程运行。</p>
+<p>在容器的 <code>/root/.codex_proxy_env</code> 中保存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&quot;http://127.0.0.1:17897&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&quot;<span class="variable">$http_proxy</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> HTTP_PROXY=<span class="string">&quot;<span class="variable">$http_proxy</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> HTTPS_PROXY=<span class="string">&quot;<span class="variable">$http_proxy</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> ALL_PROXY=<span class="string">&quot;<span class="variable">$http_proxy</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> no_proxy=<span class="string">&quot;127.0.0.1,localhost&quot;</span></span><br><span class="line"><span class="built_in">export</span> NO_PROXY=<span class="string">&quot;<span class="variable">$no_proxy</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p>在 <code>~/.profile</code> 和 <code>~/.bashrc</code> 中加入以下内容，让登录和交互式 shell 自动加载代理</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /root/.codex_proxy_env</span><br></pre></td></tr></table></figure>
+<h4 id="2-配置容器-SSH">2. 配置容器 SSH</h4>
+<p>容器需要开启 SSH 服务，在本地 <code>~/.ssh/config</code> 添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host ydshi_dev</span><br><span class="line">    HostName 192.168.1.101</span><br><span class="line">    User root</span><br><span class="line">    Port 22222</span><br></pre></td></tr></table></figure>
+<h4 id="3-登录并连接-Codex">3. 登录并连接 Codex</h4>
+<p>容器中执行设备代码登录，按提示在浏览器完成授权：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codex login --device-auth</span><br></pre></td></tr></table></figure>
+<p>本地 Codex 在“设置 → 连接”中添加 SSH 别名 <code>ydshi_dev</code>，创建项目时选择该远端设备。</p>
+<h3 id="充值流程">充值流程</h3>
+<p>用安卓手机和招商银行万事达卡订阅 ChatGPT 的流程</p>
 <h4 id="准备与操作">准备与操作</h4>
 <ol>
 <li>准备本人实名认证、能够正常接收短信的手机号。</li>
@@ -333,10 +347,6 @@
                                 
                                     <li class="tag-item border-box">
                                         <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Life/">Life</a>
-                                    </li>
-                                
-                                    <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/AI/">AI</a>
                                     </li>
                                 
                                     <li class="tag-item border-box">
@@ -392,7 +402,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0-Codex-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E5%AE%B9%E5%99%A8"><span class="nav-text">本地 Codex 连接远程容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BB%BA%E7%AB%8B%E4%BB%A3%E7%90%86%E9%93%BE%E8%B7%AF"><span class="nav-text">1. 建立代理链路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8-SSH"><span class="nav-text">2. 配置容器 SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95%E5%B9%B6%E8%BF%9E%E6%8E%A5-Codex"><span class="nav-text">3. 登录并连接 Codex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B"><span class="nav-text">充值流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol></li></ol>
     </div>
 </div>
 
@@ -552,7 +562,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0-Codex-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E5%AE%B9%E5%99%A8"><span class="nav-text">本地 Codex 连接远程容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BB%BA%E7%AB%8B%E4%BB%A3%E7%90%86%E9%93%BE%E8%B7%AF"><span class="nav-text">1. 建立代理链路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8-SSH"><span class="nav-text">2. 配置容器 SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95%E5%B9%B6%E8%BF%9E%E6%8E%A5-Codex"><span class="nav-text">3. 登录并连接 Codex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B"><span class="nav-text">充值流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol></li></ol>
     </div>
 </div>
 
