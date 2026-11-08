@@ -1,60 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="eric">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="Hexo Theme Keep">
+  <meta name="description" content="Hexo Theme Keep">
+  <meta name="author" content="eric">
+  
+  <title>
     
-    <title>
-        
-        introspection
-    </title>
-    
+    introspection
+  </title>
+  
 <link rel="stylesheet" href="/css/style.css">
 
-    
-        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
-    
-    
+  
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+  
+  
 <link rel="stylesheet" href="/font/css/fontawesome.min.css">
 
-    
+  
 <link rel="stylesheet" href="/font/css/regular.min.css">
 
-    
+  
 <link rel="stylesheet" href="/font/css/solid.min.css">
 
-    
+  
 <link rel="stylesheet" href="/font/css/brands.min.css">
 
+  
     
+      
         
-            
-                
 <link rel="stylesheet" href="/css/custom.css">
 
-            
-        
+      
     
-    <script>
-        (function () {
-            let theme = localStorage.getItem('KEEP-THEME-STATUS');
-            let classname = "";
-            if (!theme || (JSON.parse(theme).isAutoTheme)){
-                classname = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? "dark-mode" : "light-mode";
-            }
-            else{
-                classname = JSON.parse(theme).isDark ? "dark-mode" : "light-mode";
-            }
-            document.documentElement.classList.add(classname);
-        })();
-    </script>
-    <script class="keep-theme-configurations">
+  
+  <script>
+    (function () {
+      let theme = localStorage.getItem('KEEP-THEME-STATUS');
+      let classname = "";
+      if (!theme || (JSON.parse(theme).isAutoTheme)){
+        classname = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? "dark-mode" : "light-mode";
+      }
+      else{
+        classname = JSON.parse(theme).isDark ? "dark-mode" : "light-mode";
+      }
+      document.documentElement.classList.add(classname);
+    })();
+  </script>
+  <script class="keep-theme-configurations">
     const KEEP = window.KEEP || {}
     KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en"}
-    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr","custom":{"enable":false,"url":null}},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"record":{"enable":false,"list":[{"code":null,"link":null}]},"site_deploy":{"enable":false,"provider":"github","url":null}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","search_db_path":"keep-search.json","source_data":{},"version":"4.3.0"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr","custom":{"enable":false,"url":null}},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"record":{"enable":false,"list":[{"code":null,"link":null}]},"site_deploy":{"enable":false,"provider":"github","url":null}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","search_db_path":"keep-search.json","source_data":{},"version":"4.4.1"}
     KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
     KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
     KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
@@ -64,300 +64,306 @@
 
 <body>
 <div class="progress-bar-container">
-    
+  
 
-    
+  
 </div>
 
 
 
 <main class="page-container border-box">
-    <!-- home first screen  -->
-    
+  <!-- home first screen  -->
+  
 
-    <!-- page content -->
-    <div class="page-main-content border-box is-home">
-        <div class="page-main-content-top">
-            
+  <!-- page content -->
+  <div class="page-main-content border-box is-home">
+    <div class="page-main-content-top">
+      
 <header class="header-wrapper">
 
-    <div class="border-box header-content">
-        <div class="left flex-start border-box">
-            
-                <a class="logo-image border-box" href="/">
-                    <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
-                </a>
-            
-            <a class="site-name border-box" href="/">
-               introspection
-            </a>
-        </div>
-
-        <div class="right border-box">
-            <div class="pc border-box">
-                <ul class="menu-list border-box">
-                    
-                        
-                        <li class="menu-item flex-start border-box">
-                            <a class="menu-text-color border-box" href="/">
-                                
-                                HOME
-                                
-                            </a>
-                            
-                        </li>
-                    
-                        
-                        <li class="menu-item flex-start border-box">
-                            <a class="menu-text-color border-box" href="/archives">
-                                
-                                ARCHIVES
-                                
-                            </a>
-                            
-                        </li>
-                    
-                        
-                        <li class="menu-item flex-start border-box">
-                            <a class="menu-text-color border-box" href="/tags">
-                                
-                                TAGS
-                                
-                            </a>
-                            
-                        </li>
-                    
-                        
-                        <li class="menu-item flex-start border-box">
-                            <a class="menu-text-color border-box" href="/about">
-                                
-                                ABOUT
-                                
-                            </a>
-                            
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="menu-text-color fas search fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile border-box flex-start">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+  <div class="border-box header-content">
+    <div class="left flex-start border-box">
+      
+        <a class="logo-image border-box" href="/">
+          <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+        </a>
+      
+      <a class="site-name border-box" href="/">
+        introspection
+      </a>
     </div>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list border-box">
+    <div class="right border-box">
+      <div class="pc border-box">
+        <ul class="menu-list border-box">
+          
             
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/">
                 
-                <li class="drawer-menu-item border-box not-sub-menu">
-                    <label class="drawer-menu-label border-box">
-                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
-                            
-                            HOME
-                        </a>
-                        
-                    </label>
-                    
-                </li>
-            
+                HOME
                 
-                <li class="drawer-menu-item border-box not-sub-menu">
-                    <label class="drawer-menu-label border-box">
-                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
-                            
-                            ARCHIVES
-                        </a>
-                        
-                    </label>
-                    
-                </li>
+              </a>
+              
+            </li>
+          
             
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/archives">
                 
-                <li class="drawer-menu-item border-box not-sub-menu">
-                    <label class="drawer-menu-label border-box">
-                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
-                            
-                            TAGS
-                        </a>
-                        
-                    </label>
-                    
-                </li>
-            
+                ARCHIVES
                 
-                <li class="drawer-menu-item border-box not-sub-menu">
-                    <label class="drawer-menu-label border-box">
-                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
-                            
-                            ABOUT
-                        </a>
-                        
-                    </label>
-                    
-                </li>
+              </a>
+              
+            </li>
+          
             
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/tags">
+                
+                TAGS
+                
+              </a>
+              
+            </li>
+          
+            
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/about">
+                
+                ABOUT
+                
+              </a>
+              
+            </li>
+          
+          
+            <li class="menu-item search search-popup-trigger">
+              <i class="menu-text-color fas search fa-search"></i>
+            </li>
+          
         </ul>
+      </div>
+      <div class="mobile border-box flex-start">
+        
+          <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+        
+        <div class="icon-item menu-bar">
+          <div class="menu-bar-middle"></div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="window-mask"></div>
+  <div class="header-drawer">
+    <ul class="drawer-menu-list border-box">
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+              
+              HOME
+            </a>
+            
+          </label>
+          
+        </li>
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+              
+              ARCHIVES
+            </a>
+            
+          </label>
+          
+        </li>
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+              
+              TAGS
+            </a>
+            
+          </label>
+          
+        </li>
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+              
+              ABOUT
+            </a>
+            
+          </label>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="window-mask"></div>
 
 </header>
 
 
-        </div>
+    </div>
 
-        <div class="page-main-content-middle border-box">
+    <div class="page-main-content-middle border-box">
 
-            <div class="main-content border-box">
-                
-
-                    <div class="home-content-container fade-in-down-animation">
-    
-    <ul class="home-post-list border-box">
+      <div class="main-content border-box">
         
-            <li class="home-post-item">
 
-                
+          <div class="home-content-container fade-in-down-animation">
+  
+  <ul class="home-post-list border-box">
+    
+      <li class="home-post-item">
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/07/05/Work/cuda%E7%9F%A5%E8%AF%86/">
-                            cuda知识
-                        </a>
-                    </h3>
+        
 
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            一. GPU 架构
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/07/05/Work/cuda%E7%9F%A5%E8%AF%86/">
+                cuda知识
+              </a>
+            </h3>
+          
+
+          <div class="home-post-content keep-markdown-body">
+            
+              一. GPU 架构
 1.1 SM（Streaming Multiprocessor）
 GPU 的核心计算单元，一个 GPU 含有多个 SM。每个 SM 包含：
 
 共享内存（Shared Memory）：SM 内线程块可共享的高速内存
 寄存器（Regi...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/cuda/">cuda</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/07/05/Work/cuda%E7%9F%A5%E8%AF%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/cuda/">cuda</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/07/05/Work/cuda%E7%9F%A5%E8%AF%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/07/04/Work/%E7%BB%93%E6%9D%9F/%E7%AE%97%E5%AD%90%E5%AD%A6%E4%B9%A0/">
+                算子 FlashAttention &amp; Fused MoE
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/07/04/Work/%E7%BB%93%E6%9D%9F/%E7%AE%97%E5%AD%90%E5%AD%A6%E4%B9%A0/">
-                            算子 FlashAttention &amp; Fused MoE
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            〇、概述
+          <div class="home-post-content keep-markdown-body">
+            
+              〇、概述
 大模型推理的两大计算模块是 Attention 和 MoE，对应的高性能算子是 FlashAttention 和 Fused MoE。本文梳理这两个算子的核心思路，以及它们在 serving 场景下的泛化——Flash-Decoding 与...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%AE%97%E5%AD%90/">算子</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/07/04/Work/%E7%BB%93%E6%9D%9F/%E7%AE%97%E5%AD%90%E5%AD%A6%E4%B9%A0/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%AE%97%E5%AD%90/">算子</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/07/04/Work/%E7%BB%93%E6%9D%9F/%E7%AE%97%E5%AD%90%E5%AD%A6%E4%B9%A0/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/07/02/Work/%E6%8E%A8%E7%90%86%E8%B0%83%E5%BA%A6/">
+                推理调度策略
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/07/02/Work/%E6%8E%A8%E7%90%86%E8%B0%83%E5%BA%A6/">
-                            推理调度策略
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            一、推理的两个阶段
+          <div class="home-post-content keep-markdown-body">
+            
+              一、推理的两个阶段
 Prefill
 
 并行处理整个 Prompt，计算所有输入 Token 的 KV Cache，并生成第 1个输出 Token。
@@ -366,363 +372,375 @@ Compute-bound，计算量大，能够充分利用 GPU 算力。
 Decode
 
 基于 KV Ca...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B0%83%E5%BA%A6/">调度</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/07/02/Work/%E6%8E%A8%E7%90%86%E8%B0%83%E5%BA%A6/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B0%83%E5%BA%A6/">调度</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/07/02/Work/%E6%8E%A8%E7%90%86%E8%B0%83%E5%BA%A6/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/07/01/Work/%E7%BB%93%E6%9D%9F/EPLB/">
+                EPLB
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/07/01/Work/%E7%BB%93%E6%9D%9F/EPLB/">
-                            EPLB
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            EPLB：专家并行负载均衡
+          <div class="home-post-content keep-markdown-body">
+            
+              EPLB：专家并行负载均衡
 Expert Parallelism Load Balancer
 仓库：https://github.com/deepseek-ai/EPLB（核心仅 eplb.py 一个文件）
 
 一、背景
 1.1 专家并行（Expert...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/EPLB/">EPLB</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/07/01/Work/%E7%BB%93%E6%9D%9F/EPLB/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/EPLB/">EPLB</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/07/01/Work/%E7%BB%93%E6%9D%9F/EPLB/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/06/30/Work/attention%E6%96%B9%E6%B3%95/">
+                attention方法
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/06/30/Work/attention%E6%96%B9%E6%B3%95/">
-                            attention方法
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            O. 先理清要解决的问题
+          <div class="home-post-content keep-markdown-body">
+            
+              O. 先理清要解决的问题
 标准自注意力在推理时有两大开销：
 
 KV Cache 显存：每生成一个 token，都要缓存历史所有 token 的 Key / Value，显存随上下文长度线性增长。
 注意力计算量：score 计算是 
     
     ...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/attention/">attention</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/06/30/Work/attention%E6%96%B9%E6%B3%95/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/attention/">attention</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/06/30/Work/attention%E6%96%B9%E6%B3%95/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/06/29/Work/%E7%BB%93%E6%9D%9F/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">
+                大模型并行策略
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/06/29/Work/%E7%BB%93%E6%9D%9F/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">
-                            大模型并行策略
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            简介
+          <div class="home-post-content keep-markdown-body">
+            
+              简介
 input 维度 （batch_size, sequence, hidden_size) （b, s, h)， 场景主要考虑推理
 数据并行
 Data Parallelism，DP 从 batch 维度进行切分。把一个 batch 的样本分给不同...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">并行策略</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/06/29/Work/%E7%BB%93%E6%9D%9F/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">并行策略</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/06/29/Work/%E7%BB%93%E6%9D%9F/%E5%B9%B6%E8%A1%8C%E7%AD%96%E7%95%A5/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/06/26/Work/RDMA%E5%AD%A6%E4%B9%A0/">
+                RDMA 学习笔记
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/06/26/Work/RDMA%E5%AD%A6%E4%B9%A0/">
-                            RDMA 学习笔记
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            〇、前置知识
+          <div class="home-post-content keep-markdown-body">
+            
+              〇、前置知识
 123ibv_devices       列出所有 RDMA 设备ibstatus          查看每个端口状态hostname -I       查看本地 IP
 ibstatus 里 link_layer 字段是判断环境的关键：...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RDMA/">RDMA</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/06/26/Work/RDMA%E5%AD%A6%E4%B9%A0/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RDMA/">RDMA</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/06/26/Work/RDMA%E5%AD%A6%E4%B9%A0/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/06/05/Work/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">
+                多模态推理
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/06/05/Work/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">
-                            多模态推理
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            
+          <div class="home-post-content keep-markdown-body">
+            
+              
 本文先介绍 Vision Transformer (ViT) 模型的结构，再到视觉-语言（VL）多模态模型，最后介绍 Qwen3-VL、开源推理框架层面的工程优化。
 
 1 ViT 模型
 1.1 概况
 Vision Transformer (ViT)...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">多模态推理</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/06/05/Work/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">多模态推理</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/06/05/Work/%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8E%A8%E7%90%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/06/01/Work/AI%20coding/">
+                AI coding
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/06/01/Work/AI%20coding/">
-                            AI coding
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            前言
+          <div class="home-post-content keep-markdown-body">
+            
+              前言
 尽量用新模型
 agent比网页端效果好很多
 和AI讨论清楚方案后再执行，效果会更好，可以把方案写在md文档中
@@ -731,265 +749,270 @@ Codex
 VScode插件很好用，只有插件才能用rewind功能
 VScode 插件bug
 日志logs_...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/AI-coding/">AI coding</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/06/01/Work/AI%20coding/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/AI-coding/">AI coding</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/06/01/Work/AI%20coding/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
 </div>
 
-                </div>
-            </li>
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
         
-            <li class="home-post-item">
 
-                
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
+              <a href="/2026/05/08/Work/warmup%E6%8A%80%E6%9C%AF/">
+                warmup技术
+              </a>
+            </h3>
+          
 
-                <div class="home-post-item-bottom border-box">
-                    
-                    <h3 class="home-post-title border-box">
-                        <a href="/2026/05/08/Work/warmup%E6%8A%80%E6%9C%AF/">
-                            warmup技术
-                        </a>
-                    </h3>
-
-                    <div class="home-post-content keep-markdown-body">
-                        
-                            
+          <div class="home-post-content keep-markdown-body">
+            
+              
 CUDA Graph
 
 CPU 每次向 GPU 提交 kernel 都要走一次 CUDA API 调用，有固定的调度延迟。
 CUDA Graph 在预热阶段把所有 kernel 启动、内存操作录制成一张静态图，之后每次 replay 只需一次 AP...
-                        
-                    </div>
+            
+          </div>
 
-                    
+          
 
 <div class="post-meta-info-container border-box home">
-    <div class="post-meta-info border-box">
-        
-
-        
-
-        
-
-        
-            <span class="post-tag meta-info-item border-box">
-                <ul class="post-tag-ul">
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-                        
-                    
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/warmup/">warmup</a></li>
-                        
-                    
-                </ul>
-            </span>
-        
-
-        
-        
-        
-        
-    </div>
+  <div class="post-meta-info border-box">
+    
 
     
-        <a class="home-read-more" href="/2026/05/08/Work/warmup%E6%8A%80%E6%9C%AF/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+
     
-</div>
 
-                </div>
-            </li>
-        
-    </ul>
     
-    <div class="paginator border-box flex-center">
-        <div class="border-box first-page paginator-btn allowed">
-            <a class="border-box"><i class="fa-solid fa-angle-double-left"></i></a>
-        </div>
-
-        <div class="border-box paginator-btn allowed">
-            <a class="border-box"
-               href="/"
-            ><i class="fa-solid fa-chevron-left"></i></a>
-        </div>
-
-
-        <div class="page-number-box border-box flex-center">
-            <input class="page-number-input border-box base-style"
-                   type="number"
-                   value="2"
-                   min="1"
-                   max="3"
-            /><span class="delimiter base-style">/</span><span class="base-style">3</span>
-        </div>
-
-
-        <div class="border-box paginator-btn allowed">
-            <a class="border-box"
-               href="/page/3/"
-            ><i class="fa-solid fa-chevron-right"></i></a>
-        </div>
-
-        <div class="border-box last-page paginator-btn allowed">
-            <a class="border-box"><i class="fa-solid fa-angle-double-right"></i></a>
-        </div>
-    </div>
-
-
-
-
-</div>
-
-
-                
-            </div>
-        </div>
-
-        <div class="page-main-content-bottom border-box">
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
             
-<footer class="footer border-box">
-    <div class="copyright-info info-item">
-    &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2026
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/warmup/">warmup</a></li>
+            
+          
+        </ul>
+      </span>
     
-            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/05/08/Work/warmup%E6%8A%80%E6%9C%AF/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
+</div>
+
+        </div>
+      </li>
+    
+  </ul>
+  
+  <div class="paginator border-box flex-center">
+    <div class="border-box first-page paginator-btn allowed">
+      <a class="border-box"><i class="fa-solid fa-angle-double-left"></i></a>
+    </div>
+
+    <div class="border-box paginator-btn allowed">
+      <a class="border-box"
+        href="/"
+      ><i class="fa-solid fa-chevron-left"></i></a>
+    </div>
+
+
+    <div class="page-number-box border-box flex-center">
+      <input class="page-number-input border-box base-style"
+          type="number"
+          value="2"
+          min="1"
+          max="3"
+      /><span class="delimiter base-style">/</span><span class="base-style">3</span>
+    </div>
+
+
+    <div class="border-box paginator-btn allowed">
+      <a class="border-box"
+        href="/page/3/"
+      ><i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+
+    <div class="border-box last-page paginator-btn allowed">
+      <a class="border-box"><i class="fa-solid fa-angle-double-right"></i></a>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
         
+      </div>
     </div>
 
-    <div class="theme-info info-item">
-        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
-    </div>
-
+    <div class="page-main-content-bottom border-box">
+      
+<footer class="footer border-box">
+  <div class="copyright-info info-item">
+  &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2026
+  
+      &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
     
+  </div>
 
-    
+  <div class="theme-info info-item">
+    Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+  </div>
 
-    
+  
+
+  
+
+  
 </footer>
 
-        </div>
     </div>
+  </div>
 
-    <!-- post tools -->
+  <!-- post tools -->
+  
+
+  <!-- side tools -->
+  <div class="side-tools">
+    <div class="side-tools-container border-box side-tools-show-handle">
+  <ul class="side-tools-list side-tools-show-handle border-box">
+    <li class="tools-item tool-font-adjust-plus flex-center">
+      <i class="fas fa-search-plus"></i>
+    </li>
+
+    <li class="tools-item tool-font-adjust-minus flex-center">
+      <i class="fas fa-search-minus"></i>
+    </li>
+
+    <!-- toggle chinese -->
     
 
-    <!-- side tools -->
-    <div class="side-tools">
-        <div class="side-tools-container border-box side-tools-show-handle">
-    <ul class="side-tools-list side-tools-show-handle border-box">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
+    <!-- toggle mode -->
+    
+      <li class="tools-item tool-toggle-theme-mode flex-center">
+        <i class="fas fa-moon"></i>
+      </li>
+    
 
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
+    <!-- rss -->
+    
 
-        <!-- toggle mode -->
-        
-            <li class="tools-item tool-toggle-theme-mode flex-center">
-                <i class="fas fa-moon"></i>
-            </li>
-        
+    <!-- to bottom -->
+    <li class="tools-item tool-scroll-to-bottom flex-center">
+      <i class="fas fa-arrow-down"></i>
+    </li>
+  </ul>
 
-        <!-- rss -->
-        
+  <ul class="exposed-tools-list border-box">
+    
 
-        <!-- to bottom -->
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
+    
 
-    <ul class="exposed-tools-list border-box">
-        
+    <li class="tools-item tool-toggle-show flex-center">
+      <i class="fas fa-cog fa-spin"></i>
+    </li>
 
-        
-
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-
-        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
-            <i class="arrow fas fa-arrow-up"></i>
-            <span class="percent"></span>
-        </li>
-    </ul>
+    <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+      <i class="arrow fas fa-arrow-up"></i>
+      <span class="percent"></span>
+    </li>
+  </ul>
 </div>
 
-    </div>
+  </div>
 
-    <!-- image mask -->
-    <div class="zoom-in-image-mask">
-    <img class="zoom-in-image">
+  <!-- image mask -->
+  <div class="zoom-in-image-mask">
+  <img class="zoom-in-image">
 </div>
 
 
-    <!-- local search -->
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="Search..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
-            </div>
-            <span class="close-popup-btn">
-                <i class="fas fa-times"></i>
-            </span>
-        </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+  <!-- local search -->
+  
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+    <div class="search-header">
+      <span class="search-input-field-pre">
+      <i class="fas fa-keyboard"></i>
+      </span>
+      <div class="search-input-container">
+        <input autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Search..."
+            spellcheck="false"
+            type="search"
+            class="search-input"
+        >
+      </div>
+      <span class="close-popup-btn">
+        <i class="fas fa-times"></i>
+      </span>
     </div>
+    <div id="search-result">
+      <div id="no-result">
+        <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+      </div>
+    </div>
+  </div>
 </div>
 
-    
+  
 
-    <!-- tablet toc -->
-    
+  <!-- tablet toc -->
+  
 </main>
 
 
@@ -1016,7 +1039,7 @@ CUDA Graph 在预热阶段把所有 kernel 启动、内存操作录制成一张�
 
 <!-- local search -->
 
-    
+  
 <script src="/js/local-search.js"></script>
 
 
@@ -1025,32 +1048,32 @@ CUDA Graph 在预热阶段把所有 kernel 启动、内存操作录制成一张�
 
 
 <div class="">
-    <!-- home page -->
+  <!-- home page -->
+  
     
-        
 <script src="/js/page/home-page.js"></script>
 
-    
+  
 
-    <!-- post page -->
-    
+  <!-- post page -->
+  
 
-    <!-- categories page -->
-    
+  <!-- categories page -->
+  
 
-    <!-- links page -->
-    
+  <!-- links page -->
+  
 
-    <!-- photos page -->
-    
+  <!-- photos page -->
+  
 
-    <!-- tools page -->
-    
+  <!-- tools page -->
+  
 </div>
 
 <!-- mermaid -->
 
-    
+  
 <script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
 
 
@@ -1062,7 +1085,7 @@ CUDA Graph 在预热阶段把所有 kernel 启动、内存操作录制成一张�
 
 
 
-    
+  
 
 </body>
 </html>
