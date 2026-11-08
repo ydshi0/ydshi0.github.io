@@ -233,6 +233,66 @@
           
           
             <h3 class="home-post-title border-box">
+              <a href="/2026/11/09/Work/%E7%BB%93%E6%9D%9F/Fused%20MoE%E4%B8%8E%E5%8F%98%E9%95%BF%E5%A4%84%E7%90%86/">
+                Fused MoE 与变长处理
+              </a>
+            </h3>
+          
+
+          <div class="home-post-content keep-markdown-body">
+            
+              本文记录 MoE 推理中的 Grouped GEMM、token 重排，以及它与 FlashAttention（FA）变长处理的共同思路：将不等长数据拼接起来，用 offset 标记边界，再分别调度计算。
+一、Fused MoE
+一个完整的 MoE ...
+            
+          </div>
+
+          
+
+<div class="post-meta-info-container border-box home">
+  <div class="post-meta-info border-box">
+    
+
+    
+
+    
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%AE%97%E5%AD%90/">算子</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+    
+    
+  </div>
+
+  
+    <a class="home-read-more" href="/2026/11/09/Work/%E7%BB%93%E6%9D%9F/Fused%20MoE%E4%B8%8E%E5%8F%98%E9%95%BF%E5%A4%84%E7%90%86/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
+  
+</div>
+
+        </div>
+      </li>
+    
+      <li class="home-post-item">
+
+        
+
+        <div class="home-post-item-bottom border-box">
+          
+          
+            <h3 class="home-post-title border-box">
               <a href="/2026/10/25/Life/GPT%E4%BD%BF%E7%94%A8/">
                 GPT使用
               </a>
@@ -497,7 +557,7 @@ SGLang HiCache 把 GPU、Host 和外部存储组织成三级 Prefix Cache，核�
 
     
       
-      #mjx-e6fdccd8{
+      #mjx-befc8e38{
         display:contents;
         mjx-assist...
             
@@ -798,68 +858,6 @@ FCFS 原则
 
   
     <a class="home-read-more" href="/2026/07/08/Work/%E5%86%85%E5%AD%98%E6%B1%A0%E8%AE%BE%E8%AE%A1/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
-  
-</div>
-
-        </div>
-      </li>
-    
-      <li class="home-post-item">
-
-        
-
-        <div class="home-post-item-bottom border-box">
-          
-          
-            <h3 class="home-post-title border-box">
-              <a href="/2026/07/06/Work/%E7%BB%93%E6%9D%9F/PagedAttention&amp;%20RadixAttention/">
-                PagedAttention &amp; RadixAttention
-              </a>
-            </h3>
-          
-
-          <div class="home-post-content keep-markdown-body">
-            
-              一. 动机
-朴素实现把每条序列的 KV 存成一整块物理连续显存：
-
-必须按 max_length 预留：不知道要生成多长，只能按最大长度占满 。实际用不到的部分全浪费，内部碎片多。
-无法复用：两条请求前缀即使完全相同，各自是独立连续缓冲区，KV 无法...
-            
-          </div>
-
-          
-
-<div class="post-meta-info-container border-box home">
-  <div class="post-meta-info border-box">
-    
-
-    
-
-    
-
-    
-      <span class="post-tag meta-info-item border-box">
-        <ul class="post-tag-ul">
-          
-              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
-            
-          
-              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/KV-cache/">KV cache</a></li>
-            
-          
-        </ul>
-      </span>
-    
-
-    
-    
-    
-    
-  </div>
-
-  
-    <a class="home-read-more" href="/2026/07/06/Work/%E7%BB%93%E6%9D%9F/PagedAttention&%20RadixAttention/">Read more&nbsp;<i class="icon fas fa-angle-right"></i></a>
   
 </div>
 

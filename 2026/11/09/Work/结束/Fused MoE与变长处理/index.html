@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="Hexo Theme Keep">
+  <meta name="description" content="Hexo Theme Keep">
+  <meta name="author" content="eric">
+  
+  <title>
+    
+      Fused MoE 与变长处理 |
+    
+    introspection
+  </title>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+  
+  
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+  
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+  
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+  
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+  
+    
+      
+        
+<link rel="stylesheet" href="/css/custom.css">
+
+      
+    
+  
+  <script>
+    (function () {
+      let theme = localStorage.getItem('KEEP-THEME-STATUS');
+      let classname = "";
+      if (!theme || (JSON.parse(theme).isAutoTheme)){
+        classname = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? "dark-mode" : "light-mode";
+      }
+      else{
+        classname = JSON.parse(theme).isDark ? "dark-mode" : "light-mode";
+      }
+      document.documentElement.classList.add(classname);
+    })();
+  </script>
+  <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en"}
+    KEEP.theme_config = {"base_info":{"title":"introspection","author":"eric","primary_color":"#0066cc","logo":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","favicon":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png","avatar":"https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":true,"post_datetime":null},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr","custom":{"enable":false,"url":null}},"pjax":{"enable":false},"footer":{"since":2022,"word_count":false,"record":{"enable":false,"list":[{"code":null,"link":null}]},"site_deploy":{"enable":false,"provider":"github","url":null}},"inject":{"enable":true,"css":["/css/custom.css"]},"root":"","search_db_path":"keep-search.json","source_data":{},"version":"4.4.1"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body>
+<div class="progress-bar-container">
+  
+
+  
+</div>
+
+
+
+<main class="page-container border-box">
+  <!-- home first screen  -->
+  
+
+  <!-- page content -->
+  <div class="page-main-content border-box">
+    <div class="page-main-content-top">
+      
+<header class="header-wrapper">
+
+  <div class="border-box header-content">
+    <div class="left flex-start border-box">
+      
+        <a class="logo-image border-box" href="/">
+          <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+        </a>
+      
+      <a class="site-name border-box" href="/">
+        introspection
+      </a>
+    </div>
+
+    <div class="right border-box">
+      <div class="pc border-box">
+        <ul class="menu-list border-box">
+          
+            
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/">
+                
+                HOME
+                
+              </a>
+              
+            </li>
+          
+            
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/archives">
+                
+                ARCHIVES
+                
+              </a>
+              
+            </li>
+          
+            
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/tags">
+                
+                TAGS
+                
+              </a>
+              
+            </li>
+          
+            
+            <li class="menu-item flex-start border-box">
+              <a class="menu-text-color border-box" href="/about">
+                
+                ABOUT
+                
+              </a>
+              
+            </li>
+          
+          
+            <li class="menu-item search search-popup-trigger">
+              <i class="menu-text-color fas search fa-search"></i>
+            </li>
+          
+        </ul>
+      </div>
+      <div class="mobile border-box flex-start">
+        
+          <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+        
+        <div class="icon-item menu-bar">
+          <div class="menu-bar-middle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-drawer">
+    <ul class="drawer-menu-list border-box">
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+              
+              HOME
+            </a>
+            
+          </label>
+          
+        </li>
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+              
+              ARCHIVES
+            </a>
+            
+          </label>
+          
+        </li>
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+              
+              TAGS
+            </a>
+            
+          </label>
+          
+        </li>
+      
+        
+        <li class="drawer-menu-item border-box not-sub-menu">
+          <label class="drawer-menu-label border-box">
+            <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+              
+              ABOUT
+            </a>
+            
+          </label>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="window-mask"></div>
+
+</header>
+
+
+    </div>
+
+    <div class="page-main-content-middle border-box">
+
+      <div class="main-content border-box">
+        
+
+          
+<div class="fade-in-down-animation">
+  <div class="post-page-container border-box">
+    <div class="post-content-container border-box">
+      
+
+      <div class="post-content-bottom border-box">
+        
+          <div class="post-title">
+            Fused MoE 与变长处理
+          </div>
+        
+
+        
+          <div class="post-header border-box">
+            
+              <div class="avatar-box border-box">
+                <img src="https://cdn.jsdelivr.net/gh/ydshi0/picture/20260610132734769.png">
+              </div>
+            
+            <div class="info-box">
+              <div class="author border-box">
+                <span class="name">eric</span>
+                
+              </div>
+              <div class="meta-info border-box">
+                
+
+<div class="post-meta-info-container border-box post">
+  <div class="post-meta-info border-box">
+    
+
+    
+      <span class="meta-info-item post-create-date">
+        <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+        <span class="datetime">2026-11-09</span>
+      </span>
+
+      
+        <span class="meta-info-item post-update-date">
+          <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+          <span class="datetime" data-updated="Mon Nov 09 2026 01:44:24 GMT+0800">2026-11-09</span>
+        </span>
+      
+    
+
+    
+
+    
+      <span class="post-tag meta-info-item border-box">
+        <ul class="post-tag-ul">
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Work/">Work</a></li>
+            
+          
+              <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%AE%97%E5%AD%90/">算子</a></li>
+            
+          
+        </ul>
+      </span>
+    
+
+    
+    
+      <span class="meta-info-item post-word-count">
+        <i class="icon fas fa-file-word"></i>&nbsp;<span>1.3k Words</span>
+      </span>
+    
+    
+      <span class="meta-info-item post-min2read">
+        <i class="icon fas fa-clock"></i>&nbsp;<span>6 Mins</span>
+      </span>
+    
+    
+  </div>
+
+  
+</div>
+
+              </div>
+            </div>
+          </div>
+        
+
+        <div class="post-content keep-markdown-body ">
+          
+
+          
+            <p>本文记录 MoE 推理中的 Grouped GEMM、token 重排，以及它与 FlashAttention（FA）变长处理的共同思路：将不等长数据拼接起来，用 offset 标记边界，再分别调度计算。</p>
+<h3 id="一、Fused-MoE">一、Fused MoE</h3>
+<p>一个完整的 MoE FFN 层：router 把每个 token 路由给若干 expert，各 expert 用自己的权重做 FFN，再加权求和。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router → permute → GEMM₁(W_gate/W_up) → activation(SiLU) → GEMM₂(W_down) → 加权求和 → unpermute</span><br></pre></td></tr></table></figure>
+<p>**Fused MoE 通过融合部分步骤、批量调度专家计算，减少 kernel 启动和中间数据读写。**具体融合范围取决于实现，不代表整条链都在一个 kernel 内完成，也不保证所有中间结果都不落 HBM。</p>
+<h4 id="1-1-Grouped-GEMM（MoE-的核心计算）">1.1 Grouped GEMM（MoE 的核心计算）</h4>
+<p>router 把 token 分给不同 expert。Grouped GEMM 并行算所有 
+    <span id="mjx-273fa85">
+      <style>
+      #mjx-273fa85{
+        display:contents;
+        mjx-assistive-mml {
+          user-select: text !important;
+          clip: auto !important;
+          color: rgba(0,0,0,0);
+        }
+        
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+      }
+      </style>
+      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.357ex;" xmlns="http://www.w3.org/2000/svg" width="12.775ex" height="1.902ex" role="img" focusable="false" viewBox="0 -683 5646.5 840.8" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D44C" d="M66 637Q54 637 49 637T39 638T32 641T30 647T33 664T42 682Q44 683 56 683Q104 680 165 680Q288 680 306 683H316Q322 677 322 674T320 656Q316 643 310 637H298Q242 637 242 624Q242 619 292 477T343 333L346 336Q350 340 358 349T379 373T411 410T454 461Q546 568 561 587T577 618Q577 634 545 637Q528 637 528 647Q528 649 530 661Q533 676 535 679T549 683Q551 683 578 682T657 680Q684 680 713 681T746 682Q763 682 763 673Q763 669 760 657T755 643Q753 637 734 637Q662 632 617 587Q608 578 477 424L348 273L322 169Q295 62 295 57Q295 46 363 46Q379 46 384 45T390 35Q390 33 388 23Q384 6 382 4T366 1Q361 1 324 1T232 2Q170 2 138 2T102 1Q84 1 84 9Q84 14 87 24Q88 27 89 30T90 35T91 39T93 42T96 44T101 45T107 45T116 46T129 46Q168 47 180 50T198 63Q201 68 227 171L252 274L129 623Q128 624 127 625T125 627T122 629T118 631T113 633T105 634T96 635T83 636T66 637Z"></path></g><g data-mml-node="mi" transform="translate(614,-150) scale(0.707)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g></g><g data-mml-node="mo" transform="translate(1271.3,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="msub" transform="translate(2327.1,0)"><g data-mml-node="mi"><path data-c="1D44B" d="M42 0H40Q26 0 26 11Q26 15 29 27Q33 41 36 43T55 46Q141 49 190 98Q200 108 306 224T411 342Q302 620 297 625Q288 636 234 637H206Q200 643 200 645T202 664Q206 677 212 683H226Q260 681 347 681Q380 681 408 681T453 682T473 682Q490 682 490 671Q490 670 488 658Q484 643 481 640T465 637Q434 634 411 620L488 426L541 485Q646 598 646 610Q646 628 622 635Q617 635 609 637Q594 637 594 648Q594 650 596 664Q600 677 606 683H618Q619 683 643 683T697 681T738 680Q828 680 837 683H845Q852 676 852 672Q850 647 840 637H824Q790 636 763 628T722 611T698 593L687 584Q687 585 592 480L505 384Q505 383 536 304T601 142T638 56Q648 47 699 46Q734 46 734 37Q734 35 732 23Q728 7 725 4T711 1Q708 1 678 1T589 2Q528 2 496 2T461 1Q444 1 444 10Q444 11 446 25Q448 35 450 39T455 44T464 46T480 47T506 54Q523 62 523 64Q522 64 476 181L429 299Q241 95 236 84Q232 76 232 72Q232 53 261 47Q262 47 267 47T273 46Q276 46 277 46T280 45T283 42T284 35Q284 26 282 19Q279 6 276 4T261 1Q258 1 243 1T201 2T142 2Q64 2 42 0Z"></path></g><g data-mml-node="mi" transform="translate(861,-150) scale(0.707)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g></g><g data-mml-node="mo" transform="translate(3789.8,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="msub" transform="translate(4290,0)"><g data-mml-node="mi"><path data-c="1D44A" d="M436 683Q450 683 486 682T553 680Q604 680 638 681T677 682Q695 682 695 674Q695 670 692 659Q687 641 683 639T661 637Q636 636 621 632T600 624T597 615Q597 603 613 377T629 138L631 141Q633 144 637 151T649 170T666 200T690 241T720 295T759 362Q863 546 877 572T892 604Q892 619 873 628T831 637Q817 637 817 647Q817 650 819 660Q823 676 825 679T839 682Q842 682 856 682T895 682T949 681Q1015 681 1034 683Q1048 683 1048 672Q1048 666 1045 655T1038 640T1028 637Q1006 637 988 631T958 617T939 600T927 584L923 578L754 282Q586 -14 585 -15Q579 -22 561 -22Q546 -22 542 -17Q539 -14 523 229T506 480L494 462Q472 425 366 239Q222 -13 220 -15T215 -19Q210 -22 197 -22Q178 -22 176 -15Q176 -12 154 304T131 622Q129 631 121 633T82 637H58Q51 644 51 648Q52 671 64 683H76Q118 680 176 680Q301 680 313 683H323Q329 677 329 674T327 656Q322 641 318 637H297Q236 634 232 620Q262 160 266 136L501 550L499 587Q496 629 489 632Q483 636 447 637Q428 637 422 639T416 648Q416 650 418 660Q419 664 420 669T421 676T424 680T428 682T436 683Z"></path></g><g data-mml-node="mi" transform="translate(977,-150) scale(0.707)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>Y</mi><mi>e</mi></msub><mo>=</mo><msub><mi>X</mi><mi>e</mi></msub><mo>⋅</mo><msub><mi>W</mi><mi>e</mi></msub></math></mjx-assistive-mml></mjx-container>
+    </span>
+  ——就是把一批&quot;形状不同&quot;的 GEMM 打包进一个 kernel 做。</p>
+<p>做法：按 expert id 把 token 排序拼接，用 <code>offsets</code> 标边界，kernel 按 <code>offsets</code> 切 tile、tile 不跨 expert。3 个 expert，分到 5/3/7 个 token，block_size=2：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">X_packed = [e0₁ e0₂ e0₃ e0₄ e0₅ | e1₁ e1₂ e1₃ | e2₁ e2₂ e2₃ e2₄ e2₅ e2₆ e2₇]</span><br><span class="line">            ← expert 0, 5 token →  ← exp 1, 3 →   ← expert 2, 7 token →</span><br><span class="line">offsets = [0, 5, 8, 15]</span><br><span class="line"></span><br><span class="line">tile 0: [0,1] → expert 0 → 乘 W₀</span><br><span class="line">tile 1: [2,3] → expert 0 → 乘 W₀</span><br><span class="line">tile 2: [4]   → expert 0 → 乘 W₀    ← 尾部不足一 tile</span><br><span class="line">tile 3: [5,6] → expert 1 → 乘 W₁    ← 绝不与 tile 2 合并</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>与普通 GEMM 的区别：tile 内部是标准 GEMM，但要<strong>按 expert_id 索引不同权重</strong>（权重堆叠为 <code>[E, d, d_out]</code>）。</p>
+<h4 id="1-2-permute-unpermute">1.2 permute / unpermute</h4>
+<p>上面&quot;按 expert 排序拼接&quot;这一步没那么理所当然。Router 是一个学习到的网络，每个 token 路由到哪个 expert 是<strong>动态、不可预测的</strong>，同一 expert 的 token 散落在 batch 各处；而 grouped GEMM 要求同一 expert 的 token <strong>在内存里连续排列</strong>才能切 tile。所以要：</p>
+<ol>
+<li><strong>Permute</strong>：按 expert id 把 token 重排，让同一 expert 的 token 相邻</li>
+<li><strong>Grouped GEMM</strong>：在重排后的连续数据上按 offsets 切 tile 计算</li>
+<li><strong>Unpermute</strong>：算完把结果恢复到原始 token 顺序（后续层期望原始顺序）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原始顺序: [t0, t1, t2, t3, t4]</span></span><br><span class="line"><span class="comment"># router 分配: t0→exp1, t1→exp2, t2→exp0, t3→exp1, t4→exp0</span></span><br><span class="line"></span><br><span class="line">sorted_indices = argsort(expert_ids)       <span class="comment"># → [2,4, 0,3, 1] (先exp0再exp1再exp2；stable sort 保证组内保持原相对序，如 exp0 内仍是 t2 在 t4 前)</span></span><br><span class="line">X_packed = x[sorted_indices]               <span class="comment"># → [t2,t4 | t0,t3 | t1]  按expert连续排列</span></span><br><span class="line">offsets = [<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>]                     <span class="comment"># exp0: 2个, exp1: 2个, exp2: 1个</span></span><br><span class="line"></span><br><span class="line">Y_packed = grouped_gemm(X_packed, W_all, offsets)</span><br><span class="line"></span><br><span class="line">Y[sorted_indices] = Y_packed              <span class="comment"># unpermute: 结果放回原始位置</span></span><br></pre></td></tr></table></figure>
+<h3 id="二、变长处理：一个统一的套路">二、变长处理：一个统一的套路</h3>
+<p>MoE 的 grouped GEMM 和 FA 处理变长 batch 用的是<strong>同一个套路</strong>：</p>
+<blockquote>
+<p><strong>共同思路：不把所有序列补到同一长度，而是拼接数据，用 offset 标记边界。tile 尾部仍可能需要 padding 或 mask。</strong></p>
+</blockquote>
+<p>FA 侧这招叫 <strong>Packed Batching</strong>：把所有请求的 Q/K/V 沿 seq 维首尾拼接，用 <code>cu_seqlens</code> 标边界，kernel 按 <code>cu_seqlens</code> 切 tile、block 只在同一请求内滑动。请求间主要靠调度范围隔离；尾部越界和因果关系仍可能需要 mask。3 个请求（长度 5, 3, 7），block_size=2：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Q_packed = [A₁ A₂ A₃ A₄ A₅ | B₁ B₂ B₃ | C₁ C₂ C₃ C₄ C₅ C₆ C₇]</span><br><span class="line">cu_seqlens = [0, 5, 8, 15]</span><br><span class="line"></span><br><span class="line">tile 0: [0,1] → 请求A, KV [0..5)</span><br><span class="line">tile 1: [2,3] → 请求A, KV [0..5)</span><br><span class="line">tile 2: [4]   → 请求A               ← 尾部不足一 tile</span><br><span class="line">tile 3: [5,6] → 请求B, KV [5..8)    ← 不与 tile 2 合并</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>它和 1.1 的 grouped GEMM 一一对应（<code>cu_seqlens</code> ↔ <code>offsets</code>，请求 ↔ expert）。<strong>主要区别</strong>在 tile 内部：FA tile 做 online softmax + 沿变长 KV 滑动；grouped GEMM tile 做标准 GEMM + 按 expert_id 索引权重。</p>
+
+          
+        </div>
+
+        
+
+        <div class="post-bottom-tags-and-share border-box">
+          <div>
+            
+              <ul class="post-tags-box border-box">
+                
+                  <li class="tag-item border-box">
+                    <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Work/">Work</a>
+                  </li>
+                
+                  <li class="tag-item border-box">
+                    <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%AE%97%E5%AD%90/">算子</a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+          <div>
+            
+          </div>
+        </div>
+
+        
+
+        
+          <div class="post-nav border-box">
+            
+            
+              <div class="next-post">
+                <a class="next"
+                  rel="next"
+                  href="/2026/10/25/Life/GPT%E4%BD%BF%E7%94%A8/"
+                  title="GPT使用"
+                >
+                  <span class="title flex-center">
+                    <span class="post-nav-title-item text-ellipsis">GPT使用</span>
+                    <span class="post-nav-item">Next posts</span>
+                  </span>
+                  <span class="right arrow-icon flex-center">
+                    <i class="fas fa-chevron-right"></i>
+                  </span>
+                </a>
+              </div>
+            
+          </div>
+        
+
+        
+          
+
+
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+      <div class="pc-post-toc right-toc">
+        <div class="post-toc-wrap border-box">
+  <div class="post-toc border-box">
+    <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81Fused-MoE"><span class="nav-text">一、Fused MoE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-Grouped-GEMM%EF%BC%88MoE-%E7%9A%84%E6%A0%B8%E5%BF%83%E8%AE%A1%E7%AE%97%EF%BC%89"><span class="nav-text">1.1 Grouped GEMM（MoE 的核心计算）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-permute-unpermute"><span class="nav-text">1.2 permute &#x2F; unpermute</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8F%98%E9%95%BF%E5%A4%84%E7%90%86%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%BB%9F%E4%B8%80%E7%9A%84%E5%A5%97%E8%B7%AF"><span class="nav-text">二、变长处理：一个统一的套路</span></a></li></ol>
+  </div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+
+        
+      </div>
+    </div>
+
+    <div class="page-main-content-bottom border-box">
+      
+<footer class="footer border-box">
+  <div class="copyright-info info-item">
+  &copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2026
+  
+      &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">eric</a>
+    
+  </div>
+
+  <div class="theme-info info-item">
+    Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+  </div>
+
+  
+
+  
+
+  
+</footer>
+
+    </div>
+  </div>
+
+  <!-- post tools -->
+  
+    <div class="post-tools right-toc">
+      <div class="post-tools-container border-box">
+  <ul class="post-tools-list border-box">
+    <!-- PC encrypt again -->
+    
+
+    <!-- PC TOC show toggle -->
+    
+      <li class="tools-item flex-center toggle-show-toc">
+        <i class="fas fa-list"></i>
+      </li>
+    
+
+    <!-- PC go comment -->
+    
+
+    <!-- PC full screen -->
+    <li class="tools-item flex-center full-screen">
+      <i class="fa-solid fa-expand"></i>
+    </li>
+  </ul>
+</div>
+
+    </div>
+  
+
+  <!-- side tools -->
+  <div class="side-tools">
+    <div class="side-tools-container border-box ">
+  <ul class="side-tools-list side-tools-show-handle border-box">
+    <li class="tools-item tool-font-adjust-plus flex-center">
+      <i class="fas fa-search-plus"></i>
+    </li>
+
+    <li class="tools-item tool-font-adjust-minus flex-center">
+      <i class="fas fa-search-minus"></i>
+    </li>
+
+    <!-- toggle chinese -->
+    
+
+    <!-- toggle mode -->
+    
+      <li class="tools-item tool-toggle-theme-mode flex-center">
+        <i class="fas fa-moon"></i>
+      </li>
+    
+
+    <!-- rss -->
+    
+
+    <!-- to bottom -->
+    <li class="tools-item tool-scroll-to-bottom flex-center">
+      <i class="fas fa-arrow-down"></i>
+    </li>
+  </ul>
+
+  <ul class="exposed-tools-list border-box">
+    
+      <li class="tools-item toggle-show-toc-tablet flex-center">
+        <i class="fas fa-list"></i>
+      </li>
+    
+
+    
+
+    <li class="tools-item tool-toggle-show flex-center">
+      <i class="fas fa-cog fa-spin"></i>
+    </li>
+
+    <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+      <i class="arrow fas fa-arrow-up"></i>
+      <span class="percent"></span>
+    </li>
+  </ul>
+</div>
+
+  </div>
+
+  <!-- image mask -->
+  <div class="zoom-in-image-mask">
+  <img class="zoom-in-image">
+</div>
+
+
+  <!-- local search -->
+  
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+    <div class="search-header">
+      <span class="search-input-field-pre">
+      <i class="fas fa-keyboard"></i>
+      </span>
+      <div class="search-input-container">
+        <input autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Search..."
+            spellcheck="false"
+            type="search"
+            class="search-input"
+        >
+      </div>
+      <span class="close-popup-btn">
+        <i class="fas fa-times"></i>
+      </span>
+    </div>
+    <div id="search-result">
+      <div id="no-result">
+        <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+  <!-- tablet toc -->
+  
+    <div class="tablet-post-toc-mask">
+      <div class="tablet-post-toc">
+        <div class="post-toc-wrap border-box">
+  <div class="post-toc border-box">
+    <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81Fused-MoE"><span class="nav-text">一、Fused MoE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-Grouped-GEMM%EF%BC%88MoE-%E7%9A%84%E6%A0%B8%E5%BF%83%E8%AE%A1%E7%AE%97%EF%BC%89"><span class="nav-text">1.1 Grouped GEMM（MoE 的核心计算）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-permute-unpermute"><span class="nav-text">1.2 permute &#x2F; unpermute</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8F%98%E9%95%BF%E5%A4%84%E7%90%86%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%BB%9F%E4%B8%80%E7%9A%84%E5%A5%97%E8%B7%AF"><span class="nav-text">二、变长处理：一个统一的套路</span></a></li></ol>
+  </div>
+</div>
+
+      </div>
+    </div>
+  
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+  <!-- home page -->
+  
+
+  <!-- post page -->
+  
+    <!-- post-helper -->
+    
+<script src="/js/post/post-helper.js"></script>
+
+
+    <!-- toc -->
+    
+      
+<script src="/js/post/toc.js"></script>
+
+    
+
+    <!-- copyright-info -->
+    
+
+    <!-- share -->
+    
+  
+
+  <!-- categories page -->
+  
+
+  <!-- links page -->
+  
+
+  <!-- photos page -->
+  
+
+  <!-- tools page -->
+  
+</div>
+
+<!-- mermaid -->
+
+  
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+  
+
+</body>
+</html>
