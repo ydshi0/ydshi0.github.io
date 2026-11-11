@@ -30,3 +30,8 @@
 .post-meta-info-container .post-meta-info .meta-info-item.post-min2read {
     display: none;
 }
+
+/* Keep article tags visible at every screen width. */
+.post-meta-info-container .post-meta-info .post-tag {
+    display: flex !important;
+}
