@@ -26,7 +26,7 @@
 }
 
 /* Hide post word count and estimated reading time. */
-.post-word-count,
-.post-min2read {
+.post-meta-info-container .post-meta-info .meta-info-item.post-word-count,
+.post-meta-info-container .post-meta-info .meta-info-item.post-min2read {
     display: none;
 }
