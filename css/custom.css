@@ -35,3 +35,12 @@
 .post-meta-info-container .post-meta-info .post-tag {
     display: flex !important;
 }
+
+/* Render inline code as ordinary text; keep code blocks unchanged. */
+.post-content :not(pre) > code {
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    background: transparent;
+    border: 0;
+}
