@@ -24,3 +24,9 @@
     -webkit-line-clamp: 4;
     overflow: hidden;
 }
+
+/* Hide post word count and estimated reading time. */
+.post-word-count,
+.post-min2read {
+    display: none;
+}
