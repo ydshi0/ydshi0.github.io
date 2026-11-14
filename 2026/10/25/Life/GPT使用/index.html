@@ -264,7 +264,7 @@
       
         <span class="meta-info-item post-update-date">
           <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-          <span class="datetime" data-updated="Thu Nov 12 2026 00:37:55 GMT+0800">2026-11-12</span>
+          <span class="datetime" data-updated="Sat Nov 14 2026 11:15:17 GMT+0800">2026-11-14</span>
         </span>
       
     
@@ -288,7 +288,7 @@
     
     
       <span class="meta-info-item post-word-count">
-        <i class="icon fas fa-file-word"></i>&nbsp;<span>621 Words</span>
+        <i class="icon fas fa-file-word"></i>&nbsp;<span>650 Words</span>
       </span>
     
     
@@ -312,11 +312,16 @@
 
           
             <h3 id="手机操控codex">手机操控codex</h3>
-<p>1 mac 屏幕保护程序设为“永不”</p>
+<h4 id="dot">dot</h4>
+<p>1 mac设置不锁屏，屏幕保护程序设为“永不”</p>
 <p>2 使用WorkBuddy 连接 Mac，可以切换VPN节点</p>
 <p>3 手机使用codex dot操控电脑端工作（我手机直接连接codex不行）</p>
+<h4 id="直接连接">直接连接</h4>
+<p>1 手机下载谷歌身份验证器Google Authenticator</p>
+<p>2 gpt配置多因素身份验证（MFA）</p>
+<p>3 手机直接连接到mac</p>
 <h3 id="本地-Codex-连接远程设备">本地 Codex 连接远程设备</h3>
-<p>这个方案用处不大，直接让本地codex 连接就可以，和他说清楚ssh连接方式和容器环境。</p>
+<p>这个方案用处不大，直接让codex ssh连接就可以</p>
 <h4 id="1-建立代理链路">1. 建立代理链路</h4>
 <p>本地启动 Clash Verge，打开 TUN 模式，再建立 SSH 反向隧道。以下以本地代理端口 <code>7897</code> 为例</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh -NT \</span><br><span class="line">  -o ExitOnForwardFailure=<span class="built_in">yes</span> \</span><br><span class="line">  -o ServerAliveInterval=30 \</span><br><span class="line">  -o ServerAliveCountMax=3 \</span><br><span class="line">  -R 127.0.0.1:17897:127.0.0.1:7897 \</span><br><span class="line">  A1</span><br></pre></td></tr></table></figure>
@@ -431,7 +436,7 @@
       <div class="pc-post-toc right-toc">
         <div class="post-toc-wrap border-box">
   <div class="post-toc border-box">
-    <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E6%93%8D%E6%8E%A7codex"><span class="nav-text">手机操控codex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0-Codex-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E8%AE%BE%E5%A4%87"><span class="nav-text">本地 Codex 连接远程设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BB%BA%E7%AB%8B%E4%BB%A3%E7%90%86%E9%93%BE%E8%B7%AF"><span class="nav-text">1. 建立代理链路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8-SSH"><span class="nav-text">2. 配置容器 SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95%E5%B9%B6%E8%BF%9E%E6%8E%A5-Codex"><span class="nav-text">3. 登录并连接 Codex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B"><span class="nav-text">充值流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol></li></ol>
+    <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E6%93%8D%E6%8E%A7codex"><span class="nav-text">手机操控codex</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dot"><span class="nav-text">dot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%BF%9E%E6%8E%A5"><span class="nav-text">直接连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0-Codex-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E8%AE%BE%E5%A4%87"><span class="nav-text">本地 Codex 连接远程设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BB%BA%E7%AB%8B%E4%BB%A3%E7%90%86%E9%93%BE%E8%B7%AF"><span class="nav-text">1. 建立代理链路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8-SSH"><span class="nav-text">2. 配置容器 SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95%E5%B9%B6%E8%BF%9E%E6%8E%A5-Codex"><span class="nav-text">3. 登录并连接 Codex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B"><span class="nav-text">充值流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol></li></ol>
   </div>
 </div>
 
@@ -594,7 +599,7 @@
       <div class="tablet-post-toc">
         <div class="post-toc-wrap border-box">
   <div class="post-toc border-box">
-    <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E6%93%8D%E6%8E%A7codex"><span class="nav-text">手机操控codex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0-Codex-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E8%AE%BE%E5%A4%87"><span class="nav-text">本地 Codex 连接远程设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BB%BA%E7%AB%8B%E4%BB%A3%E7%90%86%E9%93%BE%E8%B7%AF"><span class="nav-text">1. 建立代理链路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8-SSH"><span class="nav-text">2. 配置容器 SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95%E5%B9%B6%E8%BF%9E%E6%8E%A5-Codex"><span class="nav-text">3. 登录并连接 Codex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B"><span class="nav-text">充值流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol></li></ol>
+    <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E6%93%8D%E6%8E%A7codex"><span class="nav-text">手机操控codex</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dot"><span class="nav-text">dot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%BF%9E%E6%8E%A5"><span class="nav-text">直接连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0-Codex-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E8%AE%BE%E5%A4%87"><span class="nav-text">本地 Codex 连接远程设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BB%BA%E7%AB%8B%E4%BB%A3%E7%90%86%E9%93%BE%E8%B7%AF"><span class="nav-text">1. 建立代理链路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8-SSH"><span class="nav-text">2. 配置容器 SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95%E5%B9%B6%E8%BF%9E%E6%8E%A5-Codex"><span class="nav-text">3. 登录并连接 Codex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B"><span class="nav-text">充值流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="nav-text">准备与操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A3%E6%AC%BE%E6%96%B9%E5%BC%8F"><span class="nav-text">扣款方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9B%B4%E5%80%BE%E5%90%91%E5%AE%89%E5%8D%93"><span class="nav-text">为什么更倾向安卓</span></a></li></ol></li></ol>
   </div>
 </div>
 

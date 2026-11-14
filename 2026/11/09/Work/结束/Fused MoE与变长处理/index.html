@@ -318,9 +318,9 @@
 <p>**Fused MoE 通过融合部分步骤、批量调度专家计算，减少 kernel 启动和中间数据读写。**具体融合范围取决于实现，不代表整条链都在一个 kernel 内完成，也不保证所有中间结果都不落 HBM。</p>
 <h4 id="1-1-Grouped-GEMM（MoE-的核心计算）">1.1 Grouped GEMM（MoE 的核心计算）</h4>
 <p>router 把 token 分给不同 expert。Grouped GEMM 并行算所有 
-    <span id="mjx-daf8836">
+    <span id="mjx-cc95615">
       <style>
-      #mjx-daf8836{
+      #mjx-cc95615{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
