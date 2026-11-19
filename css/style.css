@@ -3313,32 +3313,39 @@ figure.highlight .shrink-line:hover::before {
   animation: heartbeat-animate 1.2s ease-in-out infinite;
 }
 .paginator {
-  gap: 1rem;
+  gap: 0.5rem;
   margin-top: $page-container-gap;
   user-select: none;
 }
 .paginator .paginator-btn {
-  cursor: not-allowed;
-}
-.paginator .paginator-btn a {
-  padding: 0.3rem 0.6rem;
-  pointer-events: none;
-}
-.paginator .paginator-btn a i {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
   color: var(--text-color-4);
   font-size: 1rem;
+  background: var(--background-color-2);
+  border: 0;
+  border-radius: 0.2rem;
+  cursor: not-allowed;
 }
-.paginator .paginator-btn.allowed {
+.paginator .paginator-btn i {
+  color: inherit;
+}
+.paginator .paginator-btn[href],
+.paginator .paginator-btn:enabled {
+  color: var(--text-color-3);
+  background: var(--background-color-1);
+  box-shadow: 0.1rem 0.1rem 0.2rem var(--shadow-color);
   cursor: pointer;
 }
-.paginator .paginator-btn.allowed a {
-  pointer-events: auto;
-}
-.paginator .paginator-btn.allowed a i {
-  color: var(--text-color-3);
-}
-.paginator .paginator-btn.allowed:hover a i {
-  color: var(--primary-color);
+.paginator .paginator-btn[href]:hover,
+.paginator .paginator-btn:enabled:hover,
+.paginator .paginator-btn[href]:focus-visible,
+.paginator .paginator-btn:enabled:focus-visible {
+  color: var(--background-color-1);
+  background: var(--primary-color);
+  box-shadow: 0.2rem 0.2rem 0.4rem var(--shadow-color);
 }
 .paginator .base-style {
   color: var(--text-color-4);
@@ -3348,7 +3355,7 @@ figure.highlight .shrink-line:hover::before {
   margin: 0 0.2rem;
 }
 .paginator .page-number-box .page-number-input {
-  width: 2.8rem;
+  width: 3.6rem;
   height: 2rem;
   margin: 0;
   padding: 0;
@@ -3363,7 +3370,7 @@ figure.highlight .shrink-line:hover::before {
   transition-delay: 0s, 0s, 0s, 0s, 0s, 0s;
   transition-timing-function: ease, ease, ease, ease, ease, ease;
   transition-duration: 0.2s, 0.2s, 0.2s, 0.2s, 0.2s, 0.2s;
-  transition-property: color, background, box-shadow, border-color, width, border-color;
+  transition-property: color, background, box-shadow, border-color, border-color;
 }
 .paginator .page-number-box .page-number-input::-webkit-outer-spin-button,
 .paginator .page-number-box .page-number-input::-webkit-inner-spin-button {
@@ -3371,7 +3378,6 @@ figure.highlight .shrink-line:hover::before {
 }
 .paginator .page-number-box .page-number-input:hover,
 .paginator .page-number-box .page-number-input:focus {
-  width: 3.8rem;
   border-color: var(--primary-color);
 }
 .paginator .page-number-box .delimiter {

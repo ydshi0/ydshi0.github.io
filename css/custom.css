@@ -7,15 +7,6 @@
     --post-img-align: 0 auto;
 }
 
-.headerlink{
-    display: none;
- }
-
-
- h2, h3, h4, h5{
-    border: none!important;
-  }
-
 /* Preserve line breaks in home page excerpts. */
 .home-post-content {
     white-space: pre-line;
@@ -23,17 +14,6 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
-}
-
-/* Hide post word count and estimated reading time. */
-.post-meta-info-container .post-meta-info .meta-info-item.post-word-count,
-.post-meta-info-container .post-meta-info .meta-info-item.post-min2read {
-    display: none;
-}
-
-/* Keep article tags visible at every screen width. */
-.post-meta-info-container .post-meta-info .post-tag {
-    display: flex !important;
 }
 
 /* Render inline code as ordinary text; keep code blocks unchanged. */
